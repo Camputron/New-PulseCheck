@@ -14,13 +14,13 @@ import VertexStore from "./vertex"
 export const DEPLOY_URL = "https://pulsecheck-7cf2b.web.app"
 
 const config: FirebaseOptions = {
-  apiKey: "AIzaSyBAGd9DDTtn8aAeab4Ydq65yErWAzO7mPg",
-  appId: "1:262073852184:web:b7097acec54647a2f5fe6d",
-  authDomain: "pulsecheck-7cf2b.firebaseapp.com",
-  measurementId: "G-TZTCLTT9EK",
-  messagingSenderId: "262073852184",
-  projectId: "pulsecheck-7cf2b",
-  storageBucket: "pulsecheck-7cf2b.firebasestorage.app",
+  apiKey: "AIzaSyDWTmXZvlh_kWxwROS6ma1XZz9VSpBAOEQ",
+  authDomain: "new-pulsecheck.firebaseapp.com",
+  projectId: "new-pulsecheck",
+  storageBucket: "new-pulsecheck.firebasestorage.app",
+  messagingSenderId: "238920390028",
+  appId: "1:238920390028:web:b567cdeb56f8603b6932a9",
+  measurementId: "G-79L0E0NQPP",
 }
 
 const BUCKET_URL = "gs://pulsecheck-7cf2b.firebasestorage.app"
@@ -29,6 +29,10 @@ const app = initializeApp(config)
 const vertexAI = getVertexAI(app)
 export const model = getGenerativeModel(vertexAI, {
   model: "gemini-2.0-flash-001",
+  generationConfig: {
+    responseMimeType: "application/json",
+    temperature: 0.2,
+  },
 })
 export const auth = getAuth(app)
 export const firestore = getFirestore(app)

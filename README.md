@@ -26,7 +26,7 @@ To run PulseCheck locally, follow the steps below:
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone git@github.com:CSC190-289/pulsecheck.git
+   git clone git@github.com:Camputron/New-PulseCheck.git
    ```
 2. Navigate to the project directory:
     ```bash
@@ -37,7 +37,7 @@ To run PulseCheck locally, follow the steps below:
     yarn install
     ```
 ## Development Scripts
-The following scripts are available in the `package.json` file:
+The following scripts are available in `package.json`:
 
 - `yarn dev`: Starts the app for development.
 - `yarn test`: Runs test scripts using [Vitest](https://vitest.dev/)

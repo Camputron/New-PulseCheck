@@ -22,7 +22,6 @@ export default class VertexStore {
         fileUri: uri,
       },
     }
-    console.debug("extracting text...")
     const ai1 = await this.model.generateContent([prompt_extract, image])
     const parsed_text = ai1.response.text()
     const ai2 = await this.model.generateContent([
