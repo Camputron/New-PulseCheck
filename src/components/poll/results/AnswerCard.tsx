@@ -1,6 +1,6 @@
 import api from "@/lib/api/firebase"
 import { SessionOption, SessionQuestion, SessionResponse } from "@/lib/types"
-import { Typography, Card, CardContent, CardMedia, Box } from "@mui/material"
+import { Typography, CardMedia, Box } from "@mui/material"
 import {
   DocumentReference,
   getDoc,
@@ -67,57 +67,63 @@ export default function AnswerCard(props: Props) {
   }, [uid, question, qref, sid])
 
   return (
-    <Card>
-      <CardContent>
-        <Typography gutterBottom>{question?.prompt}</Typography>
-        {question?.prompt_img && (
-          <CardMedia
-            component='img'
-            sx={{ objectFit: "contain", mb: 1 }}
-            image={question?.prompt_img ?? ""}
-          />
-        )}
-        {res?.choices.length === 0 ? (
-          /* if the user chose nothing, display blank response */
-          <React.Fragment>
-            <Typography color={"error"}>Response left blank</Typography>
-            {!res?.correct &&
-              options.map((x) => {
-                if (!x.data().correct) return <></>
-                return (
-                  <Typography key={x.id} color='success'>
-                    {"•"} {x.data().text}
-                  </Typography>
-                )
-              })}
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            {options
-              ?.filter((x) => res?.choices.some((y) => refEqual(x.ref, y)))
-              .map((x) => (
-                <Typography
-                  key={x.id}
-                  color={res?.correct ? "success" : "error"}>
+    <Box
+      sx={{
+        p: 2.5,
+        borderRadius: 2,
+        border: 1,
+        borderColor: "divider",
+      }}>
+      <Typography gutterBottom fontWeight={500}>
+        {question?.prompt}
+      </Typography>
+      {question?.prompt_img && (
+        <CardMedia
+          component='img'
+          sx={{ objectFit: "contain", mb: 1, borderRadius: 1 }}
+          image={question?.prompt_img ?? ""}
+        />
+      )}
+      {res?.choices.length === 0 ? (
+        /* if the user chose nothing, display blank response */
+        <React.Fragment>
+          <Typography color='error'>Response left blank</Typography>
+          {!res?.correct &&
+            options.map((x) => {
+              if (!x.data().correct) return <></>
+              return (
+                <Typography key={x.id} color='success'>
                   {"•"} {x.data().text}
                 </Typography>
-              ))}
-            {/* if the user got this question wrong, render the correct results */}
-            {!res?.correct &&
-              options.map((x) => {
-                if (!x.data().correct) return <></>
-                return (
-                  <Typography key={x.id} color='success'>
-                    {"•"} {x.data().text}
-                  </Typography>
-                )
-              })}
-          </React.Fragment>
-        )}
-        <Box display={"flex"} justifyContent={"end"}>
-          <Typography variant='caption'>{question?.points} point(s)</Typography>
-        </Box>
-      </CardContent>
-    </Card>
+              )
+            })}
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          {options
+            ?.filter((x) => res?.choices.some((y) => refEqual(x.ref, y)))
+            .map((x) => (
+              <Typography key={x.id} color={res?.correct ? "success" : "error"}>
+                {"•"} {x.data().text}
+              </Typography>
+            ))}
+          {/* if the user got this question wrong, render the correct results */}
+          {!res?.correct &&
+            options.map((x) => {
+              if (!x.data().correct) return <></>
+              return (
+                <Typography key={x.id} color='success'>
+                  {"•"} {x.data().text}
+                </Typography>
+              )
+            })}
+        </React.Fragment>
+      )}
+      <Box display='flex' justifyContent='end'>
+        <Typography variant='caption' color='text.secondary'>
+          {question?.points} point(s)
+        </Typography>
+      </Box>
+    </Box>
   )
 }

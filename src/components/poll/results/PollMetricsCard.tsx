@@ -1,8 +1,13 @@
 import { SessionSummary } from "@/lib/types"
-import { Typography, Grid2, Card, CardContent } from "@mui/material"
+import { Box, Divider, Typography } from "@mui/material"
 
 interface Props {
   sum?: SessionSummary | null
+}
+
+function fmt(val?: number): string {
+  if (val === undefined || val === null || !isFinite(val)) return "—"
+  return `${val.toFixed(0)}%`
 }
 
 /**
@@ -12,36 +17,88 @@ interface Props {
  */
 export default function PollMetricsCard(props: Props) {
   const { sum } = props
-  //null for testing
+
+  const hasData =
+    sum !== undefined &&
+    sum !== null &&
+    isFinite(sum.average_100) &&
+    sum.total_participants > 0
+
+  if (!hasData) {
+    return null
+  }
+
   return (
-    <Card variant='outlined'>
-      <CardContent>
-        <Typography fontWeight={"bold"}>Score Details</Typography>
-        <Grid2 container spacing={1}>
-          <Grid2 size={{ xs: 6, sm: 4, md: 4 }}>
-            <Typography>Lowest Score: {sum?.low_100?.toFixed()}</Typography>
-          </Grid2>
-          <Grid2 size={{ xs: 6, sm: 4, md: 4 }}>
-            <Typography>Highest Score: {sum?.high_100?.toFixed()}</Typography>
-          </Grid2>
-          <Grid2 size={{ xs: 6, sm: 4, md: 4 }}>
-            <Typography>Mean Score: {sum?.average_100?.toFixed()}</Typography>
-          </Grid2>
-          <Grid2 size={{ xs: 6, sm: 4, md: 4 }}>
-            <Typography>Median Score: {sum?.median_100?.toFixed()}</Typography>
-          </Grid2>
-          <Grid2 size={{ xs: 6, sm: 4, md: 4 }}>
-            <Typography>
-              Lowest Quartile: {sum?.lower_quartile_100?.toFixed()}
-            </Typography>
-          </Grid2>
-          <Grid2 size={{ xs: 6, sm: 4, md: 4 }}>
-            <Typography>
-              Upper Quartile: {sum?.upper_quartile_100?.toFixed()}
-            </Typography>
-          </Grid2>
-        </Grid2>
-      </CardContent>
-    </Card>
+    <Box
+      sx={{
+        p: 2.5,
+        borderRadius: 2,
+        border: 1,
+        borderColor: "divider",
+      }}>
+      <Typography fontWeight={600} gutterBottom>
+        Score Details
+      </Typography>
+      <Box textAlign='center' py={1}>
+        <Typography variant='h4' fontWeight={700}>
+          {fmt(sum.average_100)}
+        </Typography>
+        <Typography variant='body2' color='text.secondary'>
+          Mean
+        </Typography>
+      </Box>
+      <Divider sx={{ my: 1.5 }} />
+      <Box display='flex' justifyContent='space-between' textAlign='center'>
+        <Box>
+          <Typography variant='body2' fontWeight={600}>
+            {fmt(sum.low_100)}
+          </Typography>
+          <Typography variant='caption' color='text.secondary'>
+            Low
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant='body2' fontWeight={600}>
+            {fmt(sum.lower_quartile_100)}
+          </Typography>
+          <Typography variant='caption' color='text.secondary'>
+            Q1
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant='body2' fontWeight={600}>
+            {fmt(sum.median_100)}
+          </Typography>
+          <Typography variant='caption' color='text.secondary'>
+            Median
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant='body2' fontWeight={600}>
+            {fmt(sum.upper_quartile_100)}
+          </Typography>
+          <Typography variant='caption' color='text.secondary'>
+            Q3
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant='body2' fontWeight={600}>
+            {fmt(sum.high_100)}
+          </Typography>
+          <Typography variant='caption' color='text.secondary'>
+            High
+          </Typography>
+        </Box>
+      </Box>
+      <Typography
+        variant='caption'
+        color='text.secondary'
+        display='block'
+        textAlign='right'
+        mt={1}>
+        {sum.total_participants} participant
+        {sum.total_participants !== 1 ? "s" : ""}
+      </Typography>
+    </Box>
   )
 }

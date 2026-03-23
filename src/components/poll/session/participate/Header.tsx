@@ -45,16 +45,28 @@ export default function Header(props: HeaderProps) {
   }
 
   return (
-    <AppBar color='inherit' position='relative'>
+    <AppBar
+      elevation={0}
+      position='relative'
+      sx={{
+        bgcolor: (t) =>
+          t.palette.mode === "dark"
+            ? "rgba(18, 18, 18, 0.8)"
+            : "rgba(255, 255, 255, 0.8)",
+        backdropFilter: "blur(12px)",
+        borderBottom: 1,
+        borderColor: "divider",
+        color: "text.primary",
+      }}>
       <Toolbar>
         <LeaveButton
           callback={leaveSession}
           dialogTitle='Are you sure you want to leave?'
           dialogContent='All answers you submitted will be discarded.'
         />
-        <Box textAlign={"initial"}>
-          <Typography>{session?.title}</Typography>
-          <Typography variant='caption' component={"div"} color='textSecondary'>
+        <Box textAlign='initial'>
+          <Typography fontWeight={600}>{session?.title}</Typography>
+          <Typography variant='caption' component='div' color='text.secondary'>
             {ntops(users?.docs.length ?? 0)}
           </Typography>
         </Box>

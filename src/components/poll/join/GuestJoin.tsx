@@ -1,7 +1,6 @@
 import {
+  Box,
   Button,
-  Card,
-  CardContent,
   Container,
   Divider,
   Stack,
@@ -64,61 +63,89 @@ export default function GuestJoin() {
   }
 
   return (
-    <Container
-      maxWidth='xs' //This allow the container to fit a certain size
-    >
-      <RA.Bounce>
-        <Card raised sx={{ mt: 8, pb: 2 }}>
-          <CardContent>
-            <Typography variant='h5' textAlign='center' marginBlock={4}>
-              Join Poll
-            </Typography>
-            <Stack
-              component='form'
-              onSubmit={handleJoinClick}
-              sx={{ m: 1 }} // margin for everything in the box
-              spacing={2}
-              noValidate
-              autoComplete='off'>
-              {/*FullWidth allows the button to extend to the xs maxwidth (styles it to match other button that have longer text or shorter)*/}
-              {/* We need to add the Join Function*/}
-              <TextField
-                id='room-code'
-                label='Room Code'
-                variant='outlined'
-                fullWidth
-                value={roomCode}
-                onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-              />
-              <TextField
-                id='guest-name'
-                label='Display Name'
-                variant='outlined'
-                fullWidth
-                onChange={(e) => setDisplayName(e.target.value)}
-              />
-              <Button
-                type='submit'
-                variant='contained'
-                color='primary'
-                onClick={handleJoinClick}
-                fullWidth>
-                POLL UP
-              </Button>
-              <Divider>
-                <Typography color='textSecondary'>or</Typography>
-              </Divider>
-              <Button
-                variant='contained'
-                color='primary'
-                onClick={handleCreateAccount}
-                fullWidth>
-                CREATE AN ACCOUNT
-              </Button>
-            </Stack>
-          </CardContent>
-        </Card>
-      </RA.Bounce>
-    </Container>
+    <Box
+      sx={{
+        minHeight: "70vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        py: { xs: 4, md: 8 },
+      }}>
+      <Container maxWidth='xs'>
+        <RA.Fade triggerOnce duration={600}>
+          <Typography
+            variant='overline'
+            sx={{
+              letterSpacing: 2,
+              color: "primary.main",
+              fontWeight: 600,
+            }}>
+            Quick Join
+          </Typography>
+          <Typography variant='h4' fontWeight={700} sx={{ mb: 1 }}>
+            Join Poll
+          </Typography>
+          <Typography variant='body2' color='text.secondary' sx={{ mb: 4 }}>
+            Enter the room code to join as a guest.
+          </Typography>
+          <Stack
+            component='form'
+            onSubmit={handleJoinClick}
+            spacing={2.5}
+            noValidate
+            autoComplete='off'>
+            <TextField
+              id='room-code'
+              label='Room Code'
+              variant='outlined'
+              fullWidth
+              value={roomCode}
+              onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+            />
+            <TextField
+              id='guest-name'
+              label='Display Name'
+              variant='outlined'
+              fullWidth
+              onChange={(e) => setDisplayName(e.target.value)}
+            />
+            <Button
+              type='submit'
+              variant='contained'
+              color='primary'
+              onClick={handleJoinClick}
+              fullWidth
+              sx={{
+                py: 1.5,
+                borderRadius: 2,
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: "1rem",
+              }}>
+              Join Session
+            </Button>
+            <Divider>
+              <Typography variant='body2' color='text.secondary'>
+                or
+              </Typography>
+            </Divider>
+            <Button
+              variant='outlined'
+              color='primary'
+              onClick={handleCreateAccount}
+              fullWidth
+              sx={{
+                py: 1.5,
+                borderRadius: 2,
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: "1rem",
+              }}>
+              Create an Account
+            </Button>
+          </Stack>
+        </RA.Fade>
+      </Container>
+    </Box>
   )
 }

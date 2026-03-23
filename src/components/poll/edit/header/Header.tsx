@@ -13,6 +13,9 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  SwipeableDrawer,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material"
 import React, { useEffect, useState } from "react"
 import api from "@/lib/api/firebase"
@@ -54,8 +57,11 @@ export default function Header(props: HeaderProps) {
   const snackbar = useSnackbar()
   const [anonymous, setAnonymous] = useState(poll.anonymous)
   const [anchorElPoll, setAnchorElPoll] = useState<HTMLElement | null>(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const navigate = useNavigate()
   const [generateWithAIModal, setGenerateWithAIModal] = useState(false)
+  const muiTheme = useTheme()
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
 
   useEffect(() => {
     async function saveAnonymous(bool: boolean | null) {
@@ -78,7 +84,11 @@ export default function Header(props: HeaderProps) {
   }, [pid, poll, anonymous, snackbar])
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElPoll(event.currentTarget)
+    if (isMobile) {
+      setDrawerOpen(true)
+    } else {
+      setAnchorElPoll(event.currentTarget)
+    }
   }
 
   const openGenerateWithAI = () => {
@@ -88,6 +98,7 @@ export default function Header(props: HeaderProps) {
 
   const handleClose = () => {
     setAnchorElPoll(null)
+    setDrawerOpen(false)
   }
 
   async function saveTitle(text: string) {
@@ -141,9 +152,21 @@ export default function Header(props: HeaderProps) {
 
   return (
     <React.Fragment>
-      <AppBar color='inherit' position='relative'>
+      <AppBar
+        elevation={0}
+        position='relative'
+        sx={{
+          bgcolor: (t) =>
+            t.palette.mode === "dark"
+              ? "rgba(18, 18, 18, 0.8)"
+              : "rgba(255, 255, 255, 0.8)",
+          backdropFilter: "blur(12px)",
+          borderBottom: 1,
+          borderColor: "divider",
+          color: "text.primary",
+        }}>
         <Toolbar>
-          <Stack direction={"row"} alignItems={"center"} flex={1}>
+          <Stack direction='row' alignItems='center' flex={1}>
             <IconButton
               onClick={() => {
                 void navigate(-1)
@@ -169,7 +192,10 @@ export default function Header(props: HeaderProps) {
                 }}
               />
             ) : (
-              <Typography onDoubleClick={handleTitleClick} textAlign={"left"}>
+              <Typography
+                onDoubleClick={handleTitleClick}
+                textAlign='left'
+                fontWeight={600}>
                 {title}
               </Typography>
             )}
@@ -186,48 +212,120 @@ export default function Header(props: HeaderProps) {
               <IconButton onClick={handleOpen} color='inherit'>
                 <MenuOpen />
               </IconButton>
-              <Menu
-                anchorEl={anchorElPoll}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                open={Boolean(anchorElPoll)}
-                onClose={handleClose}>
-                <MenuItem>
-                  <FormControlLabel
-                    label='Anonymous'
-                    checked={Boolean(anonymous)}
-                    control={
-                      <Switch
-                        onChange={(e) => setAnonymous(e.target.checked)}
-                      />
-                    }
+              {/* Desktop: dropdown menu */}
+              {!isMobile && (
+                <Menu
+                  anchorEl={anchorElPoll}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  open={Boolean(anchorElPoll)}
+                  onClose={handleClose}
+                  slotProps={{
+                    paper: {
+                      elevation: 0,
+                      sx: {
+                        border: 1,
+                        borderColor: "divider",
+                        borderRadius: 2,
+                        minWidth: 220,
+                      },
+                    },
+                  }}>
+                  <MenuItem>
+                    <FormControlLabel
+                      label='Anonymous'
+                      checked={Boolean(anonymous)}
+                      control={
+                        <Switch
+                          onChange={(e) => setAnonymous(e.target.checked)}
+                        />
+                      }
+                    />
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={openGenerateWithAI}>
+                    <ListItemIcon>
+                      <AutoAwesome />
+                    </ListItemIcon>
+                    <ListItemText>Generate with AI</ListItemText>
+                  </MenuItem>
+                  <Divider />
+                  <DeleteMenuItem pid={pid} onClick={handleClose} />
+                  <Divider />
+                  <MenuItem onClick={handleHostClick}>
+                    <ListItemIcon>
+                      <ScreenShare />
+                    </ListItemIcon>
+                    <ListItemText>Host</ListItemText>
+                  </MenuItem>
+                </Menu>
+              )}
+              {/* Mobile: bottom sheet drawer */}
+              {isMobile && (
+                <SwipeableDrawer
+                  anchor='bottom'
+                  open={drawerOpen}
+                  onClose={handleClose}
+                  onOpen={() => setDrawerOpen(true)}
+                  disableSwipeToOpen
+                  PaperProps={{
+                    sx: {
+                      borderRadius: "16px 16px 0 0",
+                      maxHeight: "70vh",
+                    },
+                  }}>
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 4,
+                      bgcolor: "divider",
+                      borderRadius: 2,
+                      mx: "auto",
+                      mt: 1.5,
+                      mb: 1,
+                    }}
                   />
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={openGenerateWithAI}>
-                  <ListItemIcon>
-                    <AutoAwesome />
-                  </ListItemIcon>
-                  <ListItemText>
-                    <Typography>Generate with AI</Typography>
-                  </ListItemText>
-                </MenuItem>
-                {/* <MenuItem>
-                <TimerSwitch pid={pid} time={poll.time} />
-              </MenuItem> */}
-                <Divider />
-                <DeleteMenuItem pid={pid} onClick={handleClose} />
-                <Divider />
-                <MenuItem onClick={handleHostClick}>
-                  <ListItemIcon>
-                    <ScreenShare />
-                  </ListItemIcon>
-                  <ListItemText>Host</ListItemText>
-                </MenuItem>
-              </Menu>
+                  <Typography
+                    variant='body2'
+                    color='text.secondary'
+                    fontWeight={600}
+                    sx={{ px: 2, pb: 1 }}>
+                    Poll Options
+                  </Typography>
+                  <Divider />
+                  <MenuItem sx={{ py: 1.5 }}>
+                    <FormControlLabel
+                      label='Anonymous'
+                      checked={Boolean(anonymous)}
+                      control={
+                        <Switch
+                          onChange={(e) => setAnonymous(e.target.checked)}
+                        />
+                      }
+                    />
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={openGenerateWithAI} sx={{ py: 1.5 }}>
+                    <ListItemIcon>
+                      <AutoAwesome />
+                    </ListItemIcon>
+                    <ListItemText>Generate with AI</ListItemText>
+                  </MenuItem>
+                  <Divider />
+                  <DeleteMenuItem pid={pid} onClick={handleClose} />
+                  <Divider />
+                  <MenuItem onClick={handleHostClick} sx={{ py: 1.5 }}>
+                    <ListItemIcon>
+                      <ScreenShare />
+                    </ListItemIcon>
+                    <ListItemText>Host</ListItemText>
+                  </MenuItem>
+                  <Box sx={{ pb: 2 }} />
+                </SwipeableDrawer>
+              )}
             </Box>
           </Stack>
           {/* <Typography variant='body2'>

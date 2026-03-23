@@ -35,15 +35,29 @@ export default function Header(props: HeaderProps) {
   }
 
   return (
-    <AppBar color='inherit' position='relative'>
+    <AppBar
+      elevation={0}
+      position='relative'
+      sx={{
+        bgcolor: (t) =>
+          t.palette.mode === "dark"
+            ? "rgba(18, 18, 18, 0.8)"
+            : "rgba(255, 255, 255, 0.8)",
+        backdropFilter: "blur(12px)",
+        borderBottom: 1,
+        borderColor: "divider",
+        color: "text.primary",
+      }}>
       <Toolbar>
-        <Stack direction={"row"} alignItems={"center"} flexGrow={1}>
+        <Stack direction='row' alignItems='center' flexGrow={1}>
           <IconButton onClick={onClick}>
             <ArrowBack color='inherit' />
           </IconButton>
-          <Stack alignItems={"flex-start"}>
-            <Typography variant='h6'>{title}</Typography>
-            <Typography variant='subtitle2'>
+          <Stack alignItems='flex-start'>
+            <Typography variant='h6' fontWeight={600}>
+              {title}
+            </Typography>
+            <Typography variant='body2' color='text.secondary'>
               Submitted {tstos(submitted_at)}
             </Typography>
           </Stack>
