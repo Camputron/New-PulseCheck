@@ -1,6 +1,7 @@
 import { Box } from "@mui/material"
 import { Gauge, gaugeClasses } from "@mui/x-charts"
 import { useEffect, useRef, useState } from "react"
+import type { Theme } from "@mui/material/styles"
 
 interface PulseGaugeProps {
   score: number
@@ -12,12 +13,12 @@ function easeOutCubic(t: number): number {
   return 1 - Math.pow(1 - t, 3)
 }
 
-function scoreColor(pct: number): string {
-  if (pct >= 80) return "#009688"
-  if (pct >= 60) return "#26a69a"
-  if (pct >= 40) return "#ffc107"
-  if (pct >= 20) return "#ff9800"
-  return "#f44336"
+function scoreColor(pct: number, palette: Theme["palette"]): string {
+  if (pct >= 80) return palette.primary.main
+  if (pct >= 60) return palette.primary.light
+  if (pct >= 40) return palette.warning.main
+  if (pct >= 20) return palette.warning.dark
+  return palette.error.main
 }
 
 export default function PulseGauge(props: PulseGaugeProps) {
@@ -64,12 +65,12 @@ export default function PulseGauge(props: PulseGaugeProps) {
           height: "100%",
           [`& .${gaugeClasses.valueText}`]: {
             fontSize,
-            fontWeight: 700,
-            transition: "fill 0.3s ease",
+            fontWeight: 600,
+            transition: "fill 100ms ease",
           },
           [`& .${gaugeClasses.valueArc}`]: {
-            fill: scoreColor(score),
-            transition: "fill 0.3s ease",
+            fill: scoreColor(score, theme.palette),
+            transition: "fill 100ms ease",
           },
           [`& .${gaugeClasses.referenceArc}`]: {
             fill: theme.palette.text.disabled,

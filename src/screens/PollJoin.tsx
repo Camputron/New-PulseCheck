@@ -33,7 +33,7 @@ function DisplayNameField(props: {
   return (
     <React.Fragment>
       <TextField
-        label='Display Name'
+        placeholder='Display Name'
         variant='outlined'
         fullWidth
         value={displayName}
@@ -136,7 +136,7 @@ export default function PollJoin() {
             autoComplete='off'>
             <TextField
               id='room-code'
-              label='Room Code'
+              placeholder='Room Code'
               variant='outlined'
               fullWidth
               value={roomCode}

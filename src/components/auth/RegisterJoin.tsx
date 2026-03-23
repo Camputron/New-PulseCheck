@@ -1,4 +1,3 @@
-// import { RA } from "@/styles"
 import {
   Button,
   Stack,
@@ -26,8 +25,6 @@ export default function RegisterJoin() {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState("")
   const [retypePassword, setRetypePassword] = useState("")
-  // const [showPassword, setShowPassword] = useState(false)
-  // const [showRetypePassword, setShowRetypePassword] = useState(false)
   const [errors, setErrors] = useState({
     displayName: "",
     email: "",
@@ -48,15 +45,9 @@ export default function RegisterJoin() {
       ...prev,
       [field]: message,
     }))
-    // throw new Error(message)
   }
 
   const validate = () => {
-    // setErrors({
-    //   email: "",
-    //   password: "",
-    //   retypePassword: "",
-    // })
     let validated = true
     if (!displayName) {
       setFieldError("displayName", "Display name required!")
@@ -85,29 +76,6 @@ export default function RegisterJoin() {
       validated = false
     }
     return validated
-    // try {
-    //   if (!email) {
-    //     setFieldError("email", "Email required!")
-    //   }
-    //   if (!/\S+@\S+\.\S+/.test(email)) {
-    //     setFieldError("email", "Invalid email")
-    //   }
-    //   if (!password) {
-    //     setFieldError("password", "Password required")
-    //   }
-
-    //   if (password.length < PASS_LEN) {
-    //     setFieldError("password", "Password too short")
-    //   }
-
-    //   if (password !== retypePassword) {
-    //     setFieldError("retypePassword", "Passwords don't match")
-    //   }
-    //   return true
-    // } catch (err: unknown) {
-    //   console.debug(err)
-    //   return false
-    // }
   }
 
   const handleRegClick = async () => {
@@ -115,20 +83,6 @@ export default function RegisterJoin() {
       return
     }
     try {
-      //checking if users exists in firestore
-      // const userRef = doc(db, "users", email)
-      // const userSnap = await getDoc(userRef)
-
-      //   await createUser(email, password)
-
-      /* this will never be true since you're trying to find a doc in path users/${email} */
-      /* what you want to do is query or maybe firebase auth has a way to check if an email is taken */
-      // if (userSnap.exists()) {
-      //   setErrors((prev) => ({ ...prev, email: "Email registered already" }))
-      //   snackbar.show({ message: "Email already exists" })
-      //   return
-      // }
-
       const UserCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -137,7 +91,6 @@ export default function RegisterJoin() {
 
       const user = UserCredential.user
 
-      //saving user to firebase
       await api.users.create(user.uid, {
         email: user.email!,
         display_name: displayName,
@@ -150,22 +103,11 @@ export default function RegisterJoin() {
 
       void navigate("/dashboard")
     } catch (err: unknown) {
-      //error handling method used from firebase authentication page
       if (err instanceof FirebaseError) {
         if (err.code === "auth/email-already-in-use") {
           setErrors((prev) => ({ ...prev, email: "Email already in use!" }))
-          // snackbar.show({
-          //   message: "Email already in use, try logging in",
-          //   type: "error",
-          // })
         }
       }
-      // if (error === "auth/email-already-in-use") {
-      // } else {
-      //   snackbar.show({
-      //     message: "Email registered Try logging in!",
-      //   })
-      // }
     }
   }
 
@@ -193,8 +135,7 @@ export default function RegisterJoin() {
 
         <Stack component={"form"} spacing={2.5} noValidate autoComplete='off'>
           <TextField
-            label='Display Name'
-            variant='outlined'
+            placeholder='Display Name'
             fullWidth
             size='medium'
             value={displayName}
@@ -206,10 +147,8 @@ export default function RegisterJoin() {
             helperText={errors.displayName}
           />
           <TextField
-            id='register-email'
-            label='Email'
+            placeholder='Email'
             type='email'
-            variant='outlined'
             fullWidth
             size='medium'
             value={email}
@@ -217,54 +156,34 @@ export default function RegisterJoin() {
               setEmail(e.target.value)
               clearFieldError("email")
             }}
-            // onKeyDown={() => clearFieldError("email")}
             error={!!errors.email}
             helperText={errors.email}
           />
           <TextField
-            id='register-password'
-            label='Password'
+            placeholder='Password'
             fullWidth
             size='medium'
             value={password}
-            // type={showPassword ? "text" : "password"}
             type='password'
             onChange={(e) => {
               setPassword(e.target.value)
               clearFieldError("password")
             }}
-            // onKeyDown={() => clearFieldError("password")}
             error={!!errors.password}
             helperText={errors.password}
           />
           <TextField
-            id='register-retype-password'
-            label='Confirm Password'
+            placeholder='Confirm Password'
             fullWidth
             size='medium'
-            // type={showPassword ? "text" : "password"}
             value={retypePassword}
             type='password'
             onChange={(e) => {
               setRetypePassword(e.target.value)
               clearFieldError("retypePassword")
             }}
-            // onKeyDown={() => clearFieldError("retypePassword")}
             error={!!errors.retypePassword}
             helperText={errors.retypePassword}
-            // InputProps={{
-            //   endAdornment: (
-            //     <InputAdornment position='end'>
-            //       <IconButton
-            //         aria-label='toggle visibility'
-            //         onClick={() => setShowPassword((prev) => !prev)}
-            //         edge='end'
-            //         size='small'>
-            //         {showPassword ? <VisibilityOff /> : <Visibility />}
-            //       </IconButton>
-            //     </InputAdornment>
-            //   ),
-            // }}
           />
 
           <Button
@@ -272,18 +191,8 @@ export default function RegisterJoin() {
             color='primary'
             fullWidth
             type='submit'
-            sx={{
-              py: 1.5,
-              borderRadius: 2,
-              textTransform: "none",
-              fontWeight: 600,
-              fontSize: "1rem",
-            }}
+            sx={{ borderRadius: 2 }}
             onClick={(e) => {
-              /*
-                setting the button type to submit allows you to fire
-                the button's on click event with the 'Enter' key
-              */
               e.preventDefault()
               void handleRegClick()
             }}>

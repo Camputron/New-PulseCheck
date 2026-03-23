@@ -28,7 +28,6 @@ export default function UserLogin() {
     email: "",
     password: "",
   })
-  // const [displayName, setDisplayName] = useState("")
 
   const clearFieldError = (field: ErrorField) => {
     setErrors((prev) => ({
@@ -42,7 +41,6 @@ export default function UserLogin() {
       ...prev,
       [field]: message,
     }))
-    // throw new Error(message)
   }
 
   const validate = () => {
@@ -70,15 +68,12 @@ export default function UserLogin() {
 
       snackbar.show({
         message: "Get Ready to Poll Up",
+        type: "success",
       })
 
       void navigate("/dashboard")
     } catch (err: unknown) {
-      //error handling method used from firebase authentication page
       if (err instanceof FirebaseError) {
-        // if (err.code === "auth/user-not-found" || "auth/wrong-password") {
-        //   setErrors((prev) => ({ ...prev, email, password: "User not found!" }));
-        // } tried both in one if statement, didn't end up working so split them up
         if (err.code === "auth/user-not-found") {
           setErrors((prev) => ({ ...prev, email: "User not found!" }))
         } else if (err.code === "auth/wrong-password") {
@@ -117,10 +112,8 @@ export default function UserLogin() {
 
         <Stack component={"form"} spacing={2.5} noValidate autoComplete='off'>
           <TextField
-            id='user-email'
-            label='Email'
+            placeholder='Email'
             type='email'
-            variant='outlined'
             fullWidth
             size='medium'
             value={email}
@@ -128,23 +121,19 @@ export default function UserLogin() {
               setEmail(e.target.value)
               clearFieldError("email")
             }}
-            // onKeyDown={() => clearFieldError("email")}
             error={!!errors.email}
             helperText={errors.email}
           />
           <TextField
-            id='input-password'
-            label='Password'
+            placeholder='Password'
             fullWidth
             size='medium'
             value={password}
-            // type={showPassword ? "text" : "password"}
             type='password'
             onChange={(e) => {
               setPassword(e.target.value)
               clearFieldError("password")
             }}
-            // onKeyDown={() => clearFieldError("password")}
             error={!!errors.password}
             helperText={errors.password}
           />
@@ -154,18 +143,8 @@ export default function UserLogin() {
             color='primary'
             fullWidth
             type='submit'
-            sx={{
-              py: 1.5,
-              borderRadius: 2,
-              textTransform: "none",
-              fontWeight: 600,
-              fontSize: "1rem",
-            }}
+            sx={{ borderRadius: 2 }}
             onClick={(e) => {
-              /*
-                  setting the button type to submit allows you to fire
-                  the button's on click event with the 'Enter' key
-                */
               e.preventDefault()
               void handleRegClick()
             }}>

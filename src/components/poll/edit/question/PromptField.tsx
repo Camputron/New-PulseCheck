@@ -44,11 +44,12 @@ export default function PromptField(props: Props) {
   return (
     <React.Fragment>
       <TextField
-        label='Type Your Question Here'
-        hiddenLabel
+        placeholder='Type Your Question Here'
         defaultValue={prompt}
         multiline
-        // variant='standard'
+        minRows={1}
+        maxRows={4}
+        size='small'
         onChange={(e) => setPrompt(e.target.value)}
       />
     </React.Fragment>

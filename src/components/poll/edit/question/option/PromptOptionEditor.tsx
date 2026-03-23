@@ -79,6 +79,7 @@ export default function PromptOptionEditor(props: Props) {
         fullWidth
         multiline
         // variant='standard'
+        // size='small'
         onChange={handleTextChange}
         slotProps={{
           input: {

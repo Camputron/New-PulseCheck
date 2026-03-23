@@ -116,9 +116,8 @@ export default function Splash() {
               endIcon={<ArrowForward />}
               onClick={handleClick}
               sx={{
-                px: 5,
-                py: 1.5,
-                fontSize: "1.1rem",
+                px: 4,
+                py: 1,
                 borderRadius: 2,
                 textTransform: "none",
                 fontWeight: 600,

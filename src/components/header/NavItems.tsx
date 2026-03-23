@@ -26,7 +26,6 @@ export default function NavItems() {
         return (
           <Button
             key={item.label}
-            color='inherit'
             onClick={() => void navigate(item.to)}
             sx={{
               textTransform: "none",
@@ -35,12 +34,16 @@ export default function NavItems() {
               color: isActive ? "primary.main" : "text.secondary",
               px: 1.5,
               minWidth: "auto",
-              borderBottom: 2,
+              border: "none",
+              borderBottom: "2px solid",
               borderColor: isActive ? "primary.main" : "transparent",
               borderRadius: 0,
               "&:hover": {
                 color: "text.primary",
                 backgroundColor: "transparent",
+                border: "none",
+                borderBottom: "2px solid",
+                borderColor: isActive ? "primary.main" : "divider",
               },
             }}>
             {item.label}

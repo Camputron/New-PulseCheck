@@ -1,3 +1,4 @@
+import ComponentShowcaseTab from "@/components/debug/ComponentShowcaseTab"
 import DesignSystemTab from "@/components/debug/DesignSystemTab"
 import { Box, Container, Tab, Tabs } from "@mui/material"
 import { useState, type SyntheticEvent } from "react"
@@ -14,9 +15,11 @@ export default function Debug() {
       <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
         <Tabs value={tab} onChange={handleTabChange}>
           <Tab label='Design System' />
+          <Tab label='Component Showcase' />
         </Tabs>
       </Box>
       {tab === 0 && <DesignSystemTab />}
+      {tab === 1 && <ComponentShowcaseTab />}
     </Container>
   )
 }

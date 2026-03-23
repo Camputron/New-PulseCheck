@@ -1,13 +1,12 @@
 import { Box, Card, CardContent, Typography } from "@mui/material"
+import { PollOutlined } from "@mui/icons-material"
 import { useAuthContext } from "@/lib/hooks"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import api from "@/lib/api/firebase"
-import { useState } from "react"
-import Image from "mui-image"
 
 export default function NoRecentPolls() {
   const { user } = useAuthContext()
-  const [doc, setDoc] = useState<string>()
+  const [displayName, setDisplayName] = useState<string>()
 
   useEffect(() => {
     if (!user || user.isAnonymous) {
@@ -17,7 +16,7 @@ export default function NoRecentPolls() {
       .get(user.uid)
       .then((x) => {
         const name: string = x.display_name
-        setDoc(name)
+        setDisplayName(name)
       })
       .catch((err) => console.debug(err))
   }, [user])
@@ -25,47 +24,43 @@ export default function NoRecentPolls() {
   if (!user) {
     return <></>
   }
+
   return (
     <Card
-      elevation={0}
-      sx={(theme) => ({
-        marginTop: 4,
-        background:
-          theme.palette.mode === "dark"
-            ? `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.main} 25%, ${theme.palette.secondary.main} 100%)`
-            : `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.light} 25%, ${theme.palette.secondary.light} 100%)`,
-        border: 1,
-        borderColor: "divider",
-        borderRadius: 3,
-        overflow: "hidden",
-      })}>
+      variant='outlined'
+      sx={{
+        mt: 4,
+        borderRadius: 2,
+      }}>
       <CardContent
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 2,
-          py: 4,
+          gap: 1.5,
+          py: 5,
         }}>
-        <Image
-          src='/favicon.png'
-          width={80}
-          height={80}
-          style={{ borderRadius: "50%" }}
-        />
-        <Box sx={{ textAlign: "center" }}>
-          <Typography variant='h5' fontWeight='bold' color='common.white'>
-            Hello {doc}!
-          </Typography>
-          <Typography
-            variant='body1'
-            sx={{ mt: 0.5, color: "rgba(255,255,255,0.85)" }}>
-            Welcome to PulseCheck
-          </Typography>
+        <Box
+          sx={(theme) => ({
+            width: 56,
+            height: 56,
+            borderRadius: "50%",
+            display: "grid",
+            placeItems: "center",
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? "action.selected"
+                : "action.hover",
+          })}>
+          <PollOutlined sx={{ fontSize: 28, color: "primary.main" }} />
         </Box>
+        <Typography variant='h6' fontWeight={600}>
+          Welcome, {displayName}
+        </Typography>
         <Typography
           variant='body2'
-          sx={{ mt: 1, fontStyle: "italic", color: "rgba(255,255,255,0.7)" }}>
+          color='text.secondary'
+          sx={{ maxWidth: 320, textAlign: "center" }}>
           No recent polls yet — create or join one to get started!
         </Typography>
       </CardContent>

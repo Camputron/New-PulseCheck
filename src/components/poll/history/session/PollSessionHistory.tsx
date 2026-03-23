@@ -164,7 +164,7 @@ export default function PollSessionHistory(props: PollSessionHistoryProps) {
     <React.Fragment>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
-          label='Search your poll sessions by name...'
+          placeholder='Search your poll sessions by name...'
           fullWidth
           value={query}
           onChange={onChange}

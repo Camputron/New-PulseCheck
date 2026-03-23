@@ -54,9 +54,16 @@ function About(props: { ref?: React.Ref<unknown> }) {
           no time wasted.
         </Typography>
       </RA.Fade>
-      <Stack direction={{ xs: "column", md: "row" }} spacing={4} sx={{ mt: 2 }}>
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={4}
+        sx={{ mt: 2, alignItems: "stretch" }}>
         {highlights.map((item) => (
-          <RA.Fade triggerOnce duration={600} key={item.title}>
+          <RA.Fade
+            triggerOnce
+            duration={600}
+            key={item.title}
+            style={{ flex: 1, display: "flex" }}>
             <Box
               sx={{
                 flex: 1,

@@ -96,7 +96,7 @@ export default function GuestJoin() {
             autoComplete='off'>
             <TextField
               id='room-code'
-              label='Room Code'
+              placeholder='Room Code'
               variant='outlined'
               fullWidth
               value={roomCode}
@@ -104,7 +104,7 @@ export default function GuestJoin() {
             />
             <TextField
               id='guest-name'
-              label='Display Name'
+              placeholder='Display Name'
               variant='outlined'
               fullWidth
               onChange={(e) => setDisplayName(e.target.value)}

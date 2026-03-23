@@ -91,7 +91,7 @@ export default function MostRecentGaugeCard(props: Props) {
   const participants = session?.summary?.total_participants
 
   const gaugeSize = isPhone ? 200 : 150
-  const gaugeFontSize = isPhone ? "1.25em" : "1.1em"
+  const gaugeFontSize = isPhone ? "1.5em" : "1.3em"
 
   const formattedDate = submitted_at
     ? submitted_at.toDate().toLocaleDateString()

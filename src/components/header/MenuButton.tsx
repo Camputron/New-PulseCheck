@@ -37,7 +37,11 @@ export default function MenuButton() {
 
   return (
     <React.Fragment>
-      <IconButton color='inherit' size='large' onClick={handleOpen}>
+      <IconButton
+        color='inherit'
+        size='large'
+        onClick={handleOpen}
+        sx={{ border: "none" }}>
         {user ? <ProfileIcon /> : <MenuIcon />}
       </IconButton>
       {!user?.isAnonymous && (

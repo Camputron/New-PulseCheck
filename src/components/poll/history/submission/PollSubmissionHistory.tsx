@@ -164,7 +164,7 @@ export default function PollSubmissionHistory(
     <React.Fragment>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
-          label='Filter your submissions by poll title...'
+          placeholder='Filter your submissions by poll title...'
           fullWidth
           value={query}
           onChange={onChange}
