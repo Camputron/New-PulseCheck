@@ -25,12 +25,24 @@ export default function ProfileIcon() {
     if (!user || user.isAnonymous) {
       return
     }
-    api.users
-      .get(user.uid)
-      .then((x) => {
-        setDoc(x)
-      })
-      .catch((err) => console.debug(err))
+    let cancelled = false
+    const fetchUser = (retries = 3) => {
+      api.users
+        .get(user.uid)
+        .then((x) => {
+          if (!cancelled) setDoc(x)
+        })
+        .catch(() => {
+          if (!cancelled && retries > 0) {
+            setTimeout(() => fetchUser(retries - 1), 500)
+          }
+        })
+    }
+    fetchUser()
+    // eslint-disable-next-line consistent-return
+    return () => {
+      cancelled = true
+    }
   }, [user])
 
   if (!user) {

@@ -3,7 +3,8 @@ import { Timestamp } from "firebase/firestore"
 /**
  * Converts string to hex color
  */
-export function stoc(str: string) {
+export function stoc(str?: string): string {
+  if (!str) return "#ffffff"
   let hash = 0
   let i
   for (i = 0; i < str.length; i += 1) {
@@ -15,7 +16,6 @@ export function stoc(str: string) {
     const value = (hash >> (i * 8)) & 0xff
     color += `00${value.toString(16)}`.slice(-2)
   }
-  console.debug(color)
   return color
 }
 
@@ -29,7 +29,8 @@ export function stoc(str: string) {
  * @param name - The input name string.
  * @returns The formatted uppercase initials.
  */
-export function stoni(name: string) {
+export function stoni(name?: string): string {
+  if (!name) return ""
   const words = name.trim().split(/\s+/) // Split by whitespace and remove extra spaces
   let initials = ""
   if (words.length === 1) {
