@@ -56,20 +56,31 @@ jobs:
         working-directory: firebase/functions
 
       - name: Start Firebase Emulators
-        run: npx firebase-tools emulators:start --project new-pulsecheck &
+        run: npx firebase-tools emulators:start --only auth,functions,firestore,hosting,storage --project new-pulsecheck &
         env:
           FIREBASE_EMULATORS_TIMEOUT: 120
 
       - name: Wait for Emulators to Start
         run: |
-          echo "Waiting for emulator hub on port 4400..."
-          for i in $(seq 1 30); do
-            if curl -sf http://localhost:4400/emulators > /dev/null 2>&1; then
-              echo "Emulator hub is ready"
+          echo "Waiting for all emulators to be ready..."
+          for i in $(seq 1 60); do
+            EMULATORS=$(curl -sf http://localhost:4400/emulators 2>/dev/null || echo "{}")
+            # Check that all 5 expected services appear in the hub response
+            ALL_READY=true
+            for svc in auth functions firestore hosting storage; do
+              if ! echo "$EMULATORS" | grep -q "\"$svc\""; then
+                ALL_READY=false
+                break
+              fi
+            done
+            if [ "$ALL_READY" = true ]; then
+              echo "All emulators are ready"
               break
             fi
-            if [ "$i" -eq 30 ]; then
-              echo "Emulator hub failed to start after 30 seconds"
+            if [ "$i" -eq 60 ]; then
+              echo "Emulators failed to start after 60 seconds"
+              echo "Hub response:"
+              echo "$EMULATORS" | python3 -m json.tool || echo "$EMULATORS"
               exit 1
             fi
             sleep 1
