@@ -1,5 +1,5 @@
-name: Deploy to Firebase Hosting on Pull Request to Main Branch
-on: 
+name: Validate Firebase Services on Pull Request
+on:
   pull_request:
     branches:
       - main
@@ -8,28 +8,110 @@ permissions:
   contents: read
   pull-requests: write
 jobs:
-  build_and_preview:
+  validate:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Setup Java (required for Firestore emulator)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
 
       - name: Enable Corepack and Install Yarn v4
         run: |
           corepack enable
           corepack prepare yarn@stable --activate
 
-      - name: Install Dependencies
+      - name: Install App Dependencies
         run: yarn install
 
-      - name: Build
+      - name: Lint App
+        run: yarn lint
+
+      - name: Build App
         run: yarn build
 
-      - name: Deploy
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NEW_PULSECHECK }}
-          projectId: new-pulsecheck
-          
+      - name: Install Functions Dependencies
+        run: npm ci
+        working-directory: firebase/functions
+
+      - name: Lint Functions
+        run: npm run lint
+        working-directory: firebase/functions
+
+      - name: Build Functions
+        run: npm run build
+        working-directory: firebase/functions
+
+      - name: Start Firebase Emulators
+        run: npx firebase-tools emulators:start --project new-pulsecheck &
+        env:
+          FIREBASE_EMULATORS_TIMEOUT: 120
+
+      - name: Wait for Emulators to Start
+        run: |
+          echo "Waiting for emulator hub on port 4400..."
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:4400/emulators > /dev/null 2>&1; then
+              echo "Emulator hub is ready"
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              echo "Emulator hub failed to start after 30 seconds"
+              exit 1
+            fi
+            sleep 1
+          done
+
+      - name: Verify All Emulators Are Running
+        run: |
+          EMULATORS=$(curl -sf http://localhost:4400/emulators)
+          echo "$EMULATORS" | python3 -m json.tool
+
+          for service in auth functions firestore hosting storage; do
+            if echo "$EMULATORS" | grep -q "\"$service\""; then
+              echo "✓ $service emulator is running"
+            else
+              echo "✗ $service emulator is NOT running"
+              exit 1
+            fi
+          done
+
+          echo ""
+          echo "All Firebase emulators verified successfully"
+
+      - name: Verify Hosting Emulator Serves App
+        run: |
+          STATUS=$(curl -so /dev/null -w "%{http_code}" http://localhost:5000)
+          if [ "$STATUS" -eq 200 ]; then
+            echo "✓ Hosting emulator serving app (HTTP $STATUS)"
+          else
+            echo "✗ Hosting emulator returned HTTP $STATUS"
+            exit 1
+          fi
+
+      - name: Verify Functions Emulator Is Responsive
+        run: |
+          STATUS=$(curl -so /dev/null -w "%{http_code}" http://localhost:5001)
+          if [ "$STATUS" -ne 000 ]; then
+            echo "✓ Functions emulator is responsive (HTTP $STATUS)"
+          else
+            echo "✗ Functions emulator is not responding"
+            exit 1
+          fi
+
+      - name: Shutdown Emulators
+        if: always()
+        run: |
+          curl -sf -X PUT http://localhost:4400/shutdown > /dev/null 2>&1 || true
+          echo "Emulators shut down"

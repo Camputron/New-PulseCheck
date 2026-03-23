@@ -1,31 +1,58 @@
-name: Deploy to Firebase Hosting on Merge to Main Branch
+name: Deploy to Firebase on Merge to Main Branch
 on:
   push:
     branches:
       - main
 jobs:
-  build_and_deploy:
+  deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-        # Enable Corepack and set up Yarn v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
       - name: Enable Corepack and Install Yarn v4
         run: |
           corepack enable
           corepack prepare yarn@stable --activate
 
-      - name: Install Dependencies
+      - name: Install App Dependencies
         run: yarn install
 
-      - name: Build
+      - name: Build App
         run: yarn build
 
-      - name: Deploy
+      - name: Install Functions Dependencies
+        run: npm ci
+        working-directory: firebase/functions
+
+      - name: Build Functions
+        run: npm run build
+        working-directory: firebase/functions
+
+      - name: Deploy Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NEW_PULSECHECK }}
           channelId: live
           projectId: new-pulsecheck
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NEW_PULSECHECK }}
+
+      - name: Deploy Functions
+        run: npx firebase-tools deploy --only functions --project new-pulsecheck --force
+
+      - name: Deploy Firestore Rules & Indexes
+        run: npx firebase-tools deploy --only firestore --project new-pulsecheck --force
+
+      - name: Deploy Storage Rules
+        run: npx firebase-tools deploy --only storage --project new-pulsecheck --force
