@@ -11,7 +11,7 @@ import SubmissionResults from "./SubmissionResults"
 import SessionResults from "./SessionResults"
 import PollView from "./PollView"
 import PrivacyPolicy from "./PrivacyPolicy"
-import Profile from "./Profile"
+import Settings from "./Settings"
 import Register from "./Register"
 import Splash from "./Splash"
 import TermsOfService from "./TermsOfService"
@@ -36,6 +36,6 @@ export const Screen = {
   SessionResults,
   PollHistory,
   PollView,
-  Profile,
+  Settings,
   NotFound,
 }

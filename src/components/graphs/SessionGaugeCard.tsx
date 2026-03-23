@@ -16,6 +16,10 @@ interface Props {
 export default function SessionGaugeCard(props: Props) {
   const { score, title, timestamp } = props
 
+  if (!isFinite(score)) {
+    return null
+  }
+
   return (
     <Card variant='outlined'>
       <CardContent>

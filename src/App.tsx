@@ -37,7 +37,7 @@ export default function App() {
         />
         <Route path='/poll/history/' element={<Screen.PollHistory />} />
         {/* <Route path='/poll/:id/overview' element={<Screen.PollView />} /> */}
-        <Route path='/profile' element={<Screen.Profile />} />
+        <Route path='/settings' element={<Screen.Settings />} />
         <Route path='*' element={<Screen.NotFound />} />
       </Routes>
     </React.Fragment>

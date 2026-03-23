@@ -8,7 +8,12 @@ interface Props {
 
 export default function ScoreGaugeCard(props: Props) {
   const { sub } = props
-  const name = sub?.display_name
+
+  if (!sub || !isFinite(sub.score_100)) {
+    return null
+  }
+
+  const name = sub.display_name
   return (
     <Card variant='outlined'>
       <CardContent>
@@ -16,7 +21,7 @@ export default function ScoreGaugeCard(props: Props) {
           {name}'s Score
         </Typography>
         <Box display={"flex"} justifyContent={"center"}>
-          <PulseGauge score={sub?.score_100 ?? 0} />
+          <PulseGauge score={sub.score_100} />
         </Box>
         <Box>
           <Typography
@@ -24,12 +29,12 @@ export default function ScoreGaugeCard(props: Props) {
             fontWeight={"bold"}
             align='center'
             gutterBottom>
-            {sub?.title}
+            {sub.title}
           </Typography>
 
           <Typography variant='body2' color='textSecondary' align='center'>
-            Submitted: {sub?.submitted_at?.toDate().toLocaleDateString()}{" "}
-            {sub?.submitted_at?.toDate().toLocaleTimeString()}
+            Submitted: {sub.submitted_at?.toDate().toLocaleDateString()}{" "}
+            {sub.submitted_at?.toDate().toLocaleTimeString()}
           </Typography>
         </Box>
       </CardContent>
