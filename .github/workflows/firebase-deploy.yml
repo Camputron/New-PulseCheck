@@ -1,4 +1,4 @@
-name: Firebase Deploy
+name: Deploy to Firebase Hosting on Merge to Main Branch
 on:
   push:
     branches:
@@ -26,6 +26,6 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PULSECHECK_7CF2B }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NEW_PULSECHECK }}
           channelId: live
-          projectId: pulsecheck-7cf2b
+          projectId: new-pulsecheck

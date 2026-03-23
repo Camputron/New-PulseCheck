@@ -1,4 +1,4 @@
-name: Firebase PR Deploy
+name: Deploy to Firebase Hosting on Pull Request to Main Branch
 on: 
   pull_request:
     branches:
@@ -30,6 +30,6 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PULSECHECK_7CF2B }}
-          projectId: pulsecheck-7cf2b
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NEW_PULSECHECK }}
+          projectId: new-pulsecheck
           

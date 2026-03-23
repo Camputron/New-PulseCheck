@@ -1,4 +1,4 @@
-import api, { DEPLOY_URL } from "@/lib/api/firebase"
+import api from "@/lib/api/firebase"
 import { useAuthContext } from "@/lib/hooks"
 import { SessionState, WaitingUser } from "@/lib/types"
 import { Box, Container, LinearProgress } from "@mui/material"
@@ -145,7 +145,7 @@ export default function PollHost() {
         <RoomCodeTitle session={session} />
         {session?.state === SessionState.OPEN && (
           <QRCodeSVG
-            value={`${DEPLOY_URL}/get-started?code=${session.room_code}`}
+            value={`${window.location.origin}/get-started?code=${session.room_code}`}
             width={256}
             height={256}
           />

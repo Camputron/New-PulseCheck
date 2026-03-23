@@ -34,16 +34,24 @@ export default function AppTitle() {
             fontSize: "1.1rem",
             letterSpacing: 0.5,
             color: "text.primary",
+            pr: `${SZ / 2 + 2}px`,
           }}>
           PulseCheck
         </Typography>
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: -8,
+            right: -4,
+          }}>
+          <Image
+            src='/favicon.png'
+            width={SZ}
+            height={SZ}
+            style={{ borderRadius: 4 }}
+          />
+        </Box>
       </Box>
-      <Image
-        src='/favicon.png'
-        width={SZ}
-        height={SZ}
-        style={{ borderRadius: 6 }}
-      />
     </Box>
   )
 }

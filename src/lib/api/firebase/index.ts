@@ -11,8 +11,6 @@ import SubmissionStore from "./submissions"
 import { getVertexAI, getGenerativeModel } from "firebase/vertexai"
 import VertexStore from "./vertex"
 
-export const DEPLOY_URL = "https://pulsecheck-7cf2b.web.app"
-
 const config: FirebaseOptions = {
   apiKey: "AIzaSyDWTmXZvlh_kWxwROS6ma1XZz9VSpBAOEQ",
   authDomain: "new-pulsecheck.firebaseapp.com",
