@@ -1,22 +1,32 @@
 import {
   Box,
+  Button,
+  Chip,
   Container,
+  Divider,
+  Paper,
   Typography,
   TextField,
   Avatar,
   Skeleton,
   IconButton,
 } from "@mui/material"
-import { Edit, Check, Close } from "@mui/icons-material"
+import { Edit, Check, Close, Google, Email, Logout } from "@mui/icons-material"
 import { RA } from "@/styles"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { auth } from "@/lib/api/firebase"
+import api, { auth } from "@/lib/api/firebase"
 import { useAuthState } from "react-firebase-hooks/auth"
 import useSnackbar from "@/lib/hooks/useSnackbar"
 import { firestore } from "@/lib/api/firebase"
 import { doc, Timestamp, getDoc, updateDoc } from "firebase/firestore"
-import { updateEmail, updateProfile } from "firebase/auth"
+import {
+  updateEmail,
+  updateProfile,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from "firebase/auth"
 import { FirebaseError } from "firebase/app"
 import ThemeSelect from "@/components/ThemeSelect"
 import useRequireAuth from "@/lib/hooks/useRequireAuth"
@@ -27,6 +37,32 @@ interface UserData {
   display_name: string
   created_at: Timestamp
   email?: string
+}
+
+function SettingsRow({
+  label,
+  children,
+}: {
+  label: string
+  children: React.ReactNode
+}) {
+  return (
+    <Box
+      sx={{
+        px: 3,
+        py: 2,
+        display: "flex",
+        alignItems: "center",
+      }}>
+      <Typography
+        variant='body2'
+        color='text.secondary'
+        sx={{ width: 140, flexShrink: 0 }}>
+        {label}
+      </Typography>
+      {children}
+    </Box>
+  )
 }
 
 /**
@@ -181,6 +217,60 @@ export default function Settings() {
     void saveChanges("displayName")
   }
 
+  const providerId = user?.providerData[0]?.providerId
+  const isPasswordProvider = providerId === "password"
+
+  const [changingPassword, setChangingPassword] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+
+  const handleChangePassword = async () => {
+    if (!user || !user.email) return
+    if (newPassword.length < 6) {
+      setPasswordError("Password must be at least 6 characters")
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError("Passwords do not match")
+      return
+    }
+    setSave(true)
+    setPasswordError("")
+    try {
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      )
+      await reauthenticateWithCredential(user, credential)
+      await updatePassword(user, newPassword)
+      snackbar.show({ message: "Password updated successfully", type: "success" })
+      setChangingPassword(false)
+      setCurrentPassword("")
+      setNewPassword("")
+      setConfirmPassword("")
+    } catch (err: unknown) {
+      if (err instanceof FirebaseError) {
+        if (err.code === "auth/wrong-password") {
+          setPasswordError("Current password is incorrect")
+        } else {
+          setPasswordError(err.message)
+        }
+      } else {
+        setPasswordError("Failed to update password")
+      }
+    } finally {
+      setSave(false)
+    }
+  }
+
+  const handleSignOut = () => {
+    void api.auth.logout().then(() => {
+      void navigate("/")
+    })
+  }
+
   return (
     <Container maxWidth='sm' sx={{ py: { xs: 3, md: 5 }, textAlign: "left" }}>
       <RA.Fade triggerOnce duration={600}>
@@ -209,11 +299,16 @@ export default function Settings() {
           <Avatar
             src={photoURL}
             alt={displayName}
-            sx={{ width: 48, height: 48, fontSize: 20 }}>
+            sx={{
+              width: 56,
+              height: 56,
+              fontSize: 22,
+              bgcolor: "primary.main",
+            }}>
             {displayName ? displayName.charAt(0).toUpperCase() : "U"}
           </Avatar>
           <Box>
-            <Typography fontWeight={600}>
+            <Typography variant='h6' fontWeight={600}>
               {displayName || <Skeleton width={120} />}
             </Typography>
             {createdAt ? (
@@ -227,33 +322,13 @@ export default function Settings() {
         </Box>
       </RA.Fade>
 
-      <Box
-        sx={{
-          border: 1,
-          borderColor: "divider",
-          borderRadius: 2,
-          overflow: "hidden",
-        }}>
-        <RA.Fade triggerOnce duration={600} delay={200}>
-          <Box
-            sx={{
-              px: 3,
-              py: 2,
-              display: "flex",
-              alignItems: "center",
-              borderBottom: 1,
-              borderColor: "divider",
-            }}>
-            <Typography
-              variant='body2'
-              color='text.secondary'
-              sx={{ width: 140 }}>
-              Display Name
-            </Typography>
+      <RA.Fade triggerOnce duration={600} delay={200}>
+        <Paper variant='outlined' sx={{ borderRadius: 2, overflow: "hidden" }}>
+          <SettingsRow label='Display Name'>
             <Box flex={1}>
               {editUser === "displayName" ? (
                 <TextField
-                  variant='standard'
+                  placeholder='Enter display name'
                   value={tempVal}
                   onChange={(e) => {
                     setTempVal(e.target.value)
@@ -285,53 +360,123 @@ export default function Settings() {
               <IconButton
                 onClick={() => handleEdit("displayName", displayName)}
                 size='small'
-                sx={{ ml: 1, color: "text.secondary" }}>
+                sx={{ ml: 1 }}>
                 <Edit fontSize='small' />
               </IconButton>
             )}
-          </Box>
-        </RA.Fade>
+          </SettingsRow>
 
-        <RA.Fade triggerOnce duration={600} delay={300}>
-          <Box
-            sx={{
-              px: 3,
-              py: 2,
-              display: "flex",
-              alignItems: "center",
-              borderBottom: 1,
-              borderColor: "divider",
-            }}>
-            <Typography
-              variant='body2'
-              color='text.secondary'
-              sx={{ width: 140 }}>
-              Email
-            </Typography>
+          <Divider />
+
+          <SettingsRow label='Email'>
             <Typography flex={1}>{email}</Typography>
-          </Box>
-        </RA.Fade>
+          </SettingsRow>
 
-        <RA.Fade triggerOnce duration={600} delay={400}>
-          <Box
-            sx={{
-              px: 3,
-              py: 2,
-              display: "flex",
-              alignItems: "center",
-            }}>
-            <Typography
-              variant='body2'
-              color='text.secondary'
-              sx={{ width: 140 }}>
-              Theme
-            </Typography>
+          <Divider />
+
+          <SettingsRow label='Theme'>
             <Box flex={1}>
               <ThemeSelect size='small' sx={{ minWidth: 160 }} />
             </Box>
-          </Box>
-        </RA.Fade>
-      </Box>
+          </SettingsRow>
+
+          <Divider />
+
+          <SettingsRow label='Provider'>
+            <Chip
+              icon={providerId === "google.com" ? <Google /> : <Email />}
+              label={providerId === "google.com" ? "Google" : "Email"}
+              size='small'
+              variant='outlined'
+            />
+          </SettingsRow>
+
+          {isPasswordProvider && (
+            <>
+              <Divider />
+              <SettingsRow label='Password'>
+                <Box flex={1}>
+                  {changingPassword ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1.5,
+                      }}>
+                      <TextField
+                        placeholder='Current password'
+                        type='password'
+                        size='small'
+                        fullWidth
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                      />
+                      <TextField
+                        placeholder='New password'
+                        type='password'
+                        size='small'
+                        fullWidth
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                      <TextField
+                        placeholder='Confirm new password'
+                        type='password'
+                        size='small'
+                        fullWidth
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        error={!!passwordError}
+                        helperText={passwordError}
+                      />
+                      <Box sx={{ display: "flex", gap: 1 }}>
+                        <Button
+                          variant='contained'
+                          size='small'
+                          disabled={save}
+                          onClick={() => void handleChangePassword()}>
+                          Save
+                        </Button>
+                        <Button
+                          variant='outlined'
+                          size='small'
+                          onClick={() => {
+                            setChangingPassword(false)
+                            setCurrentPassword("")
+                            setNewPassword("")
+                            setConfirmPassword("")
+                            setPasswordError("")
+                          }}>
+                          Cancel
+                        </Button>
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Button
+                      variant='outlined'
+                      size='small'
+                      onClick={() => setChangingPassword(true)}>
+                      Change Password
+                    </Button>
+                  )}
+                </Box>
+              </SettingsRow>
+            </>
+          )}
+        </Paper>
+      </RA.Fade>
+
+      <RA.Fade triggerOnce duration={600} delay={300}>
+        <Button
+          variant='outlined'
+          color='error'
+          fullWidth
+          startIcon={<Logout />}
+          onClick={handleSignOut}
+          sx={{ mt: 3, py: 1.5, borderRadius: 2 }}>
+          Sign Out
+        </Button>
+      </RA.Fade>
     </Container>
   )
 }
