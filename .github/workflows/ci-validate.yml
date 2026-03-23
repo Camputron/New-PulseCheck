@@ -34,6 +34,9 @@ jobs:
           corepack enable
           corepack prepare yarn@stable --activate
 
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
       - name: Install App Dependencies
         run: yarn install
 
@@ -56,7 +59,7 @@ jobs:
         working-directory: firebase/functions
 
       - name: Start Firebase Emulators
-        run: npx firebase-tools emulators:start --only auth,functions,firestore,hosting,storage --project new-pulsecheck &
+        run: firebase emulators:start --only auth,functions,firestore,hosting,storage --project new-pulsecheck &
         env:
           FIREBASE_EMULATORS_TIMEOUT: 120
 
@@ -65,7 +68,6 @@ jobs:
           echo "Waiting for all emulators to be ready..."
           for i in $(seq 1 60); do
             EMULATORS=$(curl -sf http://localhost:4400/emulators 2>/dev/null || echo "{}")
-            # Check that all 5 expected services appear in the hub response
             ALL_READY=true
             for svc in auth functions firestore hosting storage; do
               if ! echo "$EMULATORS" | grep -q "\"$svc\""; then
@@ -105,7 +107,7 @@ jobs:
 
       - name: Verify Hosting Emulator Serves App
         run: |
-          STATUS=$(curl -so /dev/null -w "%{http_code}" http://localhost:5000)
+          STATUS=$(curl -so /dev/null -w "%{http_code}" http://localhost:5050)
           if [ "$STATUS" -eq 200 ]; then
             echo "✓ Hosting emulator serving app (HTTP $STATUS)"
           else
