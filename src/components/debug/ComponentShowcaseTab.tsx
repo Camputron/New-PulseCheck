@@ -302,11 +302,7 @@ export default function ComponentShowcaseTab() {
         <ShowcaseCard title='Text Fields'>
           <TextField placeholder='Default input' size='small' fullWidth />
           <TextField placeholder='Medium input' size='medium' fullWidth />
-          <TextField
-            placeholder='Room Code'
-            size='small'
-            fullWidth
-          />
+          <TextField placeholder='Room Code' size='small' fullWidth />
           <TextField placeholder='Disabled' size='small' fullWidth disabled />
           <TextField
             placeholder='With error'

@@ -110,7 +110,17 @@ const red = {
   900: "hsl(0, 100%, 12%)",
 }
 
-type ScaleKey = "50" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"
+type ScaleKey =
+  | "50"
+  | "100"
+  | "200"
+  | "300"
+  | "400"
+  | "500"
+  | "600"
+  | "700"
+  | "800"
+  | "900"
 
 function ColorScale({
   name,
@@ -119,10 +129,24 @@ function ColorScale({
   name: string
   scale: Record<string, string>
 }) {
-  const steps: ScaleKey[] = ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"]
+  const steps: ScaleKey[] = [
+    "50",
+    "100",
+    "200",
+    "300",
+    "400",
+    "500",
+    "600",
+    "700",
+    "800",
+    "900",
+  ]
   return (
     <Box>
-      <Typography variant='caption' fontWeight={600} sx={{ mb: 0.5, display: "block" }}>
+      <Typography
+        variant='caption'
+        fontWeight={600}
+        sx={{ mb: 0.5, display: "block" }}>
         {name}
       </Typography>
       <Stack direction='row' spacing={0.5}>
@@ -181,13 +205,24 @@ export default function DesignSystemTab() {
   return (
     <Box>
       {/* Header */}
-      <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ mb: 1 }}>
+      <Stack
+        direction='row'
+        justifyContent='space-between'
+        alignItems='center'
+        sx={{ mb: 1 }}>
         <Box>
-          <Typography variant='h4' fontWeight={700} fontFamily='Inter, sans-serif'>
+          <Typography
+            variant='h4'
+            fontWeight={700}
+            fontFamily='Inter, sans-serif'>
             PulseCheck Design System
           </Typography>
-          <Typography variant='body2' color='text.secondary' fontFamily='Inter, sans-serif'>
-            Teal Primary + Amber/Gold Secondary — Inter Font — MUI v7 Template Style
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            fontFamily='Inter, sans-serif'>
+            Teal Primary + Amber/Gold Secondary — Inter Font — MUI v7 Template
+            Style
           </Typography>
         </Box>
         <IconButton onClick={toggleTheme} size='large'>
@@ -212,7 +247,12 @@ export default function DesignSystemTab() {
 
       {/* OLD vs NEW */}
       <SectionTitle>Old vs New</SectionTitle>
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 3 }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+          gap: 3,
+        }}>
         {/* Old */}
         <Paper
           variant='outlined'
@@ -221,7 +261,11 @@ export default function DesignSystemTab() {
             borderWidth: 2,
             borderColor: "divider",
           }}>
-          <Chip label='CURRENT' size='small' sx={{ mb: 1.5, fontWeight: 700 }} />
+          <Chip
+            label='CURRENT'
+            size='small'
+            sx={{ mb: 1.5, fontWeight: 700 }}
+          />
           <Stack direction='row' spacing={1} sx={{ mb: 1.5 }}>
             <Button
               variant='contained'
@@ -242,7 +286,11 @@ export default function DesignSystemTab() {
               Secondary Pink
             </Button>
           </Stack>
-          <Typography variant='body2' color='text.secondary' fontFamily='monospace' fontSize='0.8rem'>
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            fontFamily='monospace'
+            fontSize='0.8rem'>
             Monospace font — flat colors — no gradients — default MUI elevation
           </Typography>
         </Paper>
@@ -324,26 +372,50 @@ export default function DesignSystemTab() {
           backdropFilter: "blur(24px)",
           bgcolor: isDark ? "hsla(220, 35%, 5%, 0.7)" : "hsla(0, 0%, 99%, 0.7)",
         }}>
-        <Typography fontWeight={700} color={teal[500]} fontFamily='Inter, sans-serif'>
+        <Typography
+          fontWeight={700}
+          color={teal[500]}
+          fontFamily='Inter, sans-serif'>
           PulseCheck
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <Button size='small' sx={{ color: "text.secondary", fontFamily: "Inter, sans-serif" }}>
+        <Button
+          size='small'
+          sx={{ color: "text.secondary", fontFamily: "Inter, sans-serif" }}>
           Dashboard
         </Button>
-        <Button size='small' sx={{ color: "text.secondary", fontFamily: "Inter, sans-serif" }}>
+        <Button
+          size='small'
+          sx={{ color: "text.secondary", fontFamily: "Inter, sans-serif" }}>
           Join Poll
         </Button>
-        <Button size='small' sx={{ color: "text.secondary", fontFamily: "Inter, sans-serif" }}>
+        <Button
+          size='small'
+          sx={{ color: "text.secondary", fontFamily: "Inter, sans-serif" }}>
           History
         </Button>
-        <Avatar sx={{ bgcolor: teal[400], width: 32, height: 32, fontSize: "0.8rem" }}>MC</Avatar>
+        <Avatar
+          sx={{
+            bgcolor: teal[400],
+            width: 32,
+            height: 32,
+            fontSize: "0.8rem",
+          }}>
+          MC
+        </Avatar>
       </Paper>
 
       {/* Buttons */}
       <Paper
         variant='outlined'
-        sx={{ p: 2, mb: 3, borderRadius: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+        sx={{
+          p: 2,
+          mb: 3,
+          borderRadius: 2,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+        }}>
         <Typography variant='subtitle2' fontWeight={600}>
           Buttons
         </Typography>
@@ -418,7 +490,9 @@ export default function DesignSystemTab() {
               textTransform: "none",
               fontFamily: "Inter, sans-serif",
               fontWeight: 500,
-              "&:hover": { bgcolor: isDark ? "hsla(174, 80%, 42%, 0.1)" : teal[50] },
+              "&:hover": {
+                bgcolor: isDark ? "hsla(174, 80%, 42%, 0.1)" : teal[50],
+              },
             }}>
             Learn More
           </Button>
@@ -426,7 +500,13 @@ export default function DesignSystemTab() {
       </Paper>
 
       {/* Stat Cards + Inputs */}
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 3, mb: 3 }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+          gap: 3,
+          mb: 3,
+        }}>
         {/* Stat Card - Sessions */}
         <Paper
           elevation={0}
@@ -449,11 +529,16 @@ export default function DesignSystemTab() {
             Total Sessions
           </Typography>
           <Stack direction='row' alignItems='baseline' spacing={1}>
-            <Typography variant='h4' fontWeight={700} sx={{ color: teal[isDark ? "300" : "500"] }}>
+            <Typography
+              variant='h4'
+              fontWeight={700}
+              sx={{ color: teal[isDark ? "300" : "500"] }}>
               142
             </Typography>
             <Typography variant='caption' fontWeight={500} color={green[500]}>
-              <TrendingUp sx={{ fontSize: 14, verticalAlign: "middle", mr: 0.3 }} />
+              <TrendingUp
+                sx={{ fontSize: 14, verticalAlign: "middle", mr: 0.3 }}
+              />
               +12% this week
             </Typography>
           </Stack>
@@ -494,11 +579,16 @@ export default function DesignSystemTab() {
             Average Score
           </Typography>
           <Stack direction='row' alignItems='baseline' spacing={1}>
-            <Typography variant='h4' fontWeight={700} sx={{ color: amber[isDark ? "300" : "500"] }}>
+            <Typography
+              variant='h4'
+              fontWeight={700}
+              sx={{ color: amber[isDark ? "300" : "500"] }}>
               78.4%
             </Typography>
             <Typography variant='caption' fontWeight={500} color={green[500]}>
-              <TrendingUp sx={{ fontSize: 14, verticalAlign: "middle", mr: 0.3 }} />
+              <TrendingUp
+                sx={{ fontSize: 14, verticalAlign: "middle", mr: 0.3 }}
+              />
               +3.2%
             </Typography>
           </Stack>
@@ -552,7 +642,9 @@ export default function DesignSystemTab() {
             size='small'
             fullWidth
             InputProps={{
-              startAdornment: <Search sx={{ color: "text.secondary", mr: 1, fontSize: 20 }} />,
+              startAdornment: (
+                <Search sx={{ color: "text.secondary", mr: 1, fontSize: 20 }} />
+              ),
               sx: {
                 borderRadius: 2,
                 fontFamily: "Inter, sans-serif",
@@ -702,7 +794,13 @@ export default function DesignSystemTab() {
       {/* Alerts */}
       <Paper
         elevation={0}
-        sx={{ p: 2, border: "1px solid", borderColor: "divider", borderRadius: 2, mb: 3 }}>
+        sx={{
+          p: 2,
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 2,
+          mb: 3,
+        }}>
         <Typography variant='subtitle2' fontWeight={600} sx={{ mb: 2 }}>
           Alerts
         </Typography>
@@ -744,7 +842,13 @@ export default function DesignSystemTab() {
       </Paper>
 
       {/* Poll Card + Score Card */}
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 3, mb: 3 }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+          gap: 3,
+          mb: 3,
+        }}>
         {/* Poll Card */}
         <Paper
           elevation={0}
@@ -764,9 +868,15 @@ export default function DesignSystemTab() {
             },
           }}>
           <Stack direction='row' spacing={1.5} alignItems='center'>
-            <Avatar sx={{ bgcolor: teal[400], fontFamily: "Inter, sans-serif" }}>CS</Avatar>
+            <Avatar
+              sx={{ bgcolor: teal[400], fontFamily: "Inter, sans-serif" }}>
+              CS
+            </Avatar>
             <Box>
-              <Typography variant='subtitle2' fontWeight={600} fontFamily='Inter, sans-serif'>
+              <Typography
+                variant='subtitle2'
+                fontWeight={600}
+                fontFamily='Inter, sans-serif'>
                 CS 300 — Midterm Review
               </Typography>
               <Typography variant='caption' color='text.secondary'>
@@ -786,7 +896,12 @@ export default function DesignSystemTab() {
                 borderColor: isDark ? teal[600] : teal[300],
               }}
             />
-            <Chip label='Room: 4821' size='small' variant='outlined' sx={{ borderRadius: 999 }} />
+            <Chip
+              label='Room: 4821'
+              size='small'
+              variant='outlined'
+              sx={{ borderRadius: 999 }}
+            />
           </Stack>
           <Stack direction='row' spacing={1}>
             <Button
@@ -861,10 +976,18 @@ export default function DesignSystemTab() {
               </Typography>
             </Box>
             <Box>
-              <Typography variant='subtitle2' fontWeight={600} fontFamily='Inter, sans-serif'>
+              <Typography
+                variant='subtitle2'
+                fontWeight={600}
+                fontFamily='Inter, sans-serif'>
                 Data Structures Quiz
               </Typography>
-              <Stack direction='row' spacing={0.5} sx={{ mt: 0.5 }} flexWrap='wrap' useFlexGap>
+              <Stack
+                direction='row'
+                spacing={0.5}
+                sx={{ mt: 0.5 }}
+                flexWrap='wrap'
+                useFlexGap>
                 <Chip
                   label='85%'
                   size='small'
@@ -876,7 +999,12 @@ export default function DesignSystemTab() {
                     borderColor: isDark ? green[600] : green[300],
                   }}
                 />
-                <Chip label='17/20 pts' size='small' variant='outlined' sx={{ borderRadius: 999 }} />
+                <Chip
+                  label='17/20 pts'
+                  size='small'
+                  variant='outlined'
+                  sx={{ borderRadius: 999 }}
+                />
                 <Chip
                   label='Class avg: 72%'
                   size='small'
@@ -944,7 +1072,12 @@ export default function DesignSystemTab() {
                 <TableCell>32</TableCell>
                 <TableCell>78.4%</TableCell>
                 <TableCell>
-                  <Chip label='Finished' size='small' variant='outlined' sx={{ borderRadius: 999 }} />
+                  <Chip
+                    label='Finished'
+                    size='small'
+                    variant='outlined'
+                    sx={{ borderRadius: 999 }}
+                  />
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -953,7 +1086,12 @@ export default function DesignSystemTab() {
                 <TableCell>28</TableCell>
                 <TableCell>82.1%</TableCell>
                 <TableCell>
-                  <Chip label='Finished' size='small' variant='outlined' sx={{ borderRadius: 999 }} />
+                  <Chip
+                    label='Finished'
+                    size='small'
+                    variant='outlined'
+                    sx={{ borderRadius: 999 }}
+                  />
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -981,7 +1119,11 @@ export default function DesignSystemTab() {
       </Paper>
 
       <Divider sx={{ my: 3 }} />
-      <Typography variant='body2' color='text.secondary' textAlign='center' sx={{ mb: 4 }}>
+      <Typography
+        variant='body2'
+        color='text.secondary'
+        textAlign='center'
+        sx={{ mb: 4 }}>
         Toggle dark mode (top-right) to preview both themes
       </Typography>
     </Box>

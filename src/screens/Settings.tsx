@@ -227,7 +227,7 @@ export default function Settings() {
   const [passwordError, setPasswordError] = useState("")
 
   const handleChangePassword = async () => {
-    if (!user || !user.email) return
+    if (!user?.email) return
     if (newPassword.length < 6) {
       setPasswordError("Password must be at least 6 characters")
       return
@@ -245,7 +245,10 @@ export default function Settings() {
       )
       await reauthenticateWithCredential(user, credential)
       await updatePassword(user, newPassword)
-      snackbar.show({ message: "Password updated successfully", type: "success" })
+      snackbar.show({
+        message: "Password updated successfully",
+        type: "success",
+      })
       setChangingPassword(false)
       setCurrentPassword("")
       setNewPassword("")
