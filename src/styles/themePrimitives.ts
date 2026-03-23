@@ -126,7 +126,7 @@ export const getDesignTokens = (mode: PaletteMode) => {
         ...(mode === "dark" && {
           contrastText: teal[50],
           light: teal[300],
-          main: teal[400],
+          main: teal[500],
           dark: teal[700],
         }),
       },

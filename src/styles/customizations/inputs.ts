@@ -29,6 +29,7 @@ export const inputsCustomizations: Components<Theme> = {
         borderRadius: theme.shape.borderRadius,
         textTransform: "none" as const,
         fontWeight: 500,
+        borderColor: "transparent",
         variants: [
           {
             props: { size: "small" },
@@ -61,17 +62,17 @@ export const inputsCustomizations: Components<Theme> = {
               },
               ...theme.applyStyles("dark", {
                 color: "white",
-                backgroundColor: teal[400],
-                backgroundImage: `linear-gradient(to bottom, ${teal[300]}, ${teal[400]})`,
-                boxShadow: `inset 0 1px 0 ${alpha(teal[200], 0.3)}, inset 0 -1px 0 ${alpha(teal[700], 0.3)}`,
-                border: `1px solid ${teal[400]}`,
+                backgroundColor: teal[500],
+                backgroundImage: `linear-gradient(to bottom, ${teal[400]}, ${teal[500]})`,
+                boxShadow: `inset 0 1px 0 ${alpha(teal[300], 0.3)}, inset 0 -1px 0 ${alpha(teal[700], 0.3)}`,
+                border: `1px solid ${teal[500]}`,
                 "&:hover": {
                   backgroundImage: "none",
-                  backgroundColor: teal[500],
+                  backgroundColor: teal[600],
                   boxShadow: "none",
                 },
                 "&:active": {
-                  backgroundColor: teal[600],
+                  backgroundColor: teal[700],
                 },
               }),
             },
@@ -154,8 +155,10 @@ export const inputsCustomizations: Components<Theme> = {
             props: { variant: "text" },
             style: {
               color: gray[600],
+              border: "none",
               "&:hover": {
                 backgroundColor: gray[100],
+                border: "none",
               },
               "&:active": {
                 backgroundColor: gray[200],
@@ -164,6 +167,7 @@ export const inputsCustomizations: Components<Theme> = {
                 color: gray[50],
                 "&:hover": {
                   backgroundColor: gray[700],
+                  border: "none",
                 },
                 "&:active": {
                   backgroundColor: alpha(gray[700], 0.7),
@@ -200,32 +204,14 @@ export const inputsCustomizations: Components<Theme> = {
     styleOverrides: {
       root: ({ theme }) => ({
         boxShadow: "none",
-        borderRadius: theme.shape.borderRadius,
-        textTransform: "none" as const,
-        fontWeight: theme.typography.fontWeightMedium,
-        letterSpacing: 0,
+        borderRadius: "50%",
         color: theme.palette.text.primary,
-        border: "1px solid",
-        borderColor: gray[200],
-        backgroundColor: alpha(gray[50], 0.3),
         "&:hover": {
-          backgroundColor: gray[100],
-          borderColor: gray[300],
+          backgroundColor: alpha(theme.palette.action.hover, 0.08),
         },
         "&:active": {
-          backgroundColor: gray[200],
+          backgroundColor: alpha(theme.palette.action.active, 0.12),
         },
-        ...theme.applyStyles("dark", {
-          backgroundColor: gray[800],
-          borderColor: gray[700],
-          "&:hover": {
-            backgroundColor: gray[900],
-            borderColor: gray[600],
-          },
-          "&:active": {
-            backgroundColor: gray[900],
-          },
-        }),
         variants: [
           {
             props: { size: "small" },
@@ -297,10 +283,9 @@ export const inputsCustomizations: Components<Theme> = {
   MuiOutlinedInput: {
     styleOverrides: {
       input: {
-        padding: 0,
+        padding: "8px 12px",
       },
       root: ({ theme }) => ({
-        padding: "8px 12px",
         color: theme.palette.text.primary,
         borderRadius: theme.shape.borderRadius,
         border: `1px solid ${theme.palette.divider}`,
@@ -318,23 +303,26 @@ export const inputsCustomizations: Components<Theme> = {
             borderColor: gray[500],
           },
         }),
-        variants: [
-          {
-            props: { size: "small" },
-            style: {
-              height: "2.25rem",
-            },
-          },
-          {
-            props: { size: "medium" },
-            style: {
-              height: "2.5rem",
-            },
-          },
-        ],
       }),
       notchedOutline: {
         border: "none",
+      },
+    },
+  },
+  MuiInputLabel: {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        color: theme.palette.text.secondary,
+        "&.Mui-focused": {
+          color: theme.palette.primary.main,
+        },
+      }),
+      outlined: {
+        "&.MuiInputLabel-shrink": {
+          transform: "translate(14px, -9px) scale(0.75)",
+          backgroundColor: "var(--mui-palette-background-default, inherit)",
+          padding: "0 4px",
+        },
       },
     },
   },
