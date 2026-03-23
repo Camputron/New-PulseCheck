@@ -1,4 +1,4 @@
-name: Deploy to Firebase on Merge to Main Branch
+name: CD / Deploy to Firebase
 on:
   push:
     branches:

@@ -1,4 +1,4 @@
-name: Validate Firebase Services on Pull Request
+name: CI / Validate
 on:
   pull_request:
     branches:
