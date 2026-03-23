@@ -1,3 +1,5 @@
+# Builds the app and Cloud Functions, then deploys hosting, functions,
+# Firestore rules/indexes, and storage rules to Firebase on every push to main.
 name: CD / Deploy to Firebase
 on:
   push:

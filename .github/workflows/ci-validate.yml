@@ -1,3 +1,5 @@
+# Lints and builds the app + Cloud Functions, then spins up Firebase emulators
+# and smoke-tests that all services (auth, firestore, hosting, storage, functions) are healthy.
 name: CI / Validate
 on:
   pull_request:
