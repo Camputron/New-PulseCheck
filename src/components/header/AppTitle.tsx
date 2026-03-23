@@ -2,8 +2,9 @@ import { useAuthContext } from "@/lib/hooks"
 import { Box, Typography } from "@mui/material"
 import Image from "mui-image"
 import { Link } from "react-router-dom"
+import NewBadge from "./NewBadge"
 
-const SZ = 40
+const SZ = 32
 
 export default function AppTitle() {
   const { user } = useAuthContext()
@@ -11,6 +12,7 @@ export default function AppTitle() {
     <Box
       display={"flex"}
       alignItems={"center"}
+      gap={1}
       component={Link}
       to={user && !user.isAnonymous ? "/dashboard" : "/"}
       sx={{
@@ -18,14 +20,30 @@ export default function AppTitle() {
         alignItems: "center",
         cursor: "pointer",
         color: "inherit",
+        textDecoration: "none",
         "&:hover": {
           color: "inherit",
         },
       }}>
-      <Typography pt={0.5} variant='h6'>
-        PulseCheck
-      </Typography>
-      <Image src='/favicon.png' width={SZ} height={SZ} />
+      <Box position='relative' display='inline-flex'>
+        <NewBadge />
+        <Typography
+          variant='h6'
+          sx={{
+            fontWeight: 700,
+            fontSize: "1.1rem",
+            letterSpacing: 0.5,
+            color: "text.primary",
+          }}>
+          PulseCheck
+        </Typography>
+      </Box>
+      <Image
+        src='/favicon.png'
+        width={SZ}
+        height={SZ}
+        style={{ borderRadius: 6 }}
+      />
     </Box>
   )
 }

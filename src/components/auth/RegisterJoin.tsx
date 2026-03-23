@@ -1,9 +1,6 @@
 // import { RA } from "@/styles"
 import {
-  Card,
-  CardContent,
   Button,
-  Container,
   Stack,
   TextField,
   Divider,
@@ -177,147 +174,137 @@ export default function RegisterJoin() {
   }
 
   return (
-    <Container maxWidth='xs'>
-      <RA.Bounce triggerOnce>
-        <Card raised sx={{ mt: 8, pb: 2 }}>
-          <CardContent>
-            <Typography variant='h5' textAlign='center' marginBlock={4}>
-              Register!
-            </Typography>
-            <Stack
-              component={"form"}
-              sx={{ m: 1 }}
-              spacing={2}
-              noValidate
-              autoComplete='off'>
-              <TextField
-                label='Display Name'
-                variant='outlined'
-                fullWidth
-                value={displayName}
-                onChange={(e) => {
-                  setDisplayName(e.target.value)
-                  clearFieldError("displayName")
-                }}
-                error={!!errors.displayName}
-                helperText={errors.displayName}
-              />
-              <TextField
-                id='register-email'
-                label='Email'
-                type='email'
-                variant='outlined'
-                fullWidth
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                  clearFieldError("email")
-                }}
-                // onKeyDown={() => clearFieldError("email")}
-                error={!!errors.email}
-                helperText={errors.email}
-              />
-              <TextField
-                id='register-password'
-                label='Password'
-                fullWidth
-                value={password}
-                // type={showPassword ? "text" : "password"}
-                type='password'
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                  clearFieldError("password")
-                }}
-                // onKeyDown={() => clearFieldError("password")}
-                error={!!errors.password}
-                helperText={errors.password}
-              />
-              <TextField
-                id='register-retype-password'
-                label='Re-Type Password'
-                fullWidth
-                // type={showPassword ? "text" : "password"}
-                value={retypePassword}
-                type='password'
-                onChange={(e) => {
-                  setRetypePassword(e.target.value)
-                  clearFieldError("retypePassword")
-                }}
-                // onKeyDown={() => clearFieldError("retypePassword")}
-                error={!!errors.retypePassword}
-                helperText={errors.retypePassword}
-                // InputProps={{
-                //   endAdornment: (
-                //     <InputAdornment position='end'>
-                //       <IconButton
-                //         aria-label='toggle visibility'
-                //         onClick={() => setShowPassword((prev) => !prev)}
-                //         edge='end'
-                //         size='small'>
-                //         {showPassword ? <VisibilityOff /> : <Visibility />}
-                //       </IconButton>
-                //     </InputAdornment>
-                //   ),
-                // }}
-              />
-              {/* <IconButton
+    <Box sx={{ width: "100%", maxWidth: 400 }}>
+      <RA.Fade triggerOnce duration={600}>
+        <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+          Create Account
+        </Typography>
+        <Typography variant='body2' color='text.secondary' sx={{ mb: 4 }}>
+          Sign up to start using PulseCheck.
+        </Typography>
+
+        <SignInWGoogleButton />
+
+        <Divider sx={{ my: 3 }}>
+          <Typography variant='body2' color='text.secondary'>
+            or continue with email
+          </Typography>
+        </Divider>
+
+        <Stack component={"form"} spacing={2.5} noValidate autoComplete='off'>
+          <TextField
+            label='Display Name'
+            variant='outlined'
+            fullWidth
+            size='medium'
+            value={displayName}
+            onChange={(e) => {
+              setDisplayName(e.target.value)
+              clearFieldError("displayName")
+            }}
+            error={!!errors.displayName}
+            helperText={errors.displayName}
+          />
+          <TextField
+            id='register-email'
+            label='Email'
+            type='email'
+            variant='outlined'
+            fullWidth
+            size='medium'
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              clearFieldError("email")
+            }}
+            // onKeyDown={() => clearFieldError("email")}
+            error={!!errors.email}
+            helperText={errors.email}
+          />
+          <TextField
+            id='register-password'
+            label='Password'
+            fullWidth
+            size='medium'
+            value={password}
+            // type={showPassword ? "text" : "password"}
+            type='password'
+            onChange={(e) => {
+              setPassword(e.target.value)
+              clearFieldError("password")
+            }}
+            // onKeyDown={() => clearFieldError("password")}
+            error={!!errors.password}
+            helperText={errors.password}
+          />
+          <TextField
+            id='register-retype-password'
+            label='Confirm Password'
+            fullWidth
+            size='medium'
+            // type={showPassword ? "text" : "password"}
+            value={retypePassword}
+            type='password'
+            onChange={(e) => {
+              setRetypePassword(e.target.value)
+              clearFieldError("retypePassword")
+            }}
+            // onKeyDown={() => clearFieldError("retypePassword")}
+            error={!!errors.retypePassword}
+            helperText={errors.retypePassword}
+            // InputProps={{
+            //   endAdornment: (
+            //     <InputAdornment position='end'>
+            //       <IconButton
+            //         aria-label='toggle visibility'
+            //         onClick={() => setShowPassword((prev) => !prev)}
+            //         edge='end'
+            //         size='small'>
+            //         {showPassword ? <VisibilityOff /> : <Visibility />}
+            //       </IconButton>
+            //     </InputAdornment>
+            //   ),
+            // }}
+          />
+
+          <Button
+            variant='contained'
+            color='primary'
+            fullWidth
+            type='submit'
+            sx={{
+              py: 1.5,
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: "1rem",
+            }}
+            onClick={(e) => {
+              /*
+                setting the button type to submit allows you to fire
+                the button's on click event with the 'Enter' key
+              */
+              e.preventDefault()
+              void handleRegClick()
+            }}>
+            Create Account
+          </Button>
+
+          <Box display={"flex"} justifyContent={"center"}>
+            <Link
+              color='textPrimary'
+              onClick={handleLink}
+              variant='body2'
               sx={{
-                position: "absolute",
-                right: 50,
-                top: 20,
-              }}
-              onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton> */}
-              {/* <Typography
-                textAlign='right'
-                sx={{
-                  mt: 1,
-                  color: "primary.main",
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-                onClick={() => void navigate("/login")}>
-                Already Have an account?
-              </Typography> */}
-
-              <Box display={"flex"} flex={1} justifyContent={"right"}>
-                <Link
-                  color='textPrimary'
-                  onClick={handleLink}
-                  variant='body2'
-                  sx={{
-                    cursor: "pointer",
-                  }}>
-                  Already have an account? Login
-                </Link>
-              </Box>
-
-              <Button
-                variant='contained'
-                color='primary'
-                fullWidth
-                type='submit'
-                onClick={(e) => {
-                  /* 
-                    setting the button type to submit allows you to fire 
-                    the button's on click event with the 'Enter' key 🤓 
-                  */
-                  e.preventDefault()
-                  void handleRegClick()
-                }}>
-                Register
-              </Button>
-              <Divider>
-                <Typography color='textSecondary'> or </Typography>
-              </Divider>
-
-              <SignInWGoogleButton />
-            </Stack>
-          </CardContent>
-        </Card>
-      </RA.Bounce>
-    </Container>
+                cursor: "pointer",
+                transition: "color 0.2s",
+                "&:hover": { color: "primary.main" },
+              }}>
+              Already have an account? Sign In
+            </Link>
+          </Box>
+        </Stack>
+      </RA.Fade>
+    </Box>
   )
 }

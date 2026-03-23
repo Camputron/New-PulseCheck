@@ -1,29 +1,33 @@
-import { Container } from "@mui/material"
-import React from "react"
+import { Box } from "@mui/material"
 import UserLogin from "@/components/auth/UserLogin"
 import useRedirectIfAuthenticated from "@/lib/hooks/useRedirectIfAuthenticated"
-// import { useAuthContext } from "@/lib/hooks"
-// import { useNavigate } from "react-router-dom"
-//import SignInWGoogleButton from "@/components/auth/ContinueWGoogleButton"
+import AuthBranding from "@/components/auth/AuthBranding"
 
 export default function Login() {
   useRedirectIfAuthenticated()
-  // const auth = useAuthContext()
-  // const navigate = useNavigate()
-
-  // useEffect(() => {
-  //   if (auth.user && !auth.user.isAnonymous && !auth.loading) {
-  //     void navigate("/dashboard")
-  //   }
-  // }, [auth, navigate])
 
   return (
-    <React.Fragment>
-      <Container maxWidth='sm'>
-        {/* <Typography> Login Page Goes Here </Typography> */}
-        {/* <SignInWGoogleButton /> */}
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "calc(100vh - 64px)",
+        flexDirection: { xs: "column", md: "row" },
+      }}>
+      <AuthBranding
+        heading='Welcome back.'
+        subtext='Sign in to manage your sessions, review results, and keep your classroom engaged.'
+      />
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          py: { xs: 4, md: 0 },
+          px: 2,
+        }}>
         <UserLogin />
-      </Container>
-    </React.Fragment>
+      </Box>
+    </Box>
   )
 }

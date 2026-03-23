@@ -23,7 +23,7 @@ const config: FirebaseOptions = {
   measurementId: "G-79L0E0NQPP",
 }
 
-const BUCKET_URL = "gs://pulsecheck-7cf2b.firebasestorage.app"
+const BUCKET_URL = "gs://new-pulsecheck.firebasestorage.app"
 
 const app = initializeApp(config)
 const vertexAI = getVertexAI(app)

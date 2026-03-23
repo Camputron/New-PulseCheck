@@ -4,8 +4,7 @@ import {
   Stack,
   TextField,
   Typography,
-  Card,
-  CardContent,
+  Box,
 } from "@mui/material"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import React, { useEffect, useRef, useState } from "react"
@@ -15,6 +14,7 @@ import { FormEvent } from "react"
 import { useAuthContext } from "@/lib/hooks"
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
 import useRequireAuth from "@/lib/hooks/useRequireAuth"
+import { RA } from "@/styles"
 
 function DisplayNameField(props: {
   uid: string
@@ -63,15 +63,6 @@ export default function PollJoin() {
     }
   }, [query, user, displayName, fire])
 
-  // useEffect(() => {
-  //   /* check authentication */
-  //   if (!user && !loading) {
-  //     void navigate("/get-started")
-  //   } else if (user?.isAnonymous) {
-  //     void navigate("/get-started")
-  //   }
-  // }, [user, loading, navigate])
-
   const handleJoinClick = (e: MouseEvent | FormEvent) => {
     e.preventDefault()
     const aux = async () => {
@@ -110,19 +101,37 @@ export default function PollJoin() {
     }
     void aux()
   }
+
   return (
-    <Container maxWidth='xs'>
-      {/* <RA.Bounce triggerOnce> */}
-      <Card raised sx={{ mt: 8, pb: 2 }}>
-        <CardContent>
-          <Typography variant='h5' textAlign='center' marginBlock={4}>
+    <Box
+      sx={{
+        minHeight: "70vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        py: { xs: 4, md: 8 },
+      }}>
+      <Container maxWidth='xs'>
+        <RA.Fade triggerOnce duration={600}>
+          <Typography
+            variant='overline'
+            sx={{
+              letterSpacing: 2,
+              color: "primary.main",
+              fontWeight: 600,
+            }}>
+            Session
+          </Typography>
+          <Typography variant='h4' fontWeight={700} sx={{ mb: 1 }}>
             Join Poll
+          </Typography>
+          <Typography variant='body2' color='text.secondary' sx={{ mb: 4 }}>
+            Enter the room code provided by your instructor.
           </Typography>
           <Stack
             component='form'
             onSubmit={handleJoinClick}
-            sx={{ m: 1 }} // margin for everything in the box
-            spacing={2}
+            spacing={2.5}
             noValidate
             autoComplete='off'>
             <TextField
@@ -147,13 +156,19 @@ export default function PollJoin() {
               color='primary'
               onClick={handleJoinClick}
               fullWidth
-              disabled={disable}>
-              POLL UP
+              disabled={disable}
+              sx={{
+                py: 1.5,
+                borderRadius: 2,
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: "1rem",
+              }}>
+              Join Session
             </Button>
           </Stack>
-        </CardContent>
-      </Card>
-      {/* </RA.Bounce> */}
-    </Container>
+        </RA.Fade>
+      </Container>
+    </Box>
   )
 }

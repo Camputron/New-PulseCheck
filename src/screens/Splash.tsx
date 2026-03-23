@@ -1,4 +1,11 @@
-import { Box, Button, Container, Stack, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material"
 import { useNavigate, useLocation } from "react-router-dom"
 import About from "../components/splash/About"
 import FAQs from "../components/splash/FAQs"
@@ -6,7 +13,7 @@ import Features from "../components/splash/Features"
 import FooterLink from "../components/splash/FooterLink"
 import { useRef, useEffect } from "react"
 import { RA } from "@/styles"
-import { ExpandCircleDown } from "@mui/icons-material"
+import { ArrowForward } from "@mui/icons-material"
 import useRedirectIfAuthenticated from "@/lib/hooks/useRedirectIfAuthenticated"
 
 interface LocationState {
@@ -16,32 +23,23 @@ interface LocationState {
 export default function Splash() {
   useRedirectIfAuthenticated()
   const navigate = useNavigate()
-  // const { user, loading } = useAuthContext()
-
-  // useEffect(() => {
-  //   if (user && !user.isAnonymous && !loading) {
-  //     void navigate("/dashboard")
-  //   }
-  // }, [user, loading, navigate])
 
   const handleClick = () => {
     void navigate("/get-started")
   }
   const location = useLocation()
 
-  const aboutRef = useRef<HTMLDivElement>(null) // Stores reference to "About" section
-  const faqRef = useRef<HTMLDivElement>(null) // Stores reference to "FAQs" section
-  const featuredRef = useRef<HTMLDivElement>(null) // Stores reference to "Features" section
+  const aboutRef = useRef<HTMLDivElement>(null)
+  const faqRef = useRef<HTMLDivElement>(null)
+  const featuredRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const locstate = location.state as LocationState
     if (locstate?.scrollTo) {
-      // When the location changes...
       const target = locstate.scrollTo
       let destination: HTMLDivElement | null = null
 
       if (target === "about") {
-        // Sets destination based on the "scrollTo" state from the navbar
         destination = aboutRef.current
       } else if (target === "faqs") {
         destination = faqRef.current
@@ -50,53 +48,110 @@ export default function Splash() {
       }
 
       if (destination) {
-        destination.scrollIntoView({ behavior: "smooth" }) // Smooth scroll to the desination
+        destination.scrollIntoView({ behavior: "smooth" })
       }
     }
   }, [location])
 
   return (
-    <Container maxWidth='sm'>
-      <Box mb={16}>
-        <RA.Bounce triggerOnce>
-          <Typography variant='h4' fontWeight={700} margin={4} gutterBottom>
-            Turning Dead Time into Real-Time Learning!
-          </Typography>
-        </RA.Bounce>
-        <RA.Bounce triggerOnce>
-          <Button
-            variant='contained'
-            color='primary'
-            sx={{ mb: 2 }}
-            onClick={handleClick}>
-            Get Started
-          </Button>
-        </RA.Bounce>
-        <Stack spacing={4} mb={32}>
-          <RA.Bounce triggerOnce>
-            <Typography variant='body1' marginInline={4} gutterBottom>
-              PulseCheck brings your classroom back to life by turning silent
-              lectures into interactive learning experiences. With real-time
-              polls and quizzes, students are no longer passive -- they're part
-              of the conversation. Instructors get instant feedback, making
-              every session more dynamic and alive.
+    <Box>
+      {/* Hero Section */}
+      <Box
+        sx={{
+          py: { xs: 8, md: 12 },
+          px: 2,
+          textAlign: "center",
+          background: (theme) =>
+            theme.palette.mode === "dark"
+              ? "linear-gradient(160deg, rgba(0,150,136,0.15) 0%, rgba(0,0,0,0) 60%)"
+              : "linear-gradient(160deg, rgba(0,150,136,0.08) 0%, rgba(255,255,255,0) 60%)",
+        }}>
+        <Container maxWidth='md'>
+          <RA.Fade triggerOnce duration={800}>
+            <Typography
+              variant='overline'
+              sx={{
+                letterSpacing: 3,
+                color: "primary.main",
+                fontWeight: 600,
+                fontSize: "0.85rem",
+              }}>
+              Classroom Engagement, Reimagined
             </Typography>
-          </RA.Bounce>
+          </RA.Fade>
+          <RA.Fade triggerOnce duration={800} delay={200}>
+            <Typography
+              variant='h3'
+              fontWeight={800}
+              sx={{
+                mt: 2,
+                mb: 3,
+                fontSize: { xs: "2rem", md: "3rem" },
+                lineHeight: 1.2,
+              }}>
+              Transform Passive Lectures into Active Learning
+            </Typography>
+          </RA.Fade>
+          <RA.Fade triggerOnce duration={800} delay={400}>
+            <Typography
+              variant='h6'
+              sx={{
+                maxWidth: 600,
+                mx: "auto",
+                mb: 5,
+                color: "text.secondary",
+                fontWeight: 400,
+                lineHeight: 1.6,
+              }}>
+              PulseCheck empowers instructors with real-time polls and quizzes
+              that keep every student engaged. Get instant feedback, track
+              understanding, and make every session count.
+            </Typography>
+          </RA.Fade>
+          <RA.Fade triggerOnce duration={800} delay={600}>
+            <Button
+              variant='contained'
+              color='primary'
+              size='large'
+              endIcon={<ArrowForward />}
+              onClick={handleClick}
+              sx={{
+                px: 5,
+                py: 1.5,
+                fontSize: "1.1rem",
+                borderRadius: 2,
+                textTransform: "none",
+                fontWeight: 600,
+              }}>
+              Get Started
+            </Button>
+          </RA.Fade>
+        </Container>
+      </Box>
+
+      {/* Content Sections */}
+      <Container maxWidth='md'>
+        <Stack spacing={10} sx={{ py: 8 }}>
           <About ref={aboutRef} />
-          <Container>
-            <ExpandCircleDown />
-          </Container>
+          <Divider />
           <Features ref={featuredRef} />
-          <Container>
-            <ExpandCircleDown />
-          </Container>
+          <Divider />
           <FAQs ref={faqRef} />
         </Stack>
-      </Box>
-      <Box mb={3}>
-        <FooterLink text='Privacy Policy' path='privacy-policy' />
-        <FooterLink text='Term of Service' path='terms-of-service' />
-      </Box>
-    </Container>
+
+        {/* Footer */}
+        <Divider sx={{ mt: 4 }} />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 4,
+            py: 4,
+          }}>
+          <FooterLink text='Privacy Policy' path='privacy-policy' />
+          <FooterLink text='Terms of Service' path='terms-of-service' />
+        </Box>
+      </Container>
+    </Box>
   )
 }

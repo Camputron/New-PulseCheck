@@ -15,9 +15,14 @@ export default function FooterLink({ text, path }: Props) {
   }
   return (
     <Typography
+      variant='body2'
       onClick={handleNavigate}
-      color='primary'
-      sx={{ cursor: "pointer" }}>
+      color='text.secondary'
+      sx={{
+        cursor: "pointer",
+        transition: "color 0.2s",
+        "&:hover": { color: "primary.main" },
+      }}>
       {text}
     </Typography>
   )

@@ -626,7 +626,7 @@ export default class SessionStore extends BaseStore {
     console.debug(`Deleted ${count} document(s) from ${clx.sessions}`)
   }
 
-  /** @brief Finds all sessions the user hosted  */
+  /** @brief Finds all sessions the user hosted (FINISHED + CLOSED) */
   public async findUserSessions(
     uid: string
   ): Promise<QueryDocumentSnapshot<Session>[]> {
@@ -635,7 +635,7 @@ export default class SessionStore extends BaseStore {
     const q = query(
       subsRef,
       where("host", "==", uref),
-      where("state", "==", SessionState.FINISHED)
+      where("state", "in", [SessionState.FINISHED, SessionState.CLOSED])
     )
     const ss = await getDocs(q)
     return (ss.docs as QueryDocumentSnapshot<Session>[]) ?? []

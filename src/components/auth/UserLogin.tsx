@@ -1,8 +1,5 @@
 import {
-  Card,
-  CardContent,
   Button,
-  Container,
   Stack,
   TextField,
   Divider,
@@ -101,93 +98,95 @@ export default function UserLogin() {
   }
 
   return (
-    <Container maxWidth='xs'>
-      <RA.Bounce triggerOnce>
-        <Card raised sx={{ mt: 8, pb: 2 }}>
-          <CardContent>
-            <Typography variant='h5' textAlign='center' marginBlock={4}>
-              Login!
-            </Typography>
-            <Stack
-              component={"form"}
-              sx={{ m: 1 }}
-              spacing={2}
-              noValidate
-              autoComplete='off'>
-              <TextField
-                id='user-email'
-                label='Email'
-                type='email'
-                variant='outlined'
-                fullWidth
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                  clearFieldError("email")
-                }}
-                // onKeyDown={() => clearFieldError("email")}
-                error={!!errors.email}
-                helperText={errors.email}
-              />
-              <TextField
-                id='input-password'
-                label='Password'
-                fullWidth
-                value={password}
-                // type={showPassword ? "text" : "password"}
-                type='password'
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                  clearFieldError("password")
-                }}
-                // onKeyDown={() => clearFieldError("password")}
-                error={!!errors.password}
-                helperText={errors.password}
-              />
-              {/* <IconButton
-                sx={{
-                  position: "absolute",
-                  right: 50,
-                  top: 20,
-                }}
-                onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton> */}
+    <Box sx={{ width: "100%", maxWidth: 400 }}>
+      <RA.Fade triggerOnce duration={600}>
+        <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+          Sign In
+        </Typography>
+        <Typography variant='body2' color='text.secondary' sx={{ mb: 4 }}>
+          Enter your credentials to continue.
+        </Typography>
 
-              <Box display={"flex"} flex={1} justifyContent={"right"}>
-                <Link
-                  color='textPrimary'
-                  onClick={handleLink}
-                  variant='body2'
-                  sx={{ cursor: "pointer" }}>
-                  Don't have an account? Register
-                </Link>
-              </Box>
+        <SignInWGoogleButton />
 
-              <Button
-                variant='contained'
-                color='primary'
-                fullWidth
-                type='submit'
-                onClick={(e) => {
-                  /* 
-                      setting the button type to submit allows you to fire 
-                      the button's on click event with the 'Enter' key 🤓 
-                    */
-                  e.preventDefault()
-                  void handleRegClick()
-                }}>
-                Login
-              </Button>
-              <Divider>
-                <Typography color='textSecondary'> or </Typography>
-              </Divider>
+        <Divider sx={{ my: 3 }}>
+          <Typography variant='body2' color='text.secondary'>
+            or continue with email
+          </Typography>
+        </Divider>
 
-              <SignInWGoogleButton />
-            </Stack>
-          </CardContent>
-        </Card>
-      </RA.Bounce>
-    </Container>
+        <Stack component={"form"} spacing={2.5} noValidate autoComplete='off'>
+          <TextField
+            id='user-email'
+            label='Email'
+            type='email'
+            variant='outlined'
+            fullWidth
+            size='medium'
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              clearFieldError("email")
+            }}
+            // onKeyDown={() => clearFieldError("email")}
+            error={!!errors.email}
+            helperText={errors.email}
+          />
+          <TextField
+            id='input-password'
+            label='Password'
+            fullWidth
+            size='medium'
+            value={password}
+            // type={showPassword ? "text" : "password"}
+            type='password'
+            onChange={(e) => {
+              setPassword(e.target.value)
+              clearFieldError("password")
+            }}
+            // onKeyDown={() => clearFieldError("password")}
+            error={!!errors.password}
+            helperText={errors.password}
+          />
+
+          <Button
+            variant='contained'
+            color='primary'
+            fullWidth
+            type='submit'
+            sx={{
+              py: 1.5,
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: "1rem",
+            }}
+            onClick={(e) => {
+              /*
+                  setting the button type to submit allows you to fire
+                  the button's on click event with the 'Enter' key
+                */
+              e.preventDefault()
+              void handleRegClick()
+            }}>
+            Sign In
+          </Button>
+
+          <Box display={"flex"} justifyContent={"center"}>
+            <Link
+              color='textPrimary'
+              onClick={handleLink}
+              variant='body2'
+              sx={{
+                cursor: "pointer",
+                transition: "color 0.2s",
+                "&:hover": { color: "primary.main" },
+              }}>
+              Don't have an account? Register
+            </Link>
+          </Box>
+        </Stack>
+      </RA.Fade>
+    </Box>
   )
 }

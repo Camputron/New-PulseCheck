@@ -1,29 +1,33 @@
-import { Container } from "@mui/material"
-import React from "react"
+import { Box } from "@mui/material"
 import RegisterJoin from "@/components/auth/RegisterJoin"
 import useRedirectIfAuthenticated from "@/lib/hooks/useRedirectIfAuthenticated"
-// import { useAuthContext } from "@/lib/hooks"
-// import { useNavigate } from "react-router-dom"
-// import SignInWGoogleButton from "@/components/auth/SignInWGoogleButton"
+import AuthBranding from "@/components/auth/AuthBranding"
 
 export default function Register() {
   useRedirectIfAuthenticated()
-  // const auth = useAuthContext()
-  // const navigate = useNavigate()
-
-  // useEffect(() => {
-  //   if (auth.user && !auth.user.isAnonymous && !auth.loading) {
-  //     void navigate("/dashboard")
-  //   }
-  // }, [auth, navigate])
 
   return (
-    <React.Fragment>
-      <Container maxWidth='sm'>
-        {/* <Typography> Sorry Brando he made me do it</Typography> */}
-        {/* <SignInWGoogleButton /> */}
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "calc(100vh - 64px)",
+        flexDirection: { xs: "column", md: "row" },
+      }}>
+      <AuthBranding
+        heading='Join PulseCheck.'
+        subtext='Create an account to start building interactive sessions and engaging your classroom in real time.'
+      />
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          py: { xs: 4, md: 0 },
+          px: 2,
+        }}>
         <RegisterJoin />
-      </Container>
-    </React.Fragment>
+      </Box>
+    </Box>
   )
 }
