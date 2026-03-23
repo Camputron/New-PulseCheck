@@ -2,9 +2,10 @@ import { Firestore } from "firebase/firestore"
 import PollStore from "./polls"
 import UserStore from "./users"
 import { initializeApp, FirebaseOptions } from "firebase/app"
-import { getAuth } from "firebase/auth"
-import { getFirestore } from "firebase/firestore"
-import { getStorage } from "firebase/storage"
+import { connectAuthEmulator, getAuth } from "firebase/auth"
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore"
+import { connectStorageEmulator, getStorage } from "firebase/storage"
+import { connectFunctionsEmulator, getFunctions } from "firebase/functions"
 import AuthStore from "./auth"
 import SessionStore from "./sessions/sessions"
 import SubmissionStore from "./submissions"
@@ -35,6 +36,15 @@ export const model = getGenerativeModel(vertexAI, {
 export const auth = getAuth(app)
 export const firestore = getFirestore(app)
 export const storage = getStorage(app, BUCKET_URL)
+export const functions = getFunctions(app)
+
+if (import.meta.env.VITE_USE_EMULATORS === "true") {
+  connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true })
+  connectFirestoreEmulator(firestore, "localhost", 8080)
+  connectStorageEmulator(storage, "localhost", 9199)
+  connectFunctionsEmulator(functions, "localhost", 5001)
+  console.warn("🔧 Using Firebase emulators")
+}
 
 /**
  * Enum to model Firestore collection names.
