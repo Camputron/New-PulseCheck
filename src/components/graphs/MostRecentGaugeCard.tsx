@@ -1,21 +1,35 @@
 import {
   Box,
-  Card,
   CardActionArea,
-  CardContent,
+  Chip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material"
-import { QueryDocumentSnapshot } from "firebase/firestore"
+import { getDoc, QueryDocumentSnapshot } from "firebase/firestore"
 import api from "@/lib/api/firebase"
 import { useEffect, useState } from "react"
-import { Submission } from "@/lib/types"
+import { Session, Submission } from "@/lib/types"
 import { useAuthContext } from "@/lib/hooks"
 import { useNavigate } from "react-router-dom"
+import {
+  Groups,
+  QuestionAnswer,
+  TrendingDown,
+  TrendingUp,
+} from "@mui/icons-material"
 import NoRecentPolls from "./NoRecentPoll"
 import PulseGauge from "./PulseGauge"
 
 interface Props {
   mrpsd: number
+}
+
+function scoreMessage(pct: number): string {
+  if (pct >= 90) return "Excellent work!"
+  if (pct >= 70) return "Good job, keep it up!"
+  if (pct >= 50) return "Not bad — room to improve."
+  return "Keep practicing!"
 }
 
 export default function MostRecentGaugeCard(props: Props) {
@@ -24,23 +38,32 @@ export default function MostRecentGaugeCard(props: Props) {
   const [snapshot, setSnapshot] = useState<
     QueryDocumentSnapshot<Submission> | null | undefined
   >()
+  const [session, setSession] = useState<Session>()
   const navigate = useNavigate()
+  const theme = useTheme()
+  const isPhone = useMediaQuery(theme.breakpoints.down("sm"))
 
   useEffect(() => {
     if (user) {
       api.submissions
         .findMostRecentSubmission(user.uid)
         .then((x) => {
-          // console.debug(x?.data().score_100)
           if (!x) return
           setSnapshot(x)
+          const sub = x.data()
+          getDoc(sub.session)
+            .then((s) => {
+              if (s.exists()) {
+                setSession(s.data())
+              }
+            })
+            .catch((err) => console.debug(err))
         })
         .catch((err) => console.debug(err))
     }
   }, [user])
 
   const sub = snapshot?.data()
-  // console.debug("testing", snapshot?.data())
   if (!snapshot?.data()) {
     return <NoRecentPolls />
   }
@@ -53,112 +76,162 @@ export default function MostRecentGaugeCard(props: Props) {
     }
   }
 
-  /*mrpsd == 0 is for post poll statistics*/
-  if (mrpsd === 0) {
-    return (
-      <Card variant='outlined'>
-        {/* <CardActionArea onClick={onClick}> */}
-        <CardContent>
-          <Typography variant='h6' align='center'>
-            {user?.displayName}'s Score
-          </Typography>
-          <Box display={"flex"} justifyContent={"center"}>
-            <PulseGauge score={sub?.score_100 ?? 0} />
-          </Box>
-          <Box>
-            <Typography
-              variant='h6'
-              fontWeight={"bold"}
-              align='center'
-              gutterBottom>
-              {sub?.title}
-            </Typography>
+  const heading =
+    mrpsd === 0
+      ? `${user?.displayName}'s Score`
+      : mrpsd === 1
+        ? "Your Latest Score"
+        : "Most Recent Poll"
 
-            <Typography variant='body2' color='textSecondary' align='center'>
-              Submitted: {submitted_at?.toDate().toLocaleDateString()}{" "}
-              {submitted_at?.toDate().toLocaleTimeString()}
-            </Typography>
-          </Box>
-        </CardContent>
-        {/* </CardActionArea> */}
-      </Card>
-    )
+  const isClickable = mrpsd !== 0
+  const scoreValid = sub && isFinite(sub.score_100)
+  const classAvg = session?.summary?.average_100
+  const classAvgValid = classAvg !== undefined && isFinite(classAvg)
+  const questionCount = session?.questions?.length
+  const participants = session?.summary?.total_participants
+
+  const gaugeSize = isPhone ? 200 : 150
+  const gaugeFontSize = isPhone ? "1.25em" : "1.1em"
+
+  const formattedDate = submitted_at
+    ? submitted_at.toDate().toLocaleDateString()
+    : ""
+
+  const wrapperSx = {
+    p: isPhone ? 2.5 : 3,
+    borderRadius: 3,
+    border: 1,
+    borderColor: "divider",
+    overflow: "hidden",
+    ...(mrpsd !== 0 && { mt: 2 }),
+    display: "flex",
+    flexDirection: isPhone ? "column" : "row",
+    alignItems: "center",
+    gap: isPhone ? 1.5 : 3,
+    transition: "all 0.2s ease",
+    ...(isClickable && {
+      "&:hover": {
+        borderColor: "primary.main",
+        boxShadow:
+          theme.palette.mode === "dark"
+            ? "0 4px 20px rgba(0,150,136,0.15)"
+            : "0 4px 20px rgba(0,150,136,0.1)",
+      },
+    }),
   }
-  /*mrpsd == 1 is for Most recent Poll*/
-  if (mrpsd === 1) {
-    return (
-      <Card variant='outlined' sx={{ mt: 2 }}>
-        <CardActionArea onClick={onClick}>
-          <CardContent>
-            <Typography variant='h6' align='center'>
-              Your Latest Score
-            </Typography>
-            <Box display={"flex"} justifyContent={"center"}>
-              <PulseGauge score={sub?.score_100 ?? 0} />
-            </Box>
-            <Box>
-              <Typography
-                variant='h6'
-                fontWeight={"bold"}
-                align='center'
-                gutterBottom>
-                {sub?.title}
-              </Typography>
 
-              <Typography variant='body2' color='textSecondary' align='center'>
-                Submitted: {submitted_at?.toDate().toLocaleDateString()}{" "}
-                {submitted_at?.toDate().toLocaleTimeString()}
-              </Typography>
-            </Box>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    )
+  const inner = (
+    <>
+      {scoreValid && (
+        <Box sx={{ flexShrink: 0 }}>
+          <PulseGauge
+            score={sub.score_100}
+            size={gaugeSize}
+            fontSize={gaugeFontSize}
+          />
+        </Box>
+      )}
+      <Box
+        flex={1}
+        minWidth={0}
+        textAlign={isPhone ? "center" : "left"}
+        width={isPhone ? "100%" : "auto"}>
+        <Typography variant='body2' color='text.secondary' fontWeight={500}>
+          {heading}
+        </Typography>
+        <Typography
+          variant={isPhone ? "subtitle1" : "h6"}
+          fontWeight={700}
+          noWrap
+          sx={{ mt: 0.25 }}>
+          {sub?.title}
+        </Typography>
+        <Box
+          display='flex'
+          alignItems='center'
+          justifyContent={isPhone ? "center" : "flex-start"}
+          flexWrap='wrap'
+          gap={0.75}
+          mt={1}>
+          {scoreValid && (
+            <>
+              <Chip
+                size='small'
+                label={`${sub.score_100.toFixed(0)}%`}
+                color='primary'
+                variant='outlined'
+              />
+              <Chip
+                size='small'
+                label={`${sub.score}/${sub.max_score} pts`}
+                variant='outlined'
+                sx={{ fontSize: "0.75rem" }}
+              />
+            </>
+          )}
+          {classAvgValid && scoreValid && (
+            <Chip
+              size='small'
+              icon={
+                sub.score_100 >= classAvg ? (
+                  <TrendingUp fontSize='small' />
+                ) : (
+                  <TrendingDown fontSize='small' />
+                )
+              }
+              label={`Avg ${classAvg.toFixed(0)}%`}
+              variant='outlined'
+              color={sub.score_100 >= classAvg ? "success" : "warning"}
+              sx={{ fontSize: "0.75rem" }}
+            />
+          )}
+          {questionCount !== undefined && questionCount > 0 && (
+            <Chip
+              size='small'
+              icon={<QuestionAnswer fontSize='small' />}
+              label={`${questionCount} Question${questionCount !== 1 ? "s" : ""}`}
+              variant='outlined'
+              sx={{ px: 0.5, fontSize: "0.75rem" }}
+            />
+          )}
+          {participants !== undefined && participants > 0 && (
+            <Chip
+              size='small'
+              icon={<Groups fontSize='small' />}
+              label={`${participants}`}
+              variant='outlined'
+              sx={{ px: 0.5, fontSize: "0.75rem" }}
+            />
+          )}
+        </Box>
+        {formattedDate && (
+          <Typography
+            variant='caption'
+            color='text.secondary'
+            sx={{ mt: 1, display: "block" }}>
+            {formattedDate}
+          </Typography>
+        )}
+        {scoreValid && (
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            fontStyle='italic'
+            sx={{ mt: 1 }}>
+            {scoreMessage(sub.score_100)}
+          </Typography>
+        )}
+      </Box>
+    </>
+  )
+
+  if (!isClickable) {
+    return <Box sx={wrapperSx}>{inner}</Box>
   }
 
   return (
-    <Card variant='outlined' sx={{ mt: 2 }}>
-      <CardActionArea onClick={onClick}>
-        <CardContent>
-          <Typography variant='h6' align='center'>
-            Most Recent Poll
-          </Typography>
-          <Box display={"flex"} justifyContent={"center"}>
-            <PulseGauge score={sub?.score_100 ?? 0} />
-            {/* <Gauge
-              cornerRadius={6}
-              width={256}
-              value={score}
-              startAngle={-110}
-              endAngle={110}
-              fontSize={24}
-              text={({ value, valueMax }) => `${value} / ${valueMax}`}
-              sx={(theme) => ({
-                [`& .${gaugeClasses.valueArc}`]: {
-                  fill: theme.palette.action,
-                },
-                [`& .${gaugeClasses.referenceArc}`]: {
-                  fill: theme.palette.text.disabled,
-                },
-              })}
-            /> */}
-          </Box>
-          <Box>
-            <Typography
-              variant='h6'
-              fontWeight={"bold"}
-              align='center'
-              gutterBottom>
-              {sub?.title}
-            </Typography>
-
-            <Typography variant='body2' color='textSecondary' align='center'>
-              Submitted: {submitted_at?.toDate().toLocaleDateString()}{" "}
-              {submitted_at?.toDate().toLocaleTimeString()}
-            </Typography>
-          </Box>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+    <CardActionArea onClick={onClick} sx={wrapperSx}>
+      {inner}
+    </CardActionArea>
   )
 }
