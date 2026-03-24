@@ -53,17 +53,19 @@ export default function Splash() {
   }, [location])
 
   return (
-    <Box>
+    <Box
+      sx={{
+        background: (theme) =>
+          theme.palette.mode === "dark"
+            ? "linear-gradient(180deg, rgba(0,150,136,0.18) 0%, transparent 20%)"
+            : "linear-gradient(180deg, rgba(0,150,136,0.1) 0%, transparent 20%)",
+      }}>
       {/* Hero Section */}
       <Box
         sx={{
           py: { xs: 8, md: 12 },
           px: 2,
           textAlign: "center",
-          background: (theme) =>
-            theme.palette.mode === "dark"
-              ? "linear-gradient(160deg, rgba(0,150,136,0.15) 0%, rgba(0,0,0,0) 60%)"
-              : "linear-gradient(160deg, rgba(0,150,136,0.08) 0%, rgba(255,255,255,0) 60%)",
         }}>
         <Container maxWidth='md'>
           <RA.Fade triggerOnce duration={800}>
@@ -111,6 +113,7 @@ export default function Splash() {
             <Button
               variant='contained'
               color='primary'
+              size='large'
               onClick={handleClick}
               sx={{
                 px: 4,
