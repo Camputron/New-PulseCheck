@@ -8,7 +8,7 @@ import {
 import AppTitle from "./AppTitle"
 import GuestNavItems from "./GuestNavItems"
 import MenuButton from "./MenuButton"
-import NavItems from "./NavItems"
+import AuthNavItems from "./AuthNavItems"
 
 export default function AppBar() {
   return (
@@ -28,13 +28,14 @@ export default function AppBar() {
         }}>
         <Toolbar
           sx={{
-            px: { xs: 2, md: 4 },
+            // px: { xs: 2, md: 4 },
             minHeight: { xs: 56, md: 64 },
           }}>
           <AppTitle />
-          <Box flexGrow={1} />
+          <Box pr={2} />
           <GuestNavItems />
-          <NavItems />
+          <AuthNavItems />
+          <Box flexGrow={1} />
           <MenuButton />
         </Toolbar>
       </MUIAppbar>

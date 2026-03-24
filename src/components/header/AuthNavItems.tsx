@@ -8,7 +8,7 @@ const items = [
   { label: "History", to: "/poll/history" },
 ] as const
 
-export default function NavItems() {
+export default function AuthNavItems() {
   const { user, loading } = useAuthContext()
   const navigate = useNavigate()
   const location = useLocation()
