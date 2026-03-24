@@ -67,10 +67,23 @@ export default function Contributors() {
         py: { xs: 6, md: 10 },
         px: 2,
         minHeight: "80vh",
-        background: (theme) =>
-          theme.palette.mode === "dark"
-            ? "linear-gradient(160deg, rgba(0,150,136,0.15) 0%, rgba(0,0,0,0) 60%)"
-            : "linear-gradient(160deg, rgba(0,150,136,0.08) 0%, rgba(255,255,255,0) 60%)",
+        position: "relative",
+        overflow: "hidden",
+        "@keyframes pulse": {
+          "0%, 100%": { opacity: 0.2 },
+          "50%": { opacity: 1 },
+        },
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          background: (theme) =>
+            theme.palette.mode === "dark"
+              ? "radial-gradient(ellipse at 50% 0%, rgba(0,150,136,0.18) 0%, transparent 70%)"
+              : "radial-gradient(ellipse at 50% 0%, rgba(0,150,136,0.10) 0%, transparent 70%)",
+          animation: "pulse 8s ease-in-out infinite",
+          pointerEvents: "none",
+        },
       }}>
       <Container maxWidth='sm'>
         <RA.Fade triggerOnce duration={600}>
@@ -144,6 +157,7 @@ export default function Contributors() {
                     name={FALLBACK_NAMES[contributor.login]}
                     avatarUrl={contributor.avatar_url}
                     htmlUrl={contributor.html_url}
+                    index={i}
                   />
                 </RA.Fade>
               ))}
@@ -161,9 +175,16 @@ interface GitHubUserProps {
   name: string
   avatarUrl: string
   htmlUrl: string
+  index?: number
 }
 
-function GitHubUserCard({ login, name, avatarUrl, htmlUrl }: GitHubUserProps) {
+function GitHubUserCard({
+  login,
+  name,
+  avatarUrl,
+  htmlUrl,
+  index = 0,
+}: GitHubUserProps) {
   return (
     <Box
       component='a'
@@ -175,13 +196,18 @@ function GitHubUserCard({ login, name, avatarUrl, htmlUrl }: GitHubUserProps) {
         flexDirection: "column",
         alignItems: "center",
         gap: 0.5,
-        // width: { xs: 90, sm: 110 },
         height: { xs: 130, sm: 150 },
         textDecoration: "none",
         color: "inherit",
+        "@keyframes float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
+        animation: `float ${3 + (index % 3) * 0.5}s ease-in-out ${index * 0.3}s infinite`,
         "&:hover .github-user-avatar": {
           borderColor: "primary.main",
-          transform: "scale(1.05)",
+          transform: "scale(1.1)",
+          boxShadow: (theme) => `0 0 20px ${theme.palette.primary.main}40`,
         },
         "&:hover .github-user-name": {
           color: "primary.main",
@@ -195,14 +221,13 @@ function GitHubUserCard({ login, name, avatarUrl, htmlUrl }: GitHubUserProps) {
         src={avatarUrl}
         alt={name}
         sx={{
-          // width: { xs: 64, sm: 72 },
-          // height: { xs: 64, sm: 72 },
           width: 96,
           height: 96,
           border: 2,
           borderStyle: "solid",
           borderColor: "divider",
-          transition: "border-color 0.2s, transform 0.2s ease-out",
+          transition:
+            "border-color 0.3s, transform 0.3s ease-out, box-shadow 0.3s",
         }}
       />
       <Typography
