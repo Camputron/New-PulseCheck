@@ -1,3 +1,4 @@
+import Contributors from "./Contributors"
 import Dashboard from "./Dashboard"
 import Debug from "./Debug"
 import GetStarted from "./GetStarted"
@@ -20,6 +21,7 @@ import PollHistory from "./PollHistory"
 
 export const Screen = {
   Splash,
+  Contributors,
   Debug,
   Login,
   Register,

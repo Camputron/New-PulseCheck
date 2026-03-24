@@ -59,17 +59,17 @@ export default function LoginForm() {
     return validated
   }
 
-  const handleRegClick = async () => {
+  const handleLogin = async () => {
     if (!validate()) {
       return
     }
     try {
       await signInWithEmailAndPassword(auth, email, password)
 
-      snackbar.show({
-        message: "Get Ready to Poll Up",
-        type: "success",
-      })
+      // snackbar.show({
+      //   message: "Get Ready to Poll Up",
+      //   type: "success",
+      // })
 
       void navigate("/dashboard")
     } catch (err: unknown) {
@@ -138,7 +138,7 @@ export default function LoginForm() {
             sx={{ borderRadius: 2 }}
             onClick={(e) => {
               e.preventDefault()
-              void handleRegClick()
+              void handleLogin()
             }}>
             Continue
           </Button>

@@ -16,6 +16,7 @@ export default function App() {
         <Route path='/get-started' element={<Screen.GetStarted />} />
         <Route path='/privacy-policy' element={<Screen.PrivacyPolicy />} />
         <Route path='/terms-of-service' element={<Screen.TermsOfService />} />
+        <Route path='/contributors' element={<Screen.Contributors />} />
         <Route path='/dashboard' element={<Screen.Dashboard />} />
         {/* poll session routes */}
         <Route path='/poll/join' element={<Screen.PollJoin />} />

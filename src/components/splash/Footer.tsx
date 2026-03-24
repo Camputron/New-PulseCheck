@@ -17,6 +17,10 @@ const footerLinks = [
         action: { type: "scroll" as const, target: "features" },
       },
       { text: "FAQs", action: { type: "scroll" as const, target: "faqs" } },
+      {
+        text: "Contributors",
+        action: { type: "navigate" as const, path: "/contributors" },
+      },
     ],
   },
   {
