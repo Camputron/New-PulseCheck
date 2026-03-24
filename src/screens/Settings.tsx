@@ -30,6 +30,7 @@ import {
 import { FirebaseError } from "firebase/app"
 import ThemeSelect from "@/components/ThemeSelect"
 import useRequireAuth from "@/lib/hooks/useRequireAuth"
+import { stoc, stoni } from "@/utils"
 
 type ErrorField = "displayName" | "email"
 
@@ -306,9 +307,9 @@ export default function Settings() {
               width: 56,
               height: 56,
               fontSize: 22,
-              bgcolor: "primary.main",
+              bgcolor: stoc(displayName),
             }}>
-            {displayName ? displayName.charAt(0).toUpperCase() : "U"}
+            {stoni(displayName)}
           </Avatar>
           <Box>
             <Typography variant='h6' fontWeight={600}>

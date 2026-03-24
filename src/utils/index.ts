@@ -1,22 +1,32 @@
 import { Timestamp } from "firebase/firestore"
 
 /**
- * Converts string to hex color
+ * Converts string to a muted hex color that blends well in both light and dark mode.
+ * Uses HSL with constrained saturation (35-55%) and lightness (40-60%) to avoid
+ * overly bright or dark colors.
  */
 export function stoc(str?: string): string {
-  if (!str) return "#ffffff"
+  if (!str) return "#808080"
   let hash = 0
-  let i
-  for (i = 0; i < str.length; i += 1) {
+  for (let i = 0; i < str.length; i += 1) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash)
   }
 
-  let color = "#"
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff
-    color += `00${value.toString(16)}`.slice(-2)
+  const hue = (((hash & 0xffff) % 360) + 360) % 360
+  const sat = 35 + (((hash >> 8) & 0xff) % 21)
+  const lit = 40 + (((hash >> 16) & 0xff) % 21)
+
+  const sn = sat / 100
+  const ln = lit / 100
+  const a = sn * Math.min(ln, 1 - ln)
+  const f = (n: number) => {
+    const k = (n + hue / 30) % 12
+    const color = ln - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
+    return Math.round(255 * color)
+      .toString(16)
+      .padStart(2, "0")
   }
-  return color
+  return `#${f(0)}${f(8)}${f(4)}`
 }
 
 /**
