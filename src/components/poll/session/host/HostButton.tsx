@@ -1,4 +1,4 @@
-import { Session, SessionState } from "@/lib/types"
+import { Session, SessionState } from "@/types"
 import StartButton from "./StartButton"
 import { DocumentReference } from "firebase/firestore"
 import NextButton from "./NextButton"

@@ -1,5 +1,5 @@
 import { Avatar, Typography, Box, CardActionArea } from "@mui/material"
-import { Submission } from "@/lib/types"
+import { Submission } from "@/types"
 import { stoc } from "@/utils"
 import { useNavigate } from "react-router-dom"
 import { DocumentReference } from "firebase/firestore"

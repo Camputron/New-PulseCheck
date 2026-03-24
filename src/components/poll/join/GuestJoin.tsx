@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@mui/material"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import api from "@/lib/api/firebase"
+import api from "@/api"
 import { FormEvent, useState } from "react"
-import useSnackbar from "@/lib/hooks/useSnackbar"
+import useSnackbar from "@/hooks/useSnackbar"
 import { RA } from "@/styles"
 
 export default function GuestJoin() {

@@ -1,4 +1,4 @@
-import { Poll } from "@/lib/types"
+import { Poll } from "@/types"
 import { ntoq, stoc, tstos } from "@/utils"
 import { Description, QuestionAnswer } from "@mui/icons-material"
 import { Avatar, Box, CardActionArea, Chip, Typography } from "@mui/material"

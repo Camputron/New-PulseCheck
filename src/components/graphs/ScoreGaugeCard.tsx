@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Typography } from "@mui/material"
 import PulseGauge from "./PulseGauge"
-import { Submission } from "@/lib/types"
+import { Submission } from "@/types"
 
 interface Props {
   sub?: Submission

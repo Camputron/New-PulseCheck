@@ -1,4 +1,4 @@
-import { Session, SessionState } from "@/lib/types"
+import { Session, SessionState } from "@/types"
 import { QRCodeSVG } from "qrcode.react"
 import React from "react"
 

@@ -1,7 +1,7 @@
-import api from "@/lib/api/firebase"
-import { useAuthContext } from "@/lib/hooks"
-import { useSnackbar } from "@/lib/hooks"
-import { Session } from "@/lib/types"
+import api from "@/api"
+import { useAuthContext } from "@/hooks"
+import { useSnackbar } from "@/hooks"
+import { Session } from "@/types"
 import { RA } from "@/styles"
 import { Download } from "@mui/icons-material"
 import {

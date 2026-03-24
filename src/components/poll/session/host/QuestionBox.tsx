@@ -1,4 +1,4 @@
-import { CurrentQuestion } from "@/lib/types"
+import { CurrentQuestion } from "@/types"
 import { Box, Typography } from "@mui/material"
 import Image from "mui-image"
 import React from "react"

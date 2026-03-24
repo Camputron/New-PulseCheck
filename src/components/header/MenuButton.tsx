@@ -11,7 +11,7 @@ import {
 import { Login } from "@mui/icons-material"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAuthContext } from "@/lib/hooks"
+import { useAuthContext } from "@/hooks"
 import AuthMenuList from "./AuthMenuList"
 import ProfileIcon from "./ProfileIcon"
 

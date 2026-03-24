@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { Button, SvgIcon } from "@mui/material"
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
-import api from "@/lib/api/firebase"
+import api from "@/api"
 
 function GoogleLogo() {
   return (

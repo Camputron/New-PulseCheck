@@ -1,5 +1,5 @@
 import SlideUpTransition from "@/components/transition/SlideUpTransition"
-import api, { storage } from "@/lib/api/firebase"
+import api, { storage } from "@/api"
 import { Upload } from "@mui/icons-material"
 import {
   Alert,

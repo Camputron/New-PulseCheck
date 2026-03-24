@@ -12,7 +12,7 @@ import { useState, useEffect } from "react"
 import React from "react"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { doc, getDoc, updateDoc } from "firebase/firestore"
-import { firestore, storage } from "@/lib/api/firebase"
+import { firestore, storage } from "@/api"
 import { CloudUpload, Delete } from "@mui/icons-material"
 interface Props {
   pid: string

@@ -1,8 +1,8 @@
 import { Box, Card, CardContent, Typography } from "@mui/material"
 import { PollOutlined } from "@mui/icons-material"
-import { useAuthContext } from "@/lib/hooks"
+import { useAuthContext } from "@/hooks"
 import { useEffect, useState } from "react"
-import api from "@/lib/api/firebase"
+import api from "@/api"
 
 export default function NoRecentPolls() {
   const { user } = useAuthContext()

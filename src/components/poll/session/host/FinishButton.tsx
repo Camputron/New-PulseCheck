@@ -1,6 +1,6 @@
 import AsyncButton from "@/components/AsyncButton"
-import api from "@/lib/api/firebase"
-import { Session } from "@/lib/types"
+import api from "@/api"
+import { Session } from "@/types"
 import { DocumentReference } from "firebase/firestore"
 
 interface FinishButtonProps {

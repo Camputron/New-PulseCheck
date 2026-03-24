@@ -7,10 +7,10 @@ import {
   useTheme,
 } from "@mui/material"
 import { getDoc, QueryDocumentSnapshot } from "firebase/firestore"
-import api from "@/lib/api/firebase"
+import api from "@/api"
 import { useEffect, useState } from "react"
-import { Session, Submission } from "@/lib/types"
-import { useAuthContext } from "@/lib/hooks"
+import { Session, Submission } from "@/types"
+import { useAuthContext } from "@/hooks"
 import { useNavigate } from "react-router-dom"
 import {
   Groups,

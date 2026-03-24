@@ -1,4 +1,4 @@
-import { useAuthContext } from "@/lib/hooks"
+import { useAuthContext } from "@/hooks"
 import { Box, Button, useMediaQuery, useTheme } from "@mui/material"
 import { useLocation, useNavigate } from "react-router-dom"
 

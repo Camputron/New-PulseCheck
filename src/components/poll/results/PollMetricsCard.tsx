@@ -1,4 +1,4 @@
-import { SessionSummary } from "@/lib/types"
+import { SessionSummary } from "@/types"
 import { Box, Divider, Typography } from "@mui/material"
 
 interface Props {

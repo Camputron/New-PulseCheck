@@ -1,5 +1,5 @@
-import api from "@/lib/api/firebase"
-import { SessionOption, SessionQuestion, SessionResponse } from "@/lib/types"
+import api from "@/api"
+import { SessionOption, SessionQuestion, SessionResponse } from "@/types"
 import { Typography, CardMedia, Box } from "@mui/material"
 import {
   DocumentReference,

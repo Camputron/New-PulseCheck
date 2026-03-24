@@ -114,7 +114,7 @@ import {
   VolumeDown,
   VolumeUp,
 } from "@mui/icons-material"
-import { useThemeContext } from "@/lib/hooks/useThemeContext"
+import { useThemeContext } from "@/hooks/useThemeContext"
 import { useState, type SyntheticEvent } from "react"
 
 function SectionTitle({ children }: { children: React.ReactNode }) {

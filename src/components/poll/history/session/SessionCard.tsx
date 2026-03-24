@@ -1,5 +1,5 @@
-import { useThemeContext } from "@/lib/hooks"
-import { Session, SessionState } from "@/lib/types"
+import { useThemeContext } from "@/hooks"
+import { Session, SessionState } from "@/types"
 import { ntops, stoc, tstos } from "@/utils"
 import { BarChart } from "@mui/icons-material"
 import { Avatar, Box, CardActionArea, Chip, Typography } from "@mui/material"

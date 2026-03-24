@@ -1,4 +1,4 @@
-import { Submission } from "@/lib/types"
+import { Submission } from "@/types"
 import { stoc, stoni, tstos } from "@/utils"
 import { Avatar, Box, CardActionArea, Chip, Typography } from "@mui/material"
 import React from "react"

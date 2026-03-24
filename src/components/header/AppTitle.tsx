@@ -1,4 +1,4 @@
-import { useAuthContext } from "@/lib/hooks"
+import { useAuthContext } from "@/hooks"
 import { Box, Typography } from "@mui/material"
 import Image from "mui-image"
 import { Link } from "react-router-dom"

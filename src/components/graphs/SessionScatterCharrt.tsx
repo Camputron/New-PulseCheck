@@ -1,4 +1,4 @@
-import { Submission } from "@/lib/types"
+import { Submission } from "@/types"
 import { Card, CardContent } from "@mui/material"
 import { ScatterChart } from "@mui/x-charts"
 import React from "react"

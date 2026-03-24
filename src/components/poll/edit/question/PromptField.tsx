@@ -1,5 +1,5 @@
-import api from "@/lib/api/firebase"
-import useSnackbar from "@/lib/hooks/useSnackbar"
+import api from "@/api"
+import useSnackbar from "@/hooks/useSnackbar"
 import { TextField } from "@mui/material"
 import React, { useEffect, useState } from "react"
 

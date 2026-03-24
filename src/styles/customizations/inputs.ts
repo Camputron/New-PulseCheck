@@ -8,8 +8,8 @@ import { gray, teal, amber, red, green, orange } from "../themePrimitives"
 export const inputsCustomizations: Components<Theme> = {
   MuiButtonBase: {
     defaultProps: {
-      disableTouchRipple: true,
-      disableRipple: true,
+      // disableTouchRipple: true,
+      // disableRipple: true,
     },
     styleOverrides: {
       root: ({ theme }) => ({

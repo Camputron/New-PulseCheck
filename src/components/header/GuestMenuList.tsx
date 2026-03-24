@@ -1,7 +1,7 @@
 import { Divider, MenuList, useMediaQuery, useTheme } from "@mui/material"
 import MenuItem from "./MenuItem"
 import { Help, Info, Login, Star } from "@mui/icons-material"
-import { useAuthContext } from "@/lib/hooks"
+import { useAuthContext } from "@/hooks"
 
 interface GuestMenuListProps {
   handleClose?: () => void

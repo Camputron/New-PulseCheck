@@ -18,8 +18,8 @@ import {
   useTheme,
 } from "@mui/material"
 import React, { useEffect, useState } from "react"
-import api from "@/lib/api/firebase"
-import useSnackbar from "@/lib/hooks/useSnackbar"
+import api from "@/api"
+import useSnackbar from "@/hooks/useSnackbar"
 import {
   ArrowBack,
   AutoAwesome,
@@ -28,9 +28,9 @@ import {
   MenuOpen,
   ScreenShare,
 } from "@mui/icons-material"
-import { useAuthContext } from "@/lib/hooks"
+import { useAuthContext } from "@/hooks"
 import { useNavigate } from "react-router-dom"
-import { Poll } from "@/lib/types"
+import { Poll } from "@/types"
 import DeleteMenuItem from "./DeleteMenuItem"
 import UploadPDFDialog from "../UploadPDFDialog"
 

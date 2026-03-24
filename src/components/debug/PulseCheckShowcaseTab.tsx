@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material"
 import { Add, DarkMode, LightMode } from "@mui/icons-material"
-import { useThemeContext } from "@/lib/hooks/useThemeContext"
+import { useThemeContext } from "@/hooks/useThemeContext"
 
 // PulseCheck components (standalone-renderable)
 import AsyncButton from "@/components/AsyncButton"
@@ -23,7 +23,7 @@ import LeaveButton from "@/components/poll/session/LeaveButton"
 import Features from "@/components/splash/Features"
 import About from "@/components/splash/About"
 import FAQs from "@/components/splash/FAQs"
-import { SessionSummary } from "@/lib/types"
+import { SessionSummary } from "@/types"
 import { Timestamp } from "firebase/firestore"
 import AppTitle from "../header/AppTitle"
 

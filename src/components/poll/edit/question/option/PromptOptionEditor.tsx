@@ -1,11 +1,11 @@
-import { PromptOption, PromptType } from "@/lib/types"
+import { PromptOption, PromptType } from "@/types"
 import { Box, Skeleton, TextField, Typography } from "@mui/material"
 import { DocumentReference } from "firebase/firestore"
 import React, { useEffect, useState } from "react"
 import { useDocumentData } from "react-firebase-hooks/firestore"
 import CorrectToggleButton from "./CorrectToggleButton"
 import RemoveButton from "./RemoveButton"
-import api from "@/lib/api/firebase"
+import api from "@/api"
 
 interface Props {
   ref: DocumentReference<PromptOption>

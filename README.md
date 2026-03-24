@@ -104,14 +104,17 @@ yarn dev
 PulseCheck/
 ├── src/                        # React app source
 │   ├── components/             # UI components by feature
-│   ├── screens/                # Route-level pages
-│   ├── lib/
-│   │   ├── api/firebase/       # Firebase API stores
-│   │   ├── contexts/           # React Contexts
-│   │   ├── hooks/              # Custom hooks
-│   │   ├── providers/          # Context providers
-│   │   └── types/              # TypeScript types
-│   └── utils/
+│   ├── pages/                  # Route-level pages
+│   │   ├── auth/               # Login, Register, GetStarted
+│   │   ├── poll/               # Poll editor, session, results, history
+│   │   └── legal/              # Privacy, Terms, Contributors
+│   ├── api/firebase/           # Firebase API stores
+│   ├── contexts/               # React Contexts
+│   ├── hooks/                  # Custom hooks
+│   ├── providers/              # Context providers
+│   ├── styles/                 # Theme configuration
+│   ├── types/                  # TypeScript types
+│   └── utils/                  # Utility functions
 ├── firebase/
 │   ├── functions/              # Cloud Functions (separate Node.js project)
 │   │   ├── src/

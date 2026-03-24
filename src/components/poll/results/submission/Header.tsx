@@ -3,8 +3,8 @@ import { Toolbar, Typography, Stack, AppBar, IconButton } from "@mui/material"
 import { tstos } from "@/utils"
 import { ArrowBack } from "@mui/icons-material"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useAuthContext } from "@/lib/hooks"
-import api from "@/lib/api/firebase"
+import { useAuthContext } from "@/hooks"
+import api from "@/api"
 
 interface HeaderProps {
   title: string
