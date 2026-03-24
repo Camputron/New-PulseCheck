@@ -14,8 +14,8 @@ export default function AuthBranding({ heading, subtext }: Props) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        px: { xs: 4, md: 8 },
-        py: { xs: 6, md: 0 },
+        px: { xs: 3, md: 8 },
+        py: { xs: 3, md: 0 },
         background: (theme) =>
           theme.palette.mode === "dark"
             ? "linear-gradient(160deg, rgba(0,150,136,0.2) 0%, rgba(0,0,0,0) 70%)"
@@ -28,7 +28,7 @@ export default function AuthBranding({ heading, subtext }: Props) {
             letterSpacing: 3,
             color: "primary.main",
             fontWeight: 600,
-            fontSize: "0.85rem",
+            fontSize: { xs: "0.75rem", md: "0.85rem" },
           }}>
           PulseCheck
         </Typography>
@@ -40,7 +40,7 @@ export default function AuthBranding({ heading, subtext }: Props) {
           sx={{
             mt: 1,
             mb: 2,
-            fontSize: { xs: "2rem", md: "2.75rem" },
+            fontSize: { xs: "1.5rem", md: "2.75rem" },
             lineHeight: 1.15,
           }}>
           {heading}
@@ -48,10 +48,11 @@ export default function AuthBranding({ heading, subtext }: Props) {
       </RA.Fade>
       <RA.Fade triggerOnce duration={800} delay={300}>
         <Typography
-          variant='body1'
+          variant='body2'
           sx={{
             color: "text.secondary",
-            lineHeight: 1.7,
+            lineHeight: 1.6,
+            display: { xs: "none", sm: "block" },
           }}>
           {subtext}
         </Typography>
