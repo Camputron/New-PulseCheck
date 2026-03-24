@@ -17,14 +17,22 @@ export default function AppBar() {
         position='sticky'
         elevation={0}
         sx={{
-          backdropFilter: "blur(12px)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
           backgroundColor: (theme) =>
             theme.palette.mode === "dark"
-              ? "rgba(18, 18, 18, 0.8)"
-              : "rgba(255, 255, 255, 0.8)",
-          borderBottom: 1,
-          borderColor: "divider",
+              ? "rgba(18, 18, 18, 0.6)"
+              : "rgba(255, 255, 255, 0.6)",
+          borderBottom: "1px solid",
+          borderColor: (theme) =>
+            theme.palette.mode === "dark"
+              ? "rgba(255, 255, 255, 0.08)"
+              : "rgba(0, 0, 0, 0.06)",
           color: "text.primary",
+          boxShadow: (theme) =>
+            theme.palette.mode === "dark"
+              ? "0 1px 12px rgba(0, 0, 0, 0.3)"
+              : "0 1px 12px rgba(0, 0, 0, 0.04)",
         }}>
         <Toolbar
           sx={{
