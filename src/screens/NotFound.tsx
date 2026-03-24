@@ -1,7 +1,7 @@
 import { Box, Button, Container, Typography } from "@mui/material"
-import santa from "@/assets/not-found.png"
 import { useNavigate } from "react-router-dom"
 import { RA } from "@/styles"
+import Image from "mui-image"
 
 export default function NotFound() {
   const navigate = useNavigate()
@@ -21,7 +21,7 @@ export default function NotFound() {
           textAlign: "center",
         }}>
         <RA.JackInTheBox triggerOnce>
-          <img src={santa} alt='404 Not Found' style={{ width: 300 }} />
+          <Image src='/not-found.png' width={300} />
         </RA.JackInTheBox>
         <Typography variant='h5' gutterBottom>
           Oops! Page Not Found
