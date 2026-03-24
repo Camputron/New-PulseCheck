@@ -1,5 +1,5 @@
 import { Box } from "@mui/material"
-import UserLogin from "@/components/auth/UserLogin"
+import LoginForm from "@/components/auth/LoginForm"
 import useRedirectIfAuthenticated from "@/lib/hooks/useRedirectIfAuthenticated"
 import AuthBranding from "@/components/auth/AuthBranding"
 
@@ -26,7 +26,7 @@ export default function Login() {
           py: { xs: 4, md: 0 },
           px: 2,
         }}>
-        <UserLogin />
+        <LoginForm />
       </Box>
     </Box>
   )

@@ -26,11 +26,11 @@ function GoogleLogo() {
   )
 }
 
-export default function ContinueWGoogleButton() {
+export default function GoogleAuthButton() {
   const navigate = useNavigate()
   const auth = getAuth()
 
-  const ContinueWithGoogle = () => {
+  const handleRegister = () => {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then((res) => {
         console.debug("res.user.uid", res.user.uid)
@@ -54,7 +54,7 @@ export default function ContinueWGoogleButton() {
       variant='outlined'
       fullWidth
       startIcon={<GoogleLogo />}
-      onClick={ContinueWithGoogle}
+      onClick={handleRegister}
       sx={{
         py: 1.5,
         borderRadius: 2,

@@ -13,13 +13,13 @@ import { useState } from "react"
 import api, { auth } from "@/lib/api/firebase"
 import useSnackbar from "@/lib/hooks/useSnackbar"
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import SignInWGoogleButton from "@/components/auth/ContinueWGoogleButton"
+import GoogleAuthButton from "./GoogleAuthButton"
 import { FirebaseError } from "firebase/app"
 
 const PASS_LEN = 6
 type ErrorField = "displayName" | "email" | "password" | "retypePassword"
 
-export default function RegisterJoin() {
+export default function RegisterForm() {
   const navigate = useNavigate()
   const snackbar = useSnackbar()
   const [email, setEmail] = useState<string>("")
@@ -125,14 +125,6 @@ export default function RegisterJoin() {
           Sign up to start using PulseCheck.
         </Typography>
 
-        <SignInWGoogleButton />
-
-        <Divider sx={{ my: 3 }}>
-          <Typography variant='body2' color='text.secondary'>
-            or continue with email
-          </Typography>
-        </Divider>
-
         <Stack component={"form"} spacing={2.5} noValidate autoComplete='off'>
           <TextField
             placeholder='Display Name'
@@ -199,9 +191,17 @@ export default function RegisterJoin() {
             Create Account
           </Button>
 
+          <Divider sx={{ my: 3 }}>
+            <Typography variant='body2' color='text.secondary'>
+              or register with
+            </Typography>
+          </Divider>
+
+          <GoogleAuthButton />
+
           <Box display={"flex"} justifyContent={"center"}>
             <Link
-              color='textPrimary'
+              color='text.secondary'
               onClick={handleLink}
               variant='body2'
               sx={{

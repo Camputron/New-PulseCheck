@@ -14,12 +14,12 @@ import { useState } from "react"
 import { auth } from "@/lib/api/firebase"
 import useSnackbar from "@/lib/hooks/useSnackbar"
 import { signInWithEmailAndPassword } from "firebase/auth"
-import SignInWGoogleButton from "@/components/auth/ContinueWGoogleButton"
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton"
 import { FirebaseError } from "firebase/app"
 
 type ErrorField = "email" | "password"
 
-export default function UserLogin() {
+export default function LoginForm() {
   const navigate = useNavigate()
   const snackbar = useSnackbar()
   const [email, setEmail] = useState<string>("")
@@ -102,14 +102,6 @@ export default function UserLogin() {
           Enter your credentials to continue.
         </Typography>
 
-        <SignInWGoogleButton />
-
-        <Divider sx={{ my: 3 }}>
-          <Typography variant='body2' color='text.secondary'>
-            or continue with email
-          </Typography>
-        </Divider>
-
         <Stack component={"form"} spacing={2.5} noValidate autoComplete='off'>
           <TextField
             placeholder='Email'
@@ -148,12 +140,20 @@ export default function UserLogin() {
               e.preventDefault()
               void handleRegClick()
             }}>
-            Sign In
+            Continue
           </Button>
+
+          <Divider sx={{ my: 3 }}>
+            <Typography variant='body2' color='text.secondary'>
+              or sign in with
+            </Typography>
+          </Divider>
+
+          <GoogleAuthButton />
 
           <Box display={"flex"} justifyContent={"center"}>
             <Link
-              color='textPrimary'
+              color='text.primary'
               onClick={handleLink}
               variant='body2'
               sx={{
@@ -161,7 +161,7 @@ export default function UserLogin() {
                 transition: "color 0.2s",
                 "&:hover": { color: "primary.main" },
               }}>
-              Don't have an account? Register
+              Don't have an account yet? Register
             </Link>
           </Box>
         </Stack>

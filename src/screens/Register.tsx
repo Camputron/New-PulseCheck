@@ -1,5 +1,5 @@
 import { Box } from "@mui/material"
-import RegisterJoin from "@/components/auth/RegisterJoin"
+import RegisterForm from "@/components/auth/RegisterForm"
 import useRedirectIfAuthenticated from "@/lib/hooks/useRedirectIfAuthenticated"
 import AuthBranding from "@/components/auth/AuthBranding"
 
@@ -26,7 +26,7 @@ export default function Register() {
           py: { xs: 4, md: 0 },
           px: 2,
         }}>
-        <RegisterJoin />
+        <RegisterForm />
       </Box>
     </Box>
   )
