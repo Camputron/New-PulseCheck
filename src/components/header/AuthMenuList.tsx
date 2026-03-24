@@ -1,11 +1,6 @@
 import { Divider, MenuList, useMediaQuery, useTheme } from "@mui/material"
 import MenuItem from "./MenuItem"
-import {
-  BarChart,
-  Dashboard,
-  HowToVote,
-  Settings,
-} from "@mui/icons-material"
+import { BarChart, Dashboard, HowToVote, Settings } from "@mui/icons-material"
 import { useAuthContext } from "@/lib/hooks"
 
 interface AuthMenuListProps {
