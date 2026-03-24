@@ -3,7 +3,7 @@ import { outlinedInputClasses } from "@mui/material/OutlinedInput"
 import { svgIconClasses } from "@mui/material/SvgIcon"
 import { toggleButtonGroupClasses } from "@mui/material/ToggleButtonGroup"
 import { toggleButtonClasses } from "@mui/material/ToggleButton"
-import { gray, teal, amber } from "../themePrimitives"
+import { gray, teal, amber, red, green, orange } from "../themePrimitives"
 
 export const inputsCustomizations: Components<Theme> = {
   MuiButtonBase: {
@@ -96,6 +96,78 @@ export const inputsCustomizations: Components<Theme> = {
             },
           },
           {
+            props: { color: "success", variant: "contained" },
+            style: {
+              color: "white",
+              backgroundColor: green[500],
+              backgroundImage: `linear-gradient(to bottom, ${green[400]}, ${green[500]})`,
+              boxShadow: `inset 0 1px 0 ${alpha(green[200], 0.3)}, inset 0 -1px 0 ${alpha(green[800], 0.3)}`,
+              border: `1px solid ${green[500]}`,
+              "&:hover": {
+                backgroundImage: "none",
+                backgroundColor: green[600],
+                boxShadow: "none",
+              },
+              "&:active": {
+                backgroundColor: green[700],
+              },
+            },
+          },
+          {
+            props: { color: "error", variant: "contained" },
+            style: {
+              color: "white",
+              backgroundColor: red[400],
+              backgroundImage: `linear-gradient(to bottom, ${red[300]}, ${red[400]})`,
+              boxShadow: `inset 0 1px 0 ${alpha(red[200], 0.3)}, inset 0 -1px 0 ${alpha(red[700], 0.3)}`,
+              border: `1px solid ${red[400]}`,
+              "&:hover": {
+                backgroundImage: "none",
+                backgroundColor: red[500],
+                boxShadow: "none",
+              },
+              "&:active": {
+                backgroundColor: red[600],
+              },
+            },
+          },
+          {
+            props: { color: "warning", variant: "contained" },
+            style: {
+              color: "white",
+              backgroundColor: orange[400],
+              backgroundImage: `linear-gradient(to bottom, ${orange[300]}, ${orange[400]})`,
+              boxShadow: `inset 0 1px 0 ${alpha(orange[200], 0.3)}, inset 0 -1px 0 ${alpha(orange[700], 0.3)}`,
+              border: `1px solid ${orange[400]}`,
+              "&:hover": {
+                backgroundImage: "none",
+                backgroundColor: orange[500],
+                boxShadow: "none",
+              },
+              "&:active": {
+                backgroundColor: orange[600],
+              },
+            },
+          },
+          {
+            props: { color: "info", variant: "contained" },
+            style: {
+              color: "white",
+              backgroundColor: teal[400],
+              backgroundImage: `linear-gradient(to bottom, ${teal[300]}, ${teal[400]})`,
+              boxShadow: `inset 0 1px 0 ${alpha(teal[200], 0.3)}, inset 0 -1px 0 ${alpha(teal[700], 0.3)}`,
+              border: `1px solid ${teal[400]}`,
+              "&:hover": {
+                backgroundImage: "none",
+                backgroundColor: teal[500],
+                boxShadow: "none",
+              },
+              "&:active": {
+                backgroundColor: teal[600],
+              },
+            },
+          },
+          {
             props: { variant: "outlined" },
             style: {
               color: theme.palette.text.primary,
@@ -118,6 +190,35 @@ export const inputsCustomizations: Components<Theme> = {
                 },
                 "&:active": {
                   backgroundColor: gray[900],
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "primary", variant: "outlined" },
+            style: {
+              color: teal[500],
+              border: "1px solid",
+              borderColor: teal[200],
+              backgroundColor: alpha(teal[50], 0.3),
+              "&:hover": {
+                backgroundColor: teal[100],
+                borderColor: teal[400],
+              },
+              "&:active": {
+                backgroundColor: alpha(teal[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: teal[300],
+                border: "1px solid",
+                borderColor: teal[900],
+                backgroundColor: alpha(teal[900], 0.3),
+                "&:hover": {
+                  borderColor: teal[700],
+                  backgroundColor: alpha(teal[900], 0.6),
+                },
+                "&:active": {
+                  backgroundColor: alpha(teal[900], 0.5),
                 },
               }),
             },
@@ -152,6 +253,122 @@ export const inputsCustomizations: Components<Theme> = {
             },
           },
           {
+            props: { color: "error", variant: "outlined" },
+            style: {
+              color: red[500],
+              border: "1px solid",
+              borderColor: red[200],
+              backgroundColor: alpha(red[50], 0.3),
+              "&:hover": {
+                backgroundColor: red[100],
+                borderColor: red[400],
+              },
+              "&:active": {
+                backgroundColor: alpha(red[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: red[300],
+                border: "1px solid",
+                borderColor: red[900],
+                backgroundColor: alpha(red[900], 0.3),
+                "&:hover": {
+                  borderColor: red[700],
+                  backgroundColor: alpha(red[900], 0.6),
+                },
+                "&:active": {
+                  backgroundColor: alpha(red[900], 0.5),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "success", variant: "outlined" },
+            style: {
+              color: green[500],
+              border: "1px solid",
+              borderColor: green[200],
+              backgroundColor: alpha(green[50], 0.3),
+              "&:hover": {
+                backgroundColor: green[100],
+                borderColor: green[400],
+              },
+              "&:active": {
+                backgroundColor: alpha(green[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: green[300],
+                border: "1px solid",
+                borderColor: green[900],
+                backgroundColor: alpha(green[900], 0.3),
+                "&:hover": {
+                  borderColor: green[700],
+                  backgroundColor: alpha(green[900], 0.6),
+                },
+                "&:active": {
+                  backgroundColor: alpha(green[900], 0.5),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "warning", variant: "outlined" },
+            style: {
+              color: orange[500],
+              border: "1px solid",
+              borderColor: orange[200],
+              backgroundColor: alpha(orange[50], 0.3),
+              "&:hover": {
+                backgroundColor: orange[100],
+                borderColor: orange[400],
+              },
+              "&:active": {
+                backgroundColor: alpha(orange[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: orange[300],
+                border: "1px solid",
+                borderColor: orange[900],
+                backgroundColor: alpha(orange[900], 0.3),
+                "&:hover": {
+                  borderColor: orange[700],
+                  backgroundColor: alpha(orange[900], 0.6),
+                },
+                "&:active": {
+                  backgroundColor: alpha(orange[900], 0.5),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "info", variant: "outlined" },
+            style: {
+              color: teal[500],
+              border: "1px solid",
+              borderColor: teal[200],
+              backgroundColor: alpha(teal[50], 0.3),
+              "&:hover": {
+                backgroundColor: teal[100],
+                borderColor: teal[400],
+              },
+              "&:active": {
+                backgroundColor: alpha(teal[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: teal[300],
+                border: "1px solid",
+                borderColor: teal[900],
+                backgroundColor: alpha(teal[900], 0.3),
+                "&:hover": {
+                  borderColor: teal[700],
+                  backgroundColor: alpha(teal[900], 0.6),
+                },
+                "&:active": {
+                  backgroundColor: alpha(teal[900], 0.5),
+                },
+              }),
+            },
+          },
+          {
             props: { variant: "text" },
             style: {
               color: gray[600],
@@ -176,9 +393,117 @@ export const inputsCustomizations: Components<Theme> = {
             },
           },
           {
+            props: { color: "primary", variant: "text" },
+            style: {
+              color: teal[500],
+              border: "none",
+              "&:hover": {
+                backgroundColor: alpha(teal[100], 0.5),
+                border: "none",
+              },
+              "&:active": {
+                backgroundColor: alpha(teal[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: teal[300],
+                "&:hover": {
+                  backgroundColor: alpha(teal[900], 0.5),
+                  border: "none",
+                },
+                "&:active": {
+                  backgroundColor: alpha(teal[900], 0.3),
+                },
+              }),
+            },
+          },
+          {
             props: { color: "secondary", variant: "text" },
             style: {
-              color: teal[700],
+              color: amber[600],
+              "&:hover": {
+                backgroundColor: alpha(amber[100], 0.5),
+              },
+              "&:active": {
+                backgroundColor: alpha(amber[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: amber[300],
+                "&:hover": {
+                  backgroundColor: alpha(amber[900], 0.5),
+                },
+                "&:active": {
+                  backgroundColor: alpha(amber[900], 0.3),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "success", variant: "text" },
+            style: {
+              color: green[500],
+              "&:hover": {
+                backgroundColor: alpha(green[100], 0.5),
+              },
+              "&:active": {
+                backgroundColor: alpha(green[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: green[300],
+                "&:hover": {
+                  backgroundColor: alpha(green[900], 0.5),
+                },
+                "&:active": {
+                  backgroundColor: alpha(green[900], 0.3),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "error", variant: "text" },
+            style: {
+              color: red[500],
+              "&:hover": {
+                backgroundColor: alpha(red[100], 0.5),
+              },
+              "&:active": {
+                backgroundColor: alpha(red[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: red[300],
+                "&:hover": {
+                  backgroundColor: alpha(red[900], 0.5),
+                },
+                "&:active": {
+                  backgroundColor: alpha(red[900], 0.3),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "warning", variant: "text" },
+            style: {
+              color: orange[500],
+              "&:hover": {
+                backgroundColor: alpha(orange[100], 0.5),
+              },
+              "&:active": {
+                backgroundColor: alpha(orange[200], 0.7),
+              },
+              ...theme.applyStyles("dark", {
+                color: orange[300],
+                "&:hover": {
+                  backgroundColor: alpha(orange[900], 0.5),
+                },
+                "&:active": {
+                  backgroundColor: alpha(orange[900], 0.3),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "info", variant: "text" },
+            style: {
+              color: teal[500],
               "&:hover": {
                 backgroundColor: alpha(teal[100], 0.5),
               },
@@ -186,7 +511,7 @@ export const inputsCustomizations: Components<Theme> = {
                 backgroundColor: alpha(teal[200], 0.7),
               },
               ...theme.applyStyles("dark", {
-                color: teal[100],
+                color: teal[300],
                 "&:hover": {
                   backgroundColor: alpha(teal[900], 0.5),
                 },
@@ -227,6 +552,96 @@ export const inputsCustomizations: Components<Theme> = {
             style: {
               width: "2.5rem",
               height: "2.5rem",
+            },
+          },
+          {
+            props: { color: "primary" },
+            style: {
+              color: teal[500],
+              "&:hover": {
+                backgroundColor: alpha(teal[100], 0.5),
+              },
+              ...theme.applyStyles("dark", {
+                color: teal[300],
+                "&:hover": {
+                  backgroundColor: alpha(teal[900], 0.5),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "secondary" },
+            style: {
+              color: amber[600],
+              "&:hover": {
+                backgroundColor: alpha(amber[100], 0.5),
+              },
+              ...theme.applyStyles("dark", {
+                color: amber[300],
+                "&:hover": {
+                  backgroundColor: alpha(amber[900], 0.5),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "success" },
+            style: {
+              color: green[500],
+              "&:hover": {
+                backgroundColor: alpha(green[100], 0.5),
+              },
+              ...theme.applyStyles("dark", {
+                color: green[300],
+                "&:hover": {
+                  backgroundColor: alpha(green[900], 0.5),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "error" },
+            style: {
+              color: red[500],
+              "&:hover": {
+                backgroundColor: alpha(red[100], 0.5),
+              },
+              ...theme.applyStyles("dark", {
+                color: red[300],
+                "&:hover": {
+                  backgroundColor: alpha(red[900], 0.5),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "warning" },
+            style: {
+              color: orange[500],
+              "&:hover": {
+                backgroundColor: alpha(orange[100], 0.5),
+              },
+              ...theme.applyStyles("dark", {
+                color: orange[300],
+                "&:hover": {
+                  backgroundColor: alpha(orange[900], 0.5),
+                },
+              }),
+            },
+          },
+          {
+            props: { color: "info" },
+            style: {
+              color: teal[500],
+              "&:hover": {
+                backgroundColor: alpha(teal[100], 0.5),
+              },
+              ...theme.applyStyles("dark", {
+                color: teal[300],
+                "&:hover": {
+                  backgroundColor: alpha(teal[900], 0.5),
+                },
+              }),
             },
           },
         ],

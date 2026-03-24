@@ -57,7 +57,7 @@ export const navigationCustomizations: Components<Theme> = {
     },
     styleOverrides: {
       root: ({ theme }) => ({
-        color: theme.palette.text.primary,
+        color: theme.palette.primary.main,
         fontWeight: 500,
         position: "relative",
         textDecoration: "none",
@@ -69,9 +69,12 @@ export const navigationCustomizations: Components<Theme> = {
           height: "1px",
           bottom: 0,
           left: 0,
-          backgroundColor: theme.palette.text.secondary,
+          backgroundColor: "currentColor",
           opacity: 0.3,
           transition: "width 0.3s ease, opacity 0.3s ease",
+        },
+        "&:hover": {
+          color: theme.palette.primary.main,
         },
         "&:hover::before": {
           width: 0,
@@ -81,6 +84,26 @@ export const navigationCustomizations: Components<Theme> = {
           outlineOffset: "4px",
           borderRadius: "2px",
         },
+        variants: [
+          {
+            props: { color: "secondary" },
+            style: {
+              color: theme.palette.secondary.main,
+              "&:hover": {
+                color: theme.palette.secondary.main,
+              },
+            },
+          },
+          {
+            props: { color: "text.primary" },
+            style: {
+              color: theme.palette.text.primary,
+              "&:hover": {
+                color: theme.palette.text.primary,
+              },
+            },
+          },
+        ],
       }),
     },
   },

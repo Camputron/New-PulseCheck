@@ -87,14 +87,12 @@ export const dataDisplayCustomizations: Components<Theme> = {
   },
   MuiChip: {
     defaultProps: {
-      size: "small",
+      // size: "small",
     },
     styleOverrides: {
       root: ({ theme }) => ({
-        border: "1px solid",
-        borderRadius: "999px",
         [`& .${chipClasses.label}`]: {
-          fontWeight: 600,
+          // fontWeight: 600,
         },
         variants: [
           {
@@ -169,7 +167,6 @@ export const dataDisplayCustomizations: Components<Theme> = {
           {
             props: { size: "small" },
             style: {
-              maxHeight: 20,
               [`& .${chipClasses.label}`]: {
                 fontSize: theme.typography.caption.fontSize,
               },
