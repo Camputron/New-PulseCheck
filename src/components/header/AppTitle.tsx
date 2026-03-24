@@ -6,7 +6,7 @@ import NewBadge from "./NewBadge"
 
 const SZ = 32
 
-export default function AppTitle() {
+export default function AppTitle({ minecraft }: { minecraft?: boolean }) {
   const { user } = useAuthContext()
   return (
     <Box
@@ -26,13 +26,12 @@ export default function AppTitle() {
         },
       }}>
       <Box position='relative' display='inline-flex'>
-        <NewBadge />
+        <NewBadge defaultMinecraft={minecraft} />
         <Typography
           variant='h6'
           sx={{
             fontWeight: 700,
             fontSize: "1.1rem",
-            letterSpacing: 0.5,
             color: "text.primary",
             pr: `${SZ / 2 + 2}px`,
           }}>
@@ -45,7 +44,7 @@ export default function AppTitle() {
             right: -4,
           }}>
           <Image
-            src='/favicon.png'
+            src='/favicon.svg'
             width={SZ}
             height={SZ}
             style={{ borderRadius: 4 }}

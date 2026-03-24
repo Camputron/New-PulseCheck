@@ -3,12 +3,9 @@ import MenuItem from "./MenuItem"
 import {
   BarChart,
   Dashboard,
-  ExitToApp,
   HowToVote,
   Settings,
 } from "@mui/icons-material"
-import api from "@/lib/api/firebase"
-import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "@/lib/hooks"
 
 interface AuthMenuListProps {
@@ -17,21 +14,9 @@ interface AuthMenuListProps {
 
 export default function AuthMenuList(props: AuthMenuListProps) {
   const { handleClose } = props
-  const navigate = useNavigate()
   const { user, loading, error } = useAuthContext()
   const theme = useTheme()
   const isPhone = useMediaQuery(theme.breakpoints.down("sm"))
-
-  const handleLogout = () => {
-    api.auth
-      .logout()
-      .then(() => {
-        console.debug("logged out user!")
-        void navigate("/get-started")
-        handleClose()
-      })
-      .catch((err) => console.debug(err))
-  }
 
   if (error) {
     console.error(error)
@@ -64,12 +49,6 @@ export default function AuthMenuList(props: AuthMenuListProps) {
       )}
       <MenuItem icon={Settings} to={"/settings"} onClick={handleClose}>
         Settings
-      </MenuItem>
-      <MenuItem
-        icon={ExitToApp}
-        onClick={handleLogout}
-        sx={{ color: "error.main" }}>
-        Sign Out
       </MenuItem>
     </MenuList>
   )

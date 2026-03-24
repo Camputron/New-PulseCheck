@@ -10,8 +10,12 @@ const bounce = keyframes`
   }
 `
 
-export default function NewBadge() {
-  const [minecraft, setMinecraft] = useState(false)
+export default function NewBadge({
+  defaultMinecraft = false,
+}: {
+  defaultMinecraft?: boolean
+}) {
+  const [minecraft, setMinecraft] = useState(defaultMinecraft)
 
   const toggle = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -21,17 +25,16 @@ export default function NewBadge() {
 
   if (minecraft) {
     return (
+      /* Minecraft-style badge */
       <Typography
-        // variant='caption'
-        // fontWeight={900}
         onClick={toggle}
         sx={{
           position: "absolute",
-          top: -2,
-          left: -10,
-          lineHeight: 1,
+          top: -4,
+          left: -12,
+          fontSize: "0.65rem",
           color: "#FFFF00",
-          textShadow: "1px 1px 0 #3F3F00, -1px -1px 0 #3F3F00",
+          textShadow: "1px 1px 0 #040404, 1px 1px 0 #3F3F00",
           transform: "rotate(-20deg) scale(1)",
           transformOrigin: "center center",
           animation: `${bounce} 0.8s ease-in-out infinite`,
@@ -42,22 +45,26 @@ export default function NewBadge() {
       </Typography>
     )
   }
-
   return (
+    /* Default badge */
     <Typography
-      // variant='caption'
       onClick={toggle}
-      sx={{
+      sx={() => ({
         position: "absolute",
-        top: -6,
-        left: -10,
+        top: -11,
+        left: -15,
+        fontSize: "0.65rem",
+        fontWeight: 800,
         lineHeight: 1,
-        transform: "rotate(-20deg) scale(1)",
+        px: 0.6,
+        py: 0.3,
+        transform: "rotate(-20deg)",
         transformOrigin: "bottom right",
         cursor: "pointer",
         userSelect: "none",
-      }}>
-      New
+        zIndex: 1,
+      })}>
+      New!
     </Typography>
   )
 }
