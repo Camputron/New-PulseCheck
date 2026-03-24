@@ -377,7 +377,7 @@ export default function Settings() {
 
           <Divider />
 
-          <SettingsRow label='Theme'>
+          <SettingsRow label='Appearance'>
             <Box flex={1}>
               <ThemeSelect size='small' sx={{ minWidth: 160 }} />
             </Box>

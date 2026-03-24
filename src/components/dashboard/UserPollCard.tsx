@@ -29,7 +29,7 @@ export default function UserPollCard(props: UserPolLCardProps) {
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "space-between",
-        minHeight: 140,
+        minHeight: 120,
         transition: "all 0.2s ease",
         "&:hover": {
           borderColor: "primary.main",
@@ -51,7 +51,7 @@ export default function UserPollCard(props: UserPolLCardProps) {
         <Typography
           variant='subtitle1'
           fontWeight={700}
-          noWrap
+          // noWrap
           flex={1}
           textAlign='left'>
           {poll.title}

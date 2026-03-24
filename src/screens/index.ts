@@ -15,7 +15,7 @@ import Settings from "./Settings"
 import Register from "./Register"
 import Splash from "./Splash"
 import TermsOfService from "./TermsOfService"
-import { PollParticipate } from "./PollParticipate"
+import PollParticipate from "./PollParticipate"
 import PollHistory from "./PollHistory"
 
 export const Screen = {

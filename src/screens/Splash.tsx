@@ -10,10 +10,9 @@ import { useNavigate, useLocation } from "react-router-dom"
 import About from "../components/splash/About"
 import FAQs from "../components/splash/FAQs"
 import Features from "../components/splash/Features"
-import FooterLink from "../components/splash/FooterLink"
+import Footer from "../components/splash/Footer"
 import { useRef, useEffect } from "react"
 import { RA } from "@/styles"
-import { ArrowForward } from "@mui/icons-material"
 import useRedirectIfAuthenticated from "@/lib/hooks/useRedirectIfAuthenticated"
 
 interface LocationState {
@@ -112,8 +111,6 @@ export default function Splash() {
             <Button
               variant='contained'
               color='primary'
-              size='large'
-              endIcon={<ArrowForward />}
               onClick={handleClick}
               sx={{
                 px: 4,
@@ -137,20 +134,17 @@ export default function Splash() {
           <Divider />
           <FAQs ref={faqRef} />
         </Stack>
-
-        {/* Footer */}
-        <Divider sx={{ mt: 4 }} />
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            gap: 4,
-            py: 4,
-          }}>
-          <FooterLink text='Privacy Policy' path='privacy-policy' />
-          <FooterLink text='Terms of Service' path='terms-of-service' />
-        </Box>
       </Container>
+
+      <Footer
+        onScrollTo={(target) => {
+          let destination: HTMLDivElement | null = null
+          if (target === "about") destination = aboutRef.current
+          else if (target === "features") destination = featuredRef.current
+          else if (target === "faqs") destination = faqRef.current
+          destination?.scrollIntoView({ behavior: "smooth" })
+        }}
+      />
     </Box>
   )
 }

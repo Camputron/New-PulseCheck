@@ -8,9 +8,12 @@
     "test": "vitest",
     "build": "tsc -b && vite build",
     "lint": "eslint src",
-    "format": "prettier src --write",
+    "format": "prettier src --write --list-different",
     "format:check": "prettier src --check",
     "preview": "vite preview"
+  },
+  "engines": {
+    "node": "24"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -57,5 +60,6 @@
     "vitest": "^3.0.7",
     "vitest-browser-react": "^0.1.1"
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.6.0",
+  "privite": true
 }
