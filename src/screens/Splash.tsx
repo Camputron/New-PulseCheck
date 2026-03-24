@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import About from "../components/splash/About"
 import FAQs from "../components/splash/FAQs"
 import Features from "../components/splash/Features"
@@ -15,42 +15,51 @@ import { useRef, useEffect } from "react"
 import { RA } from "@/styles"
 import useRedirectIfAuthenticated from "@/lib/hooks/useRedirectIfAuthenticated"
 
-interface LocationState {
-  scrollTo?: string
-}
-
 export default function Splash() {
   useRedirectIfAuthenticated()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const handleClick = () => {
     void navigate("/get-started")
   }
-  const location = useLocation()
 
   const aboutRef = useRef<HTMLDivElement>(null)
   const faqRef = useRef<HTMLDivElement>(null)
   const featuredRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const locstate = location.state as LocationState
-    if (locstate?.scrollTo) {
-      const target = locstate.scrollTo
-      let destination: HTMLDivElement | null = null
+    const section = searchParams.get("section")
+    if (!section) return undefined
 
-      if (target === "about") {
-        destination = aboutRef.current
-      } else if (target === "faqs") {
-        destination = faqRef.current
-      } else if (target === "features") {
-        destination = featuredRef.current
-      }
-
-      if (destination) {
-        destination.scrollIntoView({ behavior: "smooth" })
-      }
+    const refs: Record<string, React.RefObject<HTMLDivElement | null>> = {
+      about: aboutRef,
+      features: featuredRef,
+      faqs: faqRef,
     }
-  }, [location])
+
+    const ref = refs[section]
+    const destination = ref?.current
+    if (!destination) return undefined
+
+    destination.scrollIntoView({ behavior: "smooth" })
+
+    let hasBeenVisible = false
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          hasBeenVisible = true
+        } else if (hasBeenVisible) {
+          setSearchParams({}, { replace: true })
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    observer.observe(destination)
+
+    return () => observer.disconnect()
+  }, [searchParams, setSearchParams])
 
   return (
     <Box

@@ -3,9 +3,9 @@ import { Box, Button, useMediaQuery, useTheme } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 
 const navLinks = [
-  { label: "About", to: "/", state: { scrollTo: "about" } },
-  { label: "Features", to: "/", state: { scrollTo: "features" } },
-  { label: "FAQs", to: "/", state: { scrollTo: "faqs" } },
+  { label: "About", to: "/?section=about" },
+  { label: "Features", to: "/?section=features" },
+  { label: "FAQs", to: "/?section=faqs" },
 ] as const
 
 export default function GuestNavItems() {
@@ -24,7 +24,7 @@ export default function GuestNavItems() {
         <Button
           key={item.label}
           color='inherit'
-          onClick={() => void navigate(item.to, { state: item.state })}
+          onClick={() => void navigate(item.to)}
           sx={{
             textTransform: "none",
             fontWeight: 500,

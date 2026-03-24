@@ -28,25 +28,13 @@ export default function GuestMenuList(props: GuestMenuListProps) {
 
   return (
     <MenuList sx={{ py: 1 }}>
-      <MenuItem
-        icon={Info}
-        to='/'
-        opts={{ state: { scrollTo: "about" } }}
-        onClick={handleClose}>
+      <MenuItem icon={Info} to='/?section=about' onClick={handleClose}>
         About
       </MenuItem>
-      <MenuItem
-        icon={Star}
-        to='/'
-        opts={{ state: { scrollTo: "features" } }}
-        onClick={handleClose}>
+      <MenuItem icon={Star} to='/?section=features' onClick={handleClose}>
         Features
       </MenuItem>
-      <MenuItem
-        icon={Help}
-        to='/'
-        opts={{ state: { scrollTo: "faqs" } }}
-        onClick={handleClose}>
+      <MenuItem icon={Help} to='/?section=faqs' onClick={handleClose}>
         FAQs
       </MenuItem>
       <Divider sx={{ my: 0.5 }} />
