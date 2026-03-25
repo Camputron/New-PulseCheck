@@ -72,7 +72,7 @@ export default function ScoreHistogram({ submissions, summary }: Props) {
               color: theme.palette.primary.main,
             },
           ]}
-          slotProps={{ legend: { hidden: true } }}
+          // slotProps={{ legend: { hidden: true } }}
           grid={{ horizontal: true }}
           height={280}
         />
