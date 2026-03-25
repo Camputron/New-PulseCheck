@@ -9,7 +9,6 @@ import { connectFunctionsEmulator, getFunctions } from "firebase/functions"
 import AuthStore from "./firebase/auth"
 import SessionStore from "./firebase/sessions/sessions"
 import SubmissionStore from "./firebase/submissions"
-import { getVertexAI, getGenerativeModel } from "firebase/vertexai"
 import VertexStore from "./firebase/vertex"
 import GitHubStore from "./github"
 
@@ -26,14 +25,6 @@ const config: FirebaseOptions = {
 const BUCKET_URL = "gs://new-pulsecheck.firebasestorage.app"
 
 const app = initializeApp(config)
-const vertexAI = getVertexAI(app)
-export const model = getGenerativeModel(vertexAI, {
-  model: "gemini-2.0-flash-001",
-  generationConfig: {
-    responseMimeType: "application/json",
-    temperature: 0.2,
-  },
-})
 export const auth = getAuth(app)
 export const firestore = getFirestore(app)
 export const storage = getStorage(app, BUCKET_URL)
@@ -90,7 +81,7 @@ class APIStore {
     this._polls = new PollStore(db)
     this._sessions = new SessionStore(db)
     this._submissions = new SubmissionStore(db)
-    this._vertex = new VertexStore(model)
+    this._vertex = new VertexStore(functions)
     this._github = new GitHubStore()
   }
 
