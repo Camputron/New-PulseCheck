@@ -17,8 +17,8 @@ import {
   where,
   writeBatch,
   QueryDocumentSnapshot,
-  DocumentSnapshot,
 } from "firebase/firestore"
+import { Functions, httpsCallable } from "firebase/functions"
 import BaseStore from "../store"
 import {
   CurrentQuestion,
@@ -26,13 +26,12 @@ import {
   Session,
   SessionQuestion,
   SessionState,
-  SessionUser,
 } from "@/types"
 import api, { clx } from "@/api"
 import UserStore from "./users"
 import WaitingUserStore from "./waiting_users"
 import ChatStore from "./chat"
-import { generateRoomCode, getMedian } from "@/utils"
+import { generateRoomCode } from "@/utils"
 import QuestionStore from "./question"
 import SubmissionStore from "./submissions"
 
@@ -45,14 +44,16 @@ export default class SessionStore extends BaseStore {
   private readonly _chat: ChatStore
   private readonly _questions: QuestionStore
   private readonly _submissions: SubmissionStore
+  private readonly _functions: Functions
 
-  constructor(db: Firestore) {
+  constructor(db: Firestore, functions: Functions) {
     super(db)
     this._users = new UserStore(db)
     this._waiting_users = new WaitingUserStore(db)
     this._chat = new ChatStore(db)
     this._questions = new QuestionStore(db)
     this._submissions = new SubmissionStore(db)
+    this._functions = functions
   }
 
   public get users() {
@@ -441,166 +442,15 @@ export default class SessionStore extends BaseStore {
   }
 
   /**
-   * Calulcates the user's total score in session. Creates submission to save user results.
-   */
-  protected async calcUserScore(
-    sid: string,
-    user: QueryDocumentSnapshot<SessionUser>,
-    s_ss: QueryDocumentSnapshot<Session>,
-    questions: DocumentSnapshot<SessionQuestion>[]
-  ): Promise<number> {
-    /* init users score */
-    let score = 0
-    console.debug(`grading user(${user.id})`)
-    const uid = user.id
-    /* iterate all session question ids */
-    for (const q_ss of questions) {
-      const qid = q_ss.id
-      /* fetch snapshot of session question */
-      // const q_ss = await getDoc(q_ss)
-      if (!q_ss.exists()) {
-        throw new Error(`Failed to get sessions/${sid}/questions/${qid}`)
-      }
-      /* init ref to user's response to question */
-      const rref = this.questions.responses.doc(sid, qid, uid)
-      /* fetch user's response */
-      const r_ss = await getDoc(rref)
-      const question = q_ss.data()
-      /* check if user's response is recorded */
-      if (!r_ss.exists()) {
-        /* if no record, mark as no choices were made */
-        console.debug(`user(${uid}) did not answer this question(${qid})`)
-        await this.questions.responses.answer(sid, qid, uid, [])
-      } else {
-        /* check if this question is a ranking-poll */
-        // if (question.prompt_type !== "ranking-poll") {
-        const res = r_ss.data()
-        /* check if the user's answer is correct */
-        if (res.correct) {
-          score += question.points
-        }
-        // }
-      }
-    }
-    /* create submission doc */
-    const submission_ref = await api.submissions.create({
-      title: s_ss.data().title,
-      user: api.users.doc(uid),
-      display_name: user.data().display_name,
-      photo_url: user.data().photo_url,
-      session: s_ss.ref,
-      score: score,
-      max_score: s_ss.data().summary.max_score,
-      score_100: (score / s_ss.data().summary.max_score) * 100,
-    })
-    /* create pointer to submission doc in sessions's subcollection */
-    await this.submissions.insert(s_ss.id, uid, {
-      ref: submission_ref,
-    })
-    return score
-  }
-
-  protected calcMetrics(scores: number[], maxScore: number) {
-    if (scores.length <= 0) {
-      return {
-        average: 0,
-        average_100: 0,
-        low: 0,
-        low_100: 0,
-        high: 0,
-        high_100: 0,
-        median: 0,
-        median_100: 0,
-        lower_quartile: 0,
-        lower_quartile_100: 0,
-        upper_quartile: 0,
-        upper_quartile_100: 0,
-      }
-    }
-    const sorted = [...scores].sort((a, b) => a - b)
-    const sum = scores.reduce((acc, val) => acc + val, 0)
-    const average = sum / scores.length
-    const median = getMedian(sorted)
-    let lower_quartile = 0
-    let upper_quartile = 0
-    if (sorted.length === 1) {
-      lower_quartile = sorted[0]
-      upper_quartile = sorted[0]
-    } else {
-      const mid = Math.floor(sorted.length / 2)
-      const lowerHalf = sorted.slice(0, mid)
-      const upperHalf =
-        sorted.length % 2 === 0 ? sorted.slice(mid) : sorted.slice(mid + 1)
-      lower_quartile = getMedian(lowerHalf)
-      upper_quartile = getMedian(upperHalf)
-    }
-    const low = sorted[0]
-    const high = sorted[sorted.length - 1]
-    const low_100 = (low / maxScore) * 100
-    const high_100 = (high / maxScore) * 100
-    const average_100 = (average / maxScore) * 100
-    const median_100 = (median / maxScore) * 100
-    const lower_quartile_100 = (lower_quartile / maxScore) * 100
-    const upper_quartile_100 = (upper_quartile / maxScore) * 100
-    return {
-      average,
-      average_100,
-      low,
-      low_100,
-      high,
-      high_100,
-      median,
-      median_100,
-      lower_quartile,
-      lower_quartile_100,
-      upper_quartile,
-      upper_quartile_100,
-    }
-  }
-
-  /**
-   * Changes session state to FINISHED. Creates all submissions for users in session.
+   * Finishes the session by calling the finishSession Cloud Function.
+   * The function grades all users, creates submissions, and computes session metrics.
    */
   public async finish(sref: DocumentReference<Session>) {
-    console.debug("create submission docs!")
-    const sid = sref.id
-    /* fetch session doc */
-    const s_ss = await getDoc(sref)
-    if (!s_ss.exists()) {
-      throw new Error(`Failed to get sessions/${sid}`)
-    }
-    const session = s_ss.data()
-    /* fetch all user docs in session */
-    const users = (await this.users.getAll(sref)).docs
-    /* init question promises list */
-    const question_promises: Promise<DocumentSnapshot<SessionQuestion>>[] = []
-    /* fetch all session question docs */
-    for (const qref of session.questions) {
-      question_promises.push(getDoc(qref))
-    }
-    /* wait to fetch all session question docs */
-    const questions = await Promise.all(question_promises)
-    /* init score promises list */
-    const score_promises: Promise<number>[] = []
-    /* compute score for all users in session */
-    for (const user of users) {
-      score_promises.push(this.calcUserScore(sid, user, s_ss, questions))
-    }
-    /* wait to finish scoring all users */
-    const scores = await Promise.all(score_promises)
-    const maxScore = session.summary.max_score
-    /* update session summary with metrics */
-    await setDoc(
-      sref,
-      {
-        summary: {
-          ...this.calcMetrics(scores, maxScore),
-          total_participants: users.length,
-        },
-        state: SessionState.FINISHED,
-      },
-      { merge: true }
+    const callable = httpsCallable<{ sessionId: string }, { success: boolean }>(
+      this._functions,
+      "finishSession"
     )
+    await callable({ sessionId: sref.id })
   }
 
   public async deleteAllByPREF(pref: DocumentReference<Poll>) {

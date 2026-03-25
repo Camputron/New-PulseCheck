@@ -79,7 +79,7 @@ class APIStore {
     this._auth = new AuthStore()
     this._users = new UserStore(db)
     this._polls = new PollStore(db)
-    this._sessions = new SessionStore(db)
+    this._sessions = new SessionStore(db, functions)
     this._submissions = new SubmissionStore(db)
     this._vertex = new VertexStore(functions)
     this._github = new GitHubStore()

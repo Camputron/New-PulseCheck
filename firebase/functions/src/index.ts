@@ -7,6 +7,7 @@ import {
   HarmBlockThreshold,
 } from "@google-cloud/vertexai"
 import { initializeApp } from "firebase-admin/app"
+import { getFirestore, FieldValue } from "firebase-admin/firestore"
 import { getStorage } from "firebase-admin/storage"
 
 const admin = initializeApp()
@@ -24,6 +25,10 @@ interface AIQuestion {
 interface GenerateQuestionsRequest {
   n: number
   uri: string
+}
+
+interface FinishSessionRequest {
+  sessionId: string
 }
 
 // ── Vertex AI Setup ──────────────────────────────────────────────────────────
@@ -203,5 +208,203 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
 
     // Should never reach here, but TypeScript needs it
     throw new HttpsError("internal", "Unexpected error")
+  }
+)
+
+// ── Grading Helpers ─────────────────────────────────────────────────────────
+
+function getMedian(arr: number[]): number {
+  const len = arr.length
+  const mid = Math.floor(len / 2)
+  if (len % 2 === 0) {
+    return (arr[mid - 1] + arr[mid]) / 2
+  } else {
+    return arr[mid]
+  }
+}
+
+function calcMetrics(scores: number[], maxScore: number) {
+  if (scores.length <= 0) {
+    return {
+      average: 0,
+      average_100: 0,
+      low: 0,
+      low_100: 0,
+      high: 0,
+      high_100: 0,
+      median: 0,
+      median_100: 0,
+      lower_quartile: 0,
+      lower_quartile_100: 0,
+      upper_quartile: 0,
+      upper_quartile_100: 0,
+    }
+  }
+  const sorted = [...scores].sort((a, b) => a - b)
+  const sum = scores.reduce((acc, val) => acc + val, 0)
+  const average = sum / scores.length
+  const median = getMedian(sorted)
+  let lower_quartile = 0
+  let upper_quartile = 0
+  if (sorted.length === 1) {
+    lower_quartile = sorted[0]
+    upper_quartile = sorted[0]
+  } else {
+    const mid = Math.floor(sorted.length / 2)
+    const lowerHalf = sorted.slice(0, mid)
+    const upperHalf =
+      sorted.length % 2 === 0 ? sorted.slice(mid) : sorted.slice(mid + 1)
+    lower_quartile = getMedian(lowerHalf)
+    upper_quartile = getMedian(upperHalf)
+  }
+  const low = sorted[0]
+  const high = sorted[sorted.length - 1]
+  return {
+    average,
+    average_100: (average / maxScore) * 100,
+    low,
+    low_100: (low / maxScore) * 100,
+    high,
+    high_100: (high / maxScore) * 100,
+    median,
+    median_100: (median / maxScore) * 100,
+    lower_quartile,
+    lower_quartile_100: (lower_quartile / maxScore) * 100,
+    upper_quartile,
+    upper_quartile_100: (upper_quartile / maxScore) * 100,
+  }
+}
+
+// ── Finish Session ──────────────────────────────────────────────────────────
+
+export const finishSession = onCall<FinishSessionRequest>(
+  { timeoutSeconds: 60, memory: "256MiB" },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError("unauthenticated", "Must be signed in")
+    }
+    const uid = request.auth.uid
+    const { sessionId } = request.data
+
+    if (!sessionId || typeof sessionId !== "string") {
+      throw new HttpsError("invalid-argument", "sessionId is required")
+    }
+
+    const db = getFirestore()
+    const sessionRef = db.doc(`sessions/${sessionId}`)
+    const sessionSnap = await sessionRef.get()
+
+    if (!sessionSnap.exists) {
+      throw new HttpsError("not-found", `Session ${sessionId} not found`)
+    }
+
+    const session = sessionSnap.data()!
+
+    // Verify caller is the session host
+    if (session.host.path !== `users/${uid}`) {
+      throw new HttpsError(
+        "permission-denied",
+        "Only the host can finish a session"
+      )
+    }
+
+    // Validate session is in DONE state
+    if (session.state !== "done") {
+      throw new HttpsError(
+        "failed-precondition",
+        `Session state must be "done", got "${session.state}"`
+      )
+    }
+
+    // Fetch all users in session
+    const usersSnap = await db
+      .collection(`sessions/${sessionId}/users`)
+      .get()
+    const users = usersSnap.docs
+
+    // Resolve all session question docs
+    const questionRefs: FirebaseFirestore.DocumentReference[] =
+      session.questions || []
+    const questionSnaps = await Promise.all(
+      questionRefs.map((ref) => ref.get())
+    )
+
+    // Score each user
+    const maxScore: number = session.summary?.max_score ?? 0
+    const scores: number[] = []
+
+    for (const userDoc of users) {
+      let score = 0
+      const participantUid = userDoc.id
+      const userData = userDoc.data()!
+
+      for (const qSnap of questionSnaps) {
+        if (!qSnap.exists) continue
+        const question = qSnap.data()!
+        const qid = qSnap.id
+
+        const responseRef = db.doc(
+          `sessions/${sessionId}/questions/${qid}/responses/${participantUid}`
+        )
+        const responseSnap = await responseRef.get()
+
+        if (!responseSnap.exists) {
+          // User didn't answer — create empty response
+          await responseRef.set({
+            user: db.doc(`users/${participantUid}`),
+            choices: [],
+            correct: false,
+            created_at: FieldValue.serverTimestamp(),
+          })
+        } else {
+          const response = responseSnap.data()!
+          if (response.correct) {
+            score += question.points
+          }
+        }
+      }
+
+      // Create top-level submission doc
+      const submissionRef = await db.collection("submissions").add({
+        title: session.title,
+        user: db.doc(`users/${participantUid}`),
+        display_name: userData.display_name,
+        photo_url: userData.photo_url ?? null,
+        email: null,
+        session: sessionRef,
+        score,
+        max_score: maxScore,
+        score_100: maxScore > 0 ? (score / maxScore) * 100 : 0,
+        submitted_at: FieldValue.serverTimestamp(),
+      })
+
+      // Create pointer in session's submissions subcollection
+      await db
+        .doc(`sessions/${sessionId}/submissions/${participantUid}`)
+        .set({ ref: submissionRef })
+
+      scores.push(score)
+    }
+
+    // Compute metrics and finalize session
+    const metrics = calcMetrics(scores, maxScore)
+    await sessionRef.set(
+      {
+        summary: {
+          ...metrics,
+          total_participants: users.length,
+          max_score: maxScore,
+        },
+        state: "finished",
+      },
+      { merge: true }
+    )
+
+    logger.info(`Session ${sessionId} finished by host ${uid}`, {
+      participants: users.length,
+      maxScore,
+    })
+
+    return { success: true }
   }
 )
