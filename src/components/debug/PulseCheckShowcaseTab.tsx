@@ -405,11 +405,7 @@ export default function PulseCheckShowcaseTab() {
           },
           {
             category: "Graphs",
-            items: [
-              "MostRecentGaugeCard",
-              "NoRecentPoll",
-              "ScoreGaugeCard*",
-            ],
+            items: ["MostRecentGaugeCard", "NoRecentPoll", "ScoreGaugeCard*"],
           },
         ].map((group) => (
           <Paper

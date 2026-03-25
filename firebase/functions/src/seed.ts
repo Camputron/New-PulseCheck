@@ -15,24 +15,24 @@
  *   npx ts-node src/seed.ts --clean
  */
 
-import * as admin from "firebase-admin";
+import * as admin from "firebase-admin"
 
-const USE_PROD = process.argv.includes("--prod");
-const CLEAN = process.argv.includes("--clean");
+const USE_PROD = process.argv.includes("--prod")
+const CLEAN = process.argv.includes("--clean")
 
-const PROJECT_ID = "new-pulsecheck";
+const PROJECT_ID = "new-pulsecheck"
 
 if (!USE_PROD) {
-  process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
-  process.env["FIREBASE_AUTH_EMULATOR_HOST"] = "localhost:9099";
+  process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080"
+  process.env["FIREBASE_AUTH_EMULATOR_HOST"] = "localhost:9099"
 }
 
-admin.initializeApp({projectId: PROJECT_ID});
-const db = admin.firestore();
-const authAdmin = admin.auth();
-const ts = admin.firestore.Timestamp.now;
+admin.initializeApp({ projectId: PROJECT_ID })
+const db = admin.firestore()
+const authAdmin = admin.auth()
+const ts = admin.firestore.Timestamp.now
 
-const SEED_PASSWORD = "pulsecheck123";
+const SEED_PASSWORD = "pulsecheck123"
 
 const USERS = [
   {
@@ -191,7 +191,7 @@ const USERS = [
     email: "yusuf@university.edu",
     photo_url: null,
   },
-];
+]
 
 const POLLS = [
   {
@@ -210,10 +210,10 @@ const POLLS = [
         anonymous: false,
         time: 30,
         options: [
-          {id: "seed-o-1a", text: "O(n)", correct: false},
-          {id: "seed-o-1b", text: "O(log n)", correct: true},
-          {id: "seed-o-1c", text: "O(n log n)", correct: false},
-          {id: "seed-o-1d", text: "O(1)", correct: false},
+          { id: "seed-o-1a", text: "O(n)", correct: false },
+          { id: "seed-o-1b", text: "O(log n)", correct: true },
+          { id: "seed-o-1c", text: "O(n log n)", correct: false },
+          { id: "seed-o-1d", text: "O(1)", correct: false },
         ],
       },
       {
@@ -225,10 +225,10 @@ const POLLS = [
         anonymous: false,
         time: 30,
         options: [
-          {id: "seed-o-2a", text: "Stack", correct: false},
-          {id: "seed-o-2b", text: "Queue", correct: true},
-          {id: "seed-o-2c", text: "Binary Tree", correct: false},
-          {id: "seed-o-2d", text: "Hash Map", correct: false},
+          { id: "seed-o-2a", text: "Stack", correct: false },
+          { id: "seed-o-2b", text: "Queue", correct: true },
+          { id: "seed-o-2c", text: "Binary Tree", correct: false },
+          { id: "seed-o-2d", text: "Hash Map", correct: false },
         ],
       },
       {
@@ -240,10 +240,10 @@ const POLLS = [
         anonymous: false,
         time: 45,
         options: [
-          {id: "seed-o-3a", text: "Merge Sort", correct: true},
-          {id: "seed-o-3b", text: "Quick Sort", correct: true},
-          {id: "seed-o-3c", text: "Slow Sort", correct: false},
-          {id: "seed-o-3d", text: "Bubble Sort", correct: true},
+          { id: "seed-o-3a", text: "Merge Sort", correct: true },
+          { id: "seed-o-3b", text: "Quick Sort", correct: true },
+          { id: "seed-o-3c", text: "Slow Sort", correct: false },
+          { id: "seed-o-3d", text: "Bubble Sort", correct: true },
         ],
       },
     ],
@@ -264,10 +264,10 @@ const POLLS = [
         anonymous: true,
         time: null,
         options: [
-          {id: "seed-o-h1a", text: "1774", correct: false},
-          {id: "seed-o-h1b", text: "1776", correct: true},
-          {id: "seed-o-h1c", text: "1778", correct: false},
-          {id: "seed-o-h1d", text: "1780", correct: false},
+          { id: "seed-o-h1a", text: "1774", correct: false },
+          { id: "seed-o-h1b", text: "1776", correct: true },
+          { id: "seed-o-h1c", text: "1778", correct: false },
+          { id: "seed-o-h1d", text: "1780", correct: false },
         ],
       },
       {
@@ -279,10 +279,10 @@ const POLLS = [
         anonymous: true,
         time: null,
         options: [
-          {id: "seed-o-h2a", text: "Thomas Jefferson", correct: false},
-          {id: "seed-o-h2b", text: "John Adams", correct: false},
-          {id: "seed-o-h2c", text: "George Washington", correct: true},
-          {id: "seed-o-h2d", text: "Benjamin Franklin", correct: false},
+          { id: "seed-o-h2a", text: "Thomas Jefferson", correct: false },
+          { id: "seed-o-h2b", text: "John Adams", correct: false },
+          { id: "seed-o-h2c", text: "George Washington", correct: true },
+          { id: "seed-o-h2d", text: "Benjamin Franklin", correct: false },
         ],
       },
     ],
@@ -303,10 +303,10 @@ const POLLS = [
         anonymous: false,
         time: 20,
         options: [
-          {id: "seed-o-b1a", text: "Nucleus", correct: false},
-          {id: "seed-o-b1b", text: "Mitochondria", correct: true},
-          {id: "seed-o-b1c", text: "Ribosome", correct: false},
-          {id: "seed-o-b1d", text: "Golgi Apparatus", correct: false},
+          { id: "seed-o-b1a", text: "Nucleus", correct: false },
+          { id: "seed-o-b1b", text: "Mitochondria", correct: true },
+          { id: "seed-o-b1c", text: "Ribosome", correct: false },
+          { id: "seed-o-b1d", text: "Golgi Apparatus", correct: false },
         ],
       },
       {
@@ -318,26 +318,27 @@ const POLLS = [
         anonymous: false,
         time: 45,
         options: [
-          {id: "seed-o-b2a", text: "Ribosome", correct: true},
-          {id: "seed-o-b2b", text: "Mitochondria", correct: true},
-          {id: "seed-o-b2c", text: "Nucleus", correct: true},
-          {id: "seed-o-b2d", text: "Cell", correct: true},
+          { id: "seed-o-b2a", text: "Ribosome", correct: true },
+          { id: "seed-o-b2b", text: "Mitochondria", correct: true },
+          { id: "seed-o-b2c", text: "Nucleus", correct: true },
+          { id: "seed-o-b2d", text: "Cell", correct: true },
         ],
       },
       {
         id: "seed-q-bio-3",
         prompt_type: "multi-select" as const,
-        prompt: "Which of the following are found in " +
+        prompt:
+          "Which of the following are found in " +
           "plant cells but NOT animal cells?",
         prompt_img: null,
         points: 10,
         anonymous: false,
         time: 30,
         options: [
-          {id: "seed-o-b3a", text: "Cell Wall", correct: true},
-          {id: "seed-o-b3b", text: "Chloroplast", correct: true},
-          {id: "seed-o-b3c", text: "Mitochondria", correct: false},
-          {id: "seed-o-b3d", text: "Central Vacuole", correct: true},
+          { id: "seed-o-b3a", text: "Cell Wall", correct: true },
+          { id: "seed-o-b3b", text: "Chloroplast", correct: true },
+          { id: "seed-o-b3c", text: "Mitochondria", correct: false },
+          { id: "seed-o-b3d", text: "Central Vacuole", correct: true },
         ],
       },
     ],
@@ -359,10 +360,10 @@ const POLLS = [
         anonymous: true,
         time: null,
         options: [
-          {id: "seed-o-fb1a", text: "Too slow", correct: false},
-          {id: "seed-o-fb1b", text: "Just right", correct: false},
-          {id: "seed-o-fb1c", text: "Too fast", correct: false},
-          {id: "seed-o-fb1d", text: "Varies by topic", correct: false},
+          { id: "seed-o-fb1a", text: "Too slow", correct: false },
+          { id: "seed-o-fb1b", text: "Just right", correct: false },
+          { id: "seed-o-fb1c", text: "Too fast", correct: false },
+          { id: "seed-o-fb1d", text: "Varies by topic", correct: false },
         ],
       },
       {
@@ -374,11 +375,11 @@ const POLLS = [
         anonymous: true,
         time: null,
         options: [
-          {id: "seed-o-fb2a", text: "Lecture slides", correct: false},
-          {id: "seed-o-fb2b", text: "Live coding demos", correct: false},
-          {id: "seed-o-fb2c", text: "Group activities", correct: false},
-          {id: "seed-o-fb2d", text: "Homework assignments", correct: false},
-          {id: "seed-o-fb2e", text: "Office hours", correct: false},
+          { id: "seed-o-fb2a", text: "Lecture slides", correct: false },
+          { id: "seed-o-fb2b", text: "Live coding demos", correct: false },
+          { id: "seed-o-fb2c", text: "Group activities", correct: false },
+          { id: "seed-o-fb2d", text: "Homework assignments", correct: false },
+          { id: "seed-o-fb2e", text: "Office hours", correct: false },
         ],
       },
       {
@@ -390,10 +391,10 @@ const POLLS = [
         anonymous: true,
         time: null,
         options: [
-          {id: "seed-o-fb3a", text: "Recursion", correct: false},
-          {id: "seed-o-fb3b", text: "Pointers", correct: false},
-          {id: "seed-o-fb3c", text: "Data Structures", correct: false},
-          {id: "seed-o-fb3d", text: "Algorithms", correct: false},
+          { id: "seed-o-fb3a", text: "Recursion", correct: false },
+          { id: "seed-o-fb3b", text: "Pointers", correct: false },
+          { id: "seed-o-fb3c", text: "Data Structures", correct: false },
+          { id: "seed-o-fb3d", text: "Algorithms", correct: false },
         ],
       },
       {
@@ -405,10 +406,10 @@ const POLLS = [
         anonymous: true,
         time: null,
         options: [
-          {id: "seed-o-fb4a", text: "Definitely yes", correct: false},
-          {id: "seed-o-fb4b", text: "Probably yes", correct: false},
-          {id: "seed-o-fb4c", text: "Probably not", correct: false},
-          {id: "seed-o-fb4d", text: "Definitely not", correct: false},
+          { id: "seed-o-fb4a", text: "Definitely yes", correct: false },
+          { id: "seed-o-fb4b", text: "Probably yes", correct: false },
+          { id: "seed-o-fb4c", text: "Probably not", correct: false },
+          { id: "seed-o-fb4d", text: "Definitely not", correct: false },
         ],
       },
     ],
@@ -430,10 +431,10 @@ const POLLS = [
         anonymous: false,
         time: 20,
         options: [
-          {id: "seed-o-ch1a", text: "Go", correct: false},
-          {id: "seed-o-ch1b", text: "Au", correct: true},
-          {id: "seed-o-ch1c", text: "Ag", correct: false},
-          {id: "seed-o-ch1d", text: "Gd", correct: false},
+          { id: "seed-o-ch1a", text: "Go", correct: false },
+          { id: "seed-o-ch1b", text: "Au", correct: true },
+          { id: "seed-o-ch1c", text: "Ag", correct: false },
+          { id: "seed-o-ch1d", text: "Gd", correct: false },
         ],
       },
       {
@@ -445,11 +446,11 @@ const POLLS = [
         anonymous: false,
         time: 45,
         options: [
-          {id: "seed-o-ch2a", text: "Helium", correct: true},
-          {id: "seed-o-ch2b", text: "Neon", correct: true},
-          {id: "seed-o-ch2c", text: "Nitrogen", correct: false},
-          {id: "seed-o-ch2d", text: "Argon", correct: true},
-          {id: "seed-o-ch2e", text: "Chlorine", correct: false},
+          { id: "seed-o-ch2a", text: "Helium", correct: true },
+          { id: "seed-o-ch2b", text: "Neon", correct: true },
+          { id: "seed-o-ch2c", text: "Nitrogen", correct: false },
+          { id: "seed-o-ch2d", text: "Argon", correct: true },
+          { id: "seed-o-ch2e", text: "Chlorine", correct: false },
         ],
       },
       {
@@ -461,10 +462,10 @@ const POLLS = [
         anonymous: false,
         time: 15,
         options: [
-          {id: "seed-o-ch3a", text: "Very confident", correct: false},
-          {id: "seed-o-ch3b", text: "Somewhat confident", correct: false},
-          {id: "seed-o-ch3c", text: "Not confident", correct: false},
-          {id: "seed-o-ch3d", text: "Need more review", correct: false},
+          { id: "seed-o-ch3a", text: "Very confident", correct: false },
+          { id: "seed-o-ch3b", text: "Somewhat confident", correct: false },
+          { id: "seed-o-ch3c", text: "Not confident", correct: false },
+          { id: "seed-o-ch3d", text: "Need more review", correct: false },
         ],
       },
       {
@@ -476,10 +477,10 @@ const POLLS = [
         anonymous: false,
         time: 60,
         options: [
-          {id: "seed-o-ch4a", text: "Hydrogen (H)", correct: true},
-          {id: "seed-o-ch4b", text: "Carbon (C)", correct: true},
-          {id: "seed-o-ch4c", text: "Iron (Fe)", correct: true},
-          {id: "seed-o-ch4d", text: "Gold (Au)", correct: true},
+          { id: "seed-o-ch4a", text: "Hydrogen (H)", correct: true },
+          { id: "seed-o-ch4b", text: "Carbon (C)", correct: true },
+          { id: "seed-o-ch4c", text: "Iron (Fe)", correct: true },
+          { id: "seed-o-ch4d", text: "Gold (Au)", correct: true },
         ],
       },
       {
@@ -491,10 +492,10 @@ const POLLS = [
         anonymous: false,
         time: 30,
         options: [
-          {id: "seed-o-ch5a", text: "Ionic bond", correct: false},
-          {id: "seed-o-ch5b", text: "Covalent bond", correct: true},
-          {id: "seed-o-ch5c", text: "Metallic bond", correct: false},
-          {id: "seed-o-ch5d", text: "Hydrogen bond", correct: false},
+          { id: "seed-o-ch5a", text: "Ionic bond", correct: false },
+          { id: "seed-o-ch5b", text: "Covalent bond", correct: true },
+          { id: "seed-o-ch5c", text: "Metallic bond", correct: false },
+          { id: "seed-o-ch5d", text: "Hydrogen bond", correct: false },
         ],
       },
       {
@@ -506,11 +507,11 @@ const POLLS = [
         anonymous: true,
         time: null,
         options: [
-          {id: "seed-o-ch6a", text: "Stoichiometry", correct: false},
-          {id: "seed-o-ch6b", text: "Thermodynamics", correct: false},
-          {id: "seed-o-ch6c", text: "Organic chemistry", correct: false},
-          {id: "seed-o-ch6d", text: "Acid-base reactions", correct: false},
-          {id: "seed-o-ch6e", text: "Electrochemistry", correct: false},
+          { id: "seed-o-ch6a", text: "Stoichiometry", correct: false },
+          { id: "seed-o-ch6b", text: "Thermodynamics", correct: false },
+          { id: "seed-o-ch6c", text: "Organic chemistry", correct: false },
+          { id: "seed-o-ch6d", text: "Acid-base reactions", correct: false },
+          { id: "seed-o-ch6e", text: "Electrochemistry", correct: false },
         ],
       },
     ],
@@ -532,26 +533,25 @@ const POLLS = [
         anonymous: true,
         time: 15,
         options: [
-          {id: "seed-o-ps1a", text: "Very interesting", correct: false},
-          {id: "seed-o-ps1b", text: "Somewhat interesting", correct: false},
-          {id: "seed-o-ps1c", text: "Neutral", correct: false},
-          {id: "seed-o-ps1d", text: "Did not complete it", correct: false},
+          { id: "seed-o-ps1a", text: "Very interesting", correct: false },
+          { id: "seed-o-ps1b", text: "Somewhat interesting", correct: false },
+          { id: "seed-o-ps1c", text: "Neutral", correct: false },
+          { id: "seed-o-ps1d", text: "Did not complete it", correct: false },
         ],
       },
       {
         id: "seed-q-psych-2",
         prompt_type: "multiple-choice" as const,
-        prompt:
-          "Which memory system has the largest capacity?",
+        prompt: "Which memory system has the largest capacity?",
         prompt_img: null,
         points: 15,
         anonymous: false,
         time: 30,
         options: [
-          {id: "seed-o-ps2a", text: "Sensory memory", correct: false},
-          {id: "seed-o-ps2b", text: "Short-term memory", correct: false},
-          {id: "seed-o-ps2c", text: "Long-term memory", correct: true},
-          {id: "seed-o-ps2d", text: "Working memory", correct: false},
+          { id: "seed-o-ps2a", text: "Sensory memory", correct: false },
+          { id: "seed-o-ps2b", text: "Short-term memory", correct: false },
+          { id: "seed-o-ps2c", text: "Long-term memory", correct: true },
+          { id: "seed-o-ps2d", text: "Working memory", correct: false },
         ],
       },
       {
@@ -563,11 +563,11 @@ const POLLS = [
         anonymous: false,
         time: 40,
         options: [
-          {id: "seed-o-ps3a", text: "Episodic", correct: true},
-          {id: "seed-o-ps3b", text: "Semantic", correct: true},
-          {id: "seed-o-ps3c", text: "Procedural", correct: true},
-          {id: "seed-o-ps3d", text: "Iconic", correct: false},
-          {id: "seed-o-ps3e", text: "Echoic", correct: false},
+          { id: "seed-o-ps3a", text: "Episodic", correct: true },
+          { id: "seed-o-ps3b", text: "Semantic", correct: true },
+          { id: "seed-o-ps3c", text: "Procedural", correct: true },
+          { id: "seed-o-ps3d", text: "Iconic", correct: false },
+          { id: "seed-o-ps3e", text: "Echoic", correct: false },
         ],
       },
       {
@@ -579,9 +579,9 @@ const POLLS = [
         anonymous: false,
         time: 45,
         options: [
-          {id: "seed-o-ps4a", text: "Encoding", correct: true},
-          {id: "seed-o-ps4b", text: "Storage", correct: true},
-          {id: "seed-o-ps4c", text: "Retrieval", correct: true},
+          { id: "seed-o-ps4a", text: "Encoding", correct: true },
+          { id: "seed-o-ps4b", text: "Storage", correct: true },
+          { id: "seed-o-ps4c", text: "Retrieval", correct: true },
         ],
       },
       {
@@ -593,15 +593,15 @@ const POLLS = [
         anonymous: false,
         time: 25,
         options: [
-          {id: "seed-o-ps5a", text: "5 ± 2", correct: false},
-          {id: "seed-o-ps5b", text: "7 ± 2", correct: true},
-          {id: "seed-o-ps5c", text: "9 ± 2", correct: false},
-          {id: "seed-o-ps5d", text: "12 ± 2", correct: false},
+          { id: "seed-o-ps5a", text: "5 ± 2", correct: false },
+          { id: "seed-o-ps5b", text: "7 ± 2", correct: true },
+          { id: "seed-o-ps5c", text: "9 ± 2", correct: false },
+          { id: "seed-o-ps5d", text: "12 ± 2", correct: false },
         ],
       },
     ],
   },
-];
+]
 
 /**
  * Returns a Firestore document reference for a user.
@@ -609,7 +609,7 @@ const POLLS = [
  * @return {FirebaseFirestore.DocumentReference} The document reference.
  */
 function userRef(uid: string) {
-  return db.doc(`users/${uid}`);
+  return db.doc(`users/${uid}`)
 }
 
 /**
@@ -618,7 +618,7 @@ function userRef(uid: string) {
  * @return {FirebaseFirestore.DocumentReference} The document reference.
  */
 function pollRef(pid: string) {
-  return db.doc(`polls/${pid}`);
+  return db.doc(`polls/${pid}`)
 }
 
 /**
@@ -628,12 +628,12 @@ function pollRef(pid: string) {
  * @return {FirebaseFirestore.DocumentReference} The document reference.
  */
 function questionRef(pid: string, qid: string) {
-  return db.doc(`polls/${pid}/questions/${qid}`);
+  return db.doc(`polls/${pid}/questions/${qid}`)
 }
 
 /** Creates Firebase Auth accounts and Firestore user documents. */
 async function seedUsers() {
-  console.log("Seeding users...");
+  console.log("Seeding users...")
 
   // Create Firebase Auth accounts
   for (const u of USERS) {
@@ -643,38 +643,38 @@ async function seedUsers() {
         email: u.email,
         password: SEED_PASSWORD,
         displayName: u.display_name,
-      });
+      })
     } catch (err: unknown) {
-      const code = (err as { code?: string }).code;
+      const code = (err as { code?: string }).code
       if (code === "auth/uid-already-exists") {
-        console.log(`  ⏭ Auth account for ${u.email} already exists`);
+        console.log(`  ⏭ Auth account for ${u.email} already exists`)
       } else {
-        throw err;
+        throw err
       }
     }
   }
 
   // Create Firestore user documents
-  const batch = db.batch();
+  const batch = db.batch()
   for (const u of USERS) {
     batch.set(db.doc(`users/${u.id}`), {
       display_name: u.display_name,
       email: u.email,
       photo_url: u.photo_url,
       created_at: ts(),
-    });
+    })
   }
-  await batch.commit();
-  console.log(`  ✓ ${USERS.length} users created (password: ${SEED_PASSWORD})`);
+  await batch.commit()
+  console.log(`  ✓ ${USERS.length} users created (password: ${SEED_PASSWORD})`)
 }
 
 /** Creates polls with questions and options in Firestore. */
 async function seedPolls() {
-  console.log("Seeding polls...");
-  const instructor = userRef(USERS[0].id);
+  console.log("Seeding polls...")
+  const instructor = userRef(USERS[0].id)
 
   for (const poll of POLLS) {
-    const questionRefs = poll.questions.map((q) => questionRef(poll.id, q.id));
+    const questionRefs = poll.questions.map((q) => questionRef(poll.id, q.id))
 
     // Create poll document
     await db.doc(`polls/${poll.id}`).set({
@@ -686,13 +686,13 @@ async function seedPolls() {
       questions: questionRefs,
       created_at: ts(),
       updated_at: ts(),
-    });
+    })
 
     // Create questions + options subcollections
     for (const q of poll.questions) {
       const optionRefs = q.options.map((o) =>
         db.doc(`polls/${poll.id}/questions/${q.id}/options/${o.id}`)
-      );
+      )
 
       await db.doc(`polls/${poll.id}/questions/${q.id}`).set({
         prompt_type: q.prompt_type,
@@ -704,19 +704,19 @@ async function seedPolls() {
         time: q.time,
         created_at: ts(),
         updated_at: ts(),
-      });
+      })
 
-      const batch = db.batch();
+      const batch = db.batch()
       for (const o of q.options) {
         batch.set(
           db.doc(`polls/${poll.id}/questions/${q.id}/options/${o.id}`),
-          {text: o.text, correct: o.correct}
-        );
+          { text: o.text, correct: o.correct }
+        )
       }
-      await batch.commit();
+      await batch.commit()
     }
   }
-  console.log(`  ✓ ${POLLS.length} polls with questions and options created`);
+  console.log(`  ✓ ${POLLS.length} polls with questions and options created`)
 }
 
 /** All session IDs created by the seed script. */
@@ -726,45 +726,47 @@ const ALL_SESSION_IDS = [
   "seed-session-feedback",
   "seed-session-psych",
   "seed-session-open",
-];
+]
 
 /**
  * Generic helper to seed a finished session with responses and submissions.
  * Handles graded, ungraded, and mixed-grading polls with all question types.
  */
 async function seedFinishedSessionForPoll(config: {
-  poll: (typeof POLLS)[number];
-  sessionId: string;
-  roomCode: string;
-  students: typeof USERS;
+  poll: (typeof POLLS)[number]
+  sessionId: string
+  roomCode: string
+  students: typeof USERS
 }) {
-  const {poll, sessionId: sid, roomCode, students} = config;
-  const instructor = USERS[0];
-  const maxScore = poll.questions.reduce((sum, q) => sum + q.points, 0);
+  const { poll, sessionId: sid, roomCode, students } = config
+  const instructor = USERS[0]
+  const maxScore = poll.questions.reduce((sum, q) => sum + q.points, 0)
 
-  const sessionQuestionIds = poll.questions.map((_q, i) => `seed-sq-${sid}-${i}`);
+  const sessionQuestionIds = poll.questions.map(
+    (_q, i) => `seed-sq-${sid}-${i}`
+  )
   const sessionQuestionRefs = sessionQuestionIds.map((sqid) =>
     db.doc(`sessions/${sid}/questions/${sqid}`)
-  );
+  )
 
   // Each student gets a unique random score between 0 and maxScore.
   // Use a beta-like distribution (skewed toward passing) for realism.
-  const studentSkill: Record<string, number> = {};
-  const studentScores: Record<string, number> = {};
+  const studentSkill: Record<string, number> = {}
+  const studentScores: Record<string, number> = {}
   for (const s of students) {
-    studentSkill[s.id] = 0.15 + Math.random() * 0.8;
+    studentSkill[s.id] = 0.15 + Math.random() * 0.8
     // Generate a unique continuous score: skill acts as a center,
     // then add noise so no two students land on the same value
-    const base = studentSkill[s.id] * maxScore;
-    const noise = (Math.random() - 0.5) * maxScore * 0.3;
-    const raw = Math.round((base + noise) * 10) / 10;
-    studentScores[s.id] = Math.max(0, Math.min(maxScore, raw));
+    const base = studentSkill[s.id] * maxScore
+    const noise = (Math.random() - 0.5) * maxScore * 0.3
+    const raw = Math.round((base + noise) * 10) / 10
+    studentScores[s.id] = Math.max(0, Math.min(maxScore, raw))
   }
 
   // Create session questions + options + responses
   for (let i = 0; i < poll.questions.length; i++) {
-    const q = poll.questions[i];
-    const sqid = sessionQuestionIds[i];
+    const q = poll.questions[i]
+    const sqid = sessionQuestionIds[i]
 
     await db.doc(`sessions/${sid}/questions/${sqid}`).set({
       prompt_type: q.prompt_type,
@@ -773,65 +775,64 @@ async function seedFinishedSessionForPoll(config: {
       points: q.points,
       anonymous: q.anonymous,
       time: q.time,
-    });
+    })
 
-    const optBatch = db.batch();
+    const optBatch = db.batch()
     for (const o of q.options) {
       optBatch.set(
         db.doc(`sessions/${sid}/questions/${sqid}/options/${o.id}`),
-        {text: o.text, correct: o.correct}
-      );
+        { text: o.text, correct: o.correct }
+      )
     }
-    await optBatch.commit();
+    await optBatch.commit()
 
     // Responses — Firestore batches max 500, split into chunks
-    const chunkSize = 400;
+    const chunkSize = 400
     for (let c = 0; c < students.length; c += chunkSize) {
-      const chunk = students.slice(c, c + chunkSize);
-      const respBatch = db.batch();
+      const chunk = students.slice(c, c + chunkSize)
+      const respBatch = db.batch()
 
       for (const s of chunk) {
-        const correctOpts = q.options.filter((o) => o.correct);
-        const wrongOpts = q.options.filter((o) => !o.correct);
-        const hasCorrectAnswer = correctOpts.length > 0 && wrongOpts.length > 0;
-        const skill = studentSkill[s.id];
+        const correctOpts = q.options.filter((o) => o.correct)
+        const wrongOpts = q.options.filter((o) => !o.correct)
+        const hasCorrectAnswer = correctOpts.length > 0 && wrongOpts.length > 0
+        const skill = studentSkill[s.id]
 
-        let chosenIds: string[];
-        let isCorrect: boolean;
+        let chosenIds: string[]
+        let isCorrect: boolean
 
         if (!hasCorrectAnswer) {
           // Ungraded question — pick a random option
-          const pick = q.options[Math.floor(Math.random() * q.options.length)];
-          chosenIds = [pick.id];
-          isCorrect = false;
+          const pick = q.options[Math.floor(Math.random() * q.options.length)]
+          chosenIds = [pick.id]
+          isCorrect = false
         } else if (q.prompt_type === "multi-select") {
           // Skill determines likelihood of getting all correct
-          isCorrect = Math.random() < skill;
+          isCorrect = Math.random() < skill
           if (isCorrect) {
-            chosenIds = correctOpts.map((o) => o.id);
+            chosenIds = correctOpts.map((o) => o.id)
           } else {
             // Pick a mix of correct and wrong based on skill
-            const picked = q.options.filter(() => Math.random() < skill * 0.6);
-            chosenIds = picked.length > 0 ?
-              picked.map((o) => o.id) :
-              [wrongOpts[0].id];
+            const picked = q.options.filter(() => Math.random() < skill * 0.6)
+            chosenIds =
+              picked.length > 0 ? picked.map((o) => o.id) : [wrongOpts[0].id]
           }
         } else if (q.prompt_type === "ranking-poll") {
           // Skill determines likelihood of correct ordering
-          isCorrect = Math.random() < skill;
+          isCorrect = Math.random() < skill
           if (isCorrect) {
-            chosenIds = q.options.map((o) => o.id);
+            chosenIds = q.options.map((o) => o.id)
           } else {
-            const shuffled = [...q.options].sort(() => Math.random() - 0.5);
-            chosenIds = shuffled.map((o) => o.id);
+            const shuffled = [...q.options].sort(() => Math.random() - 0.5)
+            chosenIds = shuffled.map((o) => o.id)
           }
         } else {
           // multiple-choice — skill determines correctness probability
-          isCorrect = Math.random() < skill;
+          isCorrect = Math.random() < skill
           const chosen = isCorrect ?
             correctOpts[Math.floor(Math.random() * correctOpts.length)] :
-            wrongOpts[Math.floor(Math.random() * wrongOpts.length)];
-          chosenIds = [chosen.id];
+            wrongOpts[Math.floor(Math.random() * wrongOpts.length)]
+          chosenIds = [chosen.id]
         }
 
         respBatch.set(
@@ -844,39 +845,42 @@ async function seedFinishedSessionForPoll(config: {
             correct: isCorrect,
             created_at: ts(),
           }
-        );
+        )
       }
-      await respBatch.commit();
+      await respBatch.commit()
     }
   }
 
   // Create session users
   for (let c = 0; c < students.length; c += 400) {
-    const chunk = students.slice(c, c + 400);
-    const userBatch = db.batch();
+    const chunk = students.slice(c, c + 400)
+    const userBatch = db.batch()
     for (const s of chunk) {
       userBatch.set(db.doc(`sessions/${sid}/users/${s.id}`), {
         display_name: s.display_name,
         photo_url: s.photo_url,
         joined_at: ts(),
         incorrect: false,
-      });
+      })
     }
-    await userBatch.commit();
+    await userBatch.commit()
   }
 
   // Compute summary statistics from actual scores
-  const allScores = students.map((s) => studentScores[s.id]).sort((a, b) => a - b);
-  const sum = allScores.reduce((a, b) => a + b, 0);
-  const avg = allScores.length > 0 ? sum / allScores.length : 0;
-  const mid = Math.floor(allScores.length / 2);
-  const median = allScores.length % 2 === 0 ?
-    (allScores[mid - 1] + allScores[mid]) / 2 :
-    allScores[mid];
-  const q1Idx = Math.floor(allScores.length * 0.25);
-  const q3Idx = Math.floor(allScores.length * 0.75);
+  const allScores = students
+    .map((s) => studentScores[s.id])
+    .sort((a, b) => a - b)
+  const sum = allScores.reduce((a, b) => a + b, 0)
+  const avg = allScores.length > 0 ? sum / allScores.length : 0
+  const mid = Math.floor(allScores.length / 2)
+  const median =
+    allScores.length % 2 === 0 ?
+      (allScores[mid - 1] + allScores[mid]) / 2 :
+      allScores[mid]
+  const q1Idx = Math.floor(allScores.length * 0.25)
+  const q3Idx = Math.floor(allScores.length * 0.75)
   const toPercent = (v: number) =>
-    maxScore > 0 ? Math.round((v / maxScore) * 100 * 10) / 10 : 0;
+    maxScore > 0 ? Math.round((v / maxScore) * 100 * 10) / 10 : 0
 
   await db.doc(`sessions/${sid}`).set({
     host: userRef(instructor.id),
@@ -908,10 +912,10 @@ async function seedFinishedSessionForPoll(config: {
       max_score: maxScore,
     },
     created_at: ts(),
-  });
+  })
 
   // Chat messages
-  const chatBatch = db.batch();
+  const chatBatch = db.batch()
   const chatTemplates = [
     "Is this graded?",
     "Good luck everyone!",
@@ -920,26 +924,26 @@ async function seedFinishedSessionForPoll(config: {
     "Can we go over the answers after?",
     "Running out of time here",
     "Thanks for the review session!",
-  ];
-  const chatStudents = students.slice(0, chatTemplates.length);
+  ]
+  const chatStudents = students.slice(0, chatTemplates.length)
   for (let i = 0; i < chatStudents.length; i++) {
-    const s = chatStudents[i];
+    const s = chatStudents[i]
     chatBatch.set(db.doc(`sessions/${sid}/chat/seed-chat-${sid}-${s.id}`), {
       user: userRef(s.id),
       display_name: s.display_name,
       photo_url: s.photo_url,
       message: chatTemplates[i],
       created_at: ts(),
-    });
+    })
   }
-  await chatBatch.commit();
+  await chatBatch.commit()
 
   // Submissions — always create so participants are visible
   for (let c = 0; c < students.length; c += 400) {
-    const chunk = students.slice(c, c + 400);
+    const chunk = students.slice(c, c + 400)
     for (const s of chunk) {
-      const score = studentScores[s.id];
-      const subId = `seed-sub-${sid}-${s.id}`;
+      const score = studentScores[s.id]
+      const subId = `seed-sub-${sid}-${s.id}`
 
       await db.doc(`submissions/${subId}`).set({
         title: poll.title,
@@ -952,80 +956,82 @@ async function seedFinishedSessionForPoll(config: {
         submitted_at: ts(),
         photo_url: s.photo_url,
         email: s.email,
-      });
+      })
 
       await db.doc(`sessions/${sid}/submissions/${s.id}`).set({
         ref: db.doc(`submissions/${subId}`),
-      });
+      })
     }
   }
 }
 
 /** Seeds the CS 101 finished session — all 25 students, fully graded. */
 async function seedFinishedSession() {
-  console.log("Seeding finished session (CS 101 — graded, 25 students)...");
-  const students = USERS.slice(1);
+  console.log("Seeding finished session (CS 101 — graded, 25 students)...")
+  const students = USERS.slice(1)
   await seedFinishedSessionForPoll({
     poll: POLLS[0],
     sessionId: "seed-session-finished",
     roomCode: "ABC123",
     students,
-  });
-  console.log("  ✓ CS 101 finished session");
+  })
+  console.log("  ✓ CS 101 finished session")
 }
 
 /** Seeds a finished session for Chemistry — mixed grading (some 0-pt questions). */
 async function seedChemSession() {
-  console.log("Seeding finished session (Chem 110 — mixed grading, 25 students)...");
-  const students = USERS.slice(1);
+  console.log(
+    "Seeding finished session (Chem 110 — mixed grading, 25 students)..."
+  )
+  const students = USERS.slice(1)
   await seedFinishedSessionForPoll({
     poll: POLLS[4], // seed-poll-chem
     sessionId: "seed-session-chem",
     roomCode: "CHM789",
     students,
-  });
-  console.log("  ✓ Chem 110 finished session (mixed grading)");
+  })
+  console.log("  ✓ Chem 110 finished session (mixed grading)")
 }
 
 /** Seeds a finished session for Feedback — fully ungraded (all 0-pt). */
 async function seedFeedbackSession() {
-  console.log("Seeding finished session (Feedback — ungraded, 25 students)...");
-  const students = USERS.slice(1);
+  console.log("Seeding finished session (Feedback — ungraded, 25 students)...")
+  const students = USERS.slice(1)
   await seedFinishedSessionForPoll({
     poll: POLLS[3], // seed-poll-feedback
     sessionId: "seed-session-feedback",
     roomCode: "FBK321",
     students,
-  });
-  console.log("  ✓ Feedback finished session (ungraded)");
+  })
+  console.log("  ✓ Feedback finished session (ungraded)")
 }
 
 /** Seeds a finished session for Psychology — mixed grading with varied weights. */
 async function seedPsychSession() {
   console.log(
     "Seeding finished session (Psych 200 — mixed grading, 25 students)..."
-  );
-  const students = USERS.slice(1);
+  )
+  const students = USERS.slice(1)
   await seedFinishedSessionForPoll({
     poll: POLLS[5], // seed-poll-psych
     sessionId: "seed-session-psych",
     roomCode: "PSY555",
     students,
-  });
-  console.log("  ✓ Psych 200 finished session (mixed grading)");
+  })
+  console.log("  ✓ Psych 200 finished session (mixed grading)")
 }
 
 /** Seeds an open session with users in the waiting room. */
 async function seedOpenSession() {
-  console.log("Seeding open session (waiting room)...");
-  const poll = POLLS[2]; // Biology
-  const sid = "seed-session-open";
-  const instructor = USERS[0];
-  const waitingStudents = USERS.slice(1, 4);
+  console.log("Seeding open session (waiting room)...")
+  const poll = POLLS[2] // Biology
+  const sid = "seed-session-open"
+  const instructor = USERS[0]
+  const waitingStudents = USERS.slice(1, 4)
 
   const sessionQuestionRefs = poll.questions.map((_q, i) =>
     db.doc(`sessions/${sid}/questions/seed-sq-open-${i}`)
-  );
+  )
 
   await db.doc(`sessions/${sid}`).set({
     host: userRef(instructor.id),
@@ -1057,21 +1063,21 @@ async function seedOpenSession() {
       max_score: 35,
     },
     created_at: ts(),
-  });
+  })
 
   // Waiting users
-  const batch = db.batch();
+  const batch = db.batch()
   for (const s of waitingStudents) {
     batch.set(db.doc(`sessions/${sid}/waiting_users/${s.id}`), {
       display_name: s.display_name,
       photo_url: s.photo_url,
-    });
+    })
   }
-  await batch.commit();
+  await batch.commit()
 
   // Session questions
   for (let i = 0; i < poll.questions.length; i++) {
-    const q = poll.questions[i];
+    const q = poll.questions[i]
     await db.doc(`sessions/${sid}/questions/seed-sq-open-${i}`).set({
       prompt_type: q.prompt_type,
       prompt: q.prompt,
@@ -1079,19 +1085,19 @@ async function seedOpenSession() {
       points: q.points,
       anonymous: q.anonymous,
       time: q.time,
-    });
+    })
 
-    const optBatch = db.batch();
+    const optBatch = db.batch()
     for (const o of q.options) {
       optBatch.set(
         db.doc(`sessions/${sid}/questions/seed-sq-open-${i}/options/${o.id}`),
-        {text: o.text, correct: o.correct}
-      );
+        { text: o.text, correct: o.correct }
+      )
     }
-    await optBatch.commit();
+    await optBatch.commit()
   }
 
-  console.log("  ✓ Open session with waiting room users");
+  console.log("  ✓ Open session with waiting room users")
 }
 
 /**
@@ -1100,30 +1106,30 @@ async function seedOpenSession() {
  * @return {Promise<number>} The number of deleted documents.
  */
 async function deleteDocs(path: string) {
-  const snap = await db.collection(path).get();
+  const snap = await db.collection(path).get()
   // Firestore batch limit is 500
-  const chunks: FirebaseFirestore.DocumentReference[][] = [];
+  const chunks: FirebaseFirestore.DocumentReference[][] = []
   for (let i = 0; i < snap.docs.length; i += 450) {
-    chunks.push(snap.docs.slice(i, i + 450).map((d) => d.ref));
+    chunks.push(snap.docs.slice(i, i + 450).map((d) => d.ref))
   }
   for (const chunk of chunks) {
-    const batch = db.batch();
-    chunk.forEach((ref) => batch.delete(ref));
-    await batch.commit();
+    const batch = db.batch()
+    chunk.forEach((ref) => batch.delete(ref))
+    await batch.commit()
   }
-  return snap.size;
+  return snap.size
 }
 
 /** Removes all seed data from Firestore and Firebase Auth. */
 async function clean() {
-  console.log("Cleaning seed data...");
+  console.log("Cleaning seed data...")
 
   // Delete subcollections first, then parents
   for (const poll of POLLS) {
     for (const q of poll.questions) {
-      await deleteDocs(`polls/${poll.id}/questions/${q.id}/options`);
+      await deleteDocs(`polls/${poll.id}/questions/${q.id}/options`)
     }
-    await deleteDocs(`polls/${poll.id}/questions`);
+    await deleteDocs(`polls/${poll.id}/questions`)
   }
   await Promise.all(
     POLLS.map((p) =>
@@ -1132,25 +1138,25 @@ async function clean() {
         .delete()
         .catch(() => {})
     )
-  );
+  )
 
   for (const sid of ALL_SESSION_IDS) {
-    await deleteDocs(`sessions/${sid}/users`);
-    await deleteDocs(`sessions/${sid}/waiting_users`);
-    await deleteDocs(`sessions/${sid}/chat`);
-    await deleteDocs(`sessions/${sid}/submissions`);
+    await deleteDocs(`sessions/${sid}/users`)
+    await deleteDocs(`sessions/${sid}/waiting_users`)
+    await deleteDocs(`sessions/${sid}/chat`)
+    await deleteDocs(`sessions/${sid}/submissions`)
 
     // Clean session questions + nested options/responses
-    const sqSnap = await db.collection(`sessions/${sid}/questions`).get();
+    const sqSnap = await db.collection(`sessions/${sid}/questions`).get()
     for (const sq of sqSnap.docs) {
-      await deleteDocs(`sessions/${sid}/questions/${sq.id}/options`);
-      await deleteDocs(`sessions/${sid}/questions/${sq.id}/responses`);
+      await deleteDocs(`sessions/${sid}/questions/${sq.id}/options`)
+      await deleteDocs(`sessions/${sid}/questions/${sq.id}/responses`)
     }
-    await deleteDocs(`sessions/${sid}/questions`);
+    await deleteDocs(`sessions/${sid}/questions`)
     await db
       .doc(`sessions/${sid}`)
       .delete()
-      .catch(() => {});
+      .catch(() => {})
   }
 
   // Delete seed submissions, users, and auth accounts
@@ -1159,52 +1165,52 @@ async function clean() {
       await db
         .doc(`submissions/seed-sub-${sid}-${u.id}`)
         .delete()
-        .catch(() => {});
+        .catch(() => {})
     }
     // Legacy submission ID format
     await db
       .doc(`submissions/seed-sub-fin-${u.id}`)
       .delete()
-      .catch(() => {});
+      .catch(() => {})
     await db
       .doc(`users/${u.id}`)
       .delete()
-      .catch(() => {});
-    await authAdmin.deleteUser(u.id).catch(() => {});
+      .catch(() => {})
+    await authAdmin.deleteUser(u.id).catch(() => {})
   }
 
-  console.log("  ✓ Seed data cleaned");
+  console.log("  ✓ Seed data cleaned")
 }
 
 /** Entry point — seeds or cleans based on CLI args. */
 async function main() {
-  console.log("\nPulseCheck Firestore Seed");
-  console.log(`Target: ${USE_PROD ? "PRODUCTION" : "EMULATOR (localhost)"}\n`);
+  console.log("\nPulseCheck Firestore Seed")
+  console.log(`Target: ${USE_PROD ? "PRODUCTION" : "EMULATOR (localhost)"}\n`)
 
   if (USE_PROD) {
-    console.log("⚠️  WARNING: You are about to write to PRODUCTION Firestore.");
-    console.log("   Press Ctrl+C within 3 seconds to abort.\n");
-    await new Promise((r) => setTimeout(r, 3000));
+    console.log("⚠️  WARNING: You are about to write to PRODUCTION Firestore.")
+    console.log("   Press Ctrl+C within 3 seconds to abort.\n")
+    await new Promise((r) => setTimeout(r, 3000))
   }
 
   if (CLEAN) {
-    await clean();
-    console.log("");
+    await clean()
+    console.log("")
   }
 
-  await seedUsers();
-  await seedPolls();
-  await seedFinishedSession();
-  await seedChemSession();
-  await seedFeedbackSession();
-  await seedPsychSession();
-  await seedOpenSession();
+  await seedUsers()
+  await seedPolls()
+  await seedFinishedSession()
+  await seedChemSession()
+  await seedFeedbackSession()
+  await seedPsychSession()
+  await seedOpenSession()
 
-  console.log("\n✓ Seed complete!\n");
-  process.exit(0);
+  console.log("\n✓ Seed complete!\n")
+  process.exit(0)
 }
 
 main().catch((err) => {
-  console.error("Seed failed:", err);
-  process.exit(1);
-});
+  console.error("Seed failed:", err)
+  process.exit(1)
+})

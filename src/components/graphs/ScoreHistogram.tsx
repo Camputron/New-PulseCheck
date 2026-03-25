@@ -42,16 +42,16 @@ export default function ScoreHistogram({ submissions, summary }: Props) {
   if (!hasData) return null
 
   return (
-    <Card variant="outlined">
+    <Card variant='outlined'>
       <CardContent>
         <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="baseline"
+          display='flex'
+          justifyContent='space-between'
+          alignItems='baseline'
           mb={1}>
           <Typography fontWeight={600}>Score Distribution</Typography>
           {summary && isFinite(summary.average_100) && (
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant='caption' color='text.secondary'>
               Avg: {summary.average_100.toFixed(0)}%
             </Typography>
           )}

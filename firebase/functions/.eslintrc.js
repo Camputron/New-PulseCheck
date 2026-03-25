@@ -31,5 +31,9 @@ module.exports = {
     "indent": ["error", 2],
     "require-jsdoc": "off",
     "valid-jsdoc": "off",
+    "semi": ["error", "never"],
+    // "max-len": ["error", { "code": 120 }],
+    "max-len": "off",
+    "object-curly-spacing": ["error", "always"],
   },
 };

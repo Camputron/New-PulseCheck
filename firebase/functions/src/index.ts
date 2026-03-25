@@ -49,7 +49,8 @@ const model = vertexAI.getGenerativeModel({
     role: "system",
     parts: [
       {
-        text: `You are an educational assessment expert specializing in multiple-choice question generation.
+        text: `You are an educational assessment expert specializing in 
+        multiple-choice question generation.
 
 Rules:
 - Each question must have exactly 4 unique options
@@ -116,12 +117,17 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
       )
     }
 
-    const prompt = `Generate ${n} multiple-choice questions from the following document. Return a JSON array where each object has "question" (string), "options" (array of exactly 4 strings), and "correct_answer" (string matching one of the options).`
+    const prompt = `Generate ${n} multiple-choice questions from the 
+    following document. Return a JSON array where each object has 
+    "question" (string), "options" (array of exactly 4 strings), and 
+    "correct_answer" (string matching one of the options).`
 
     // In emulator: download file and send inline (Gemini can't access local storage)
     // In production: pass gs:// URI directly (Gemini fetches from GCS)
     const isEmulator = process.env.FUNCTIONS_EMULATOR === "true"
-    let filePart: { inlineData: { mimeType: string; data: string } } | { fileData: { mimeType: string; fileUri: string } }
+    let filePart:
+      | { inlineData: { mimeType: string; data: string } }
+      | { fileData: { mimeType: string; fileUri: string } }
 
     if (isEmulator) {
       const match = uri.match(/^gs:\/\/([^/]+)\/(.+)$/)
@@ -132,7 +138,10 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
       const file = getStorage(admin).bucket(bucket).file(filePath)
       const [fileBuffer] = await file.download()
       filePart = {
-        inlineData: { mimeType: "application/pdf", data: fileBuffer.toString("base64") },
+        inlineData: {
+          mimeType: "application/pdf",
+          data: fileBuffer.toString("base64"),
+        },
       }
     } else {
       filePart = {
@@ -167,7 +176,8 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
           if (attempt === maxAttempts) {
             throw new HttpsError(
               "internal",
-              `AI generated invalid questions after ${maxAttempts} attempts: ${validationError}`
+              `AI generated invalid questions after ${maxAttempts} 
+              attempts: ${validationError}`
             )
           }
           continue
