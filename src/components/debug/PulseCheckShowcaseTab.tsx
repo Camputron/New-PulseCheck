@@ -1,6 +1,4 @@
-/* eslint-disable */
 import {
-  Avatar,
   Box,
   Divider,
   IconButton,
@@ -18,12 +16,13 @@ import RecentPollCard from "@/components/dashboard/RecentPollCard"
 import PulseGauge from "@/components/graphs/PulseGauge"
 import SessionGaugeCard from "@/components/graphs/SessionGaugeCard"
 import PollMetricsCard from "@/components/poll/results/PollMetricsCard"
+import ScoreHistogram from "@/components/graphs/ScoreHistogram"
 import UserAvatar from "@/components/poll/results/UserAvatar"
 import LeaveButton from "@/components/poll/session/LeaveButton"
 import Features from "@/components/splash/Features"
 import About from "@/components/splash/About"
 import FAQs from "@/components/splash/FAQs"
-import { SessionSummary } from "@/types"
+import { SessionSummary, Submission } from "@/types"
 import { Timestamp } from "firebase/firestore"
 import AppTitle from "../header/AppTitle"
 
@@ -70,7 +69,16 @@ function ShowcaseCard({
   )
 }
 
-// Mock data
+// Mock scattered scores for 30 students
+const mockScores = [
+  12, 23, 35, 41, 48, 52, 55, 58, 61, 63, 65, 67, 69, 71, 72, 74, 75, 76, 78,
+  79, 80, 82, 84, 86, 88, 90, 91, 93, 95, 98,
+]
+
+const mockSubmissions = mockScores.map(
+  (score) => ({ score_100: score }) as Submission
+)
+
 const mockSummary: SessionSummary = {
   total_participants: 32,
   median: 16,
@@ -236,6 +244,25 @@ export default function PulseCheckShowcaseTab() {
         />
       </Box>
 
+      {/* SCORE HISTOGRAM */}
+      <SectionTitle>ScoreHistogram</SectionTitle>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+          gap: 3,
+        }}>
+        <ScoreHistogram submissions={mockSubmissions} summary={mockSummary} />
+        <ScoreHistogram
+          submissions={mockSubmissions.slice(0, 10)}
+          summary={{
+            ...mockSummary,
+            average_100: 35,
+            total_participants: 10,
+          }}
+        />
+      </Box>
+
       {/* USER AVATAR */}
       <SectionTitle>UserAvatar</SectionTitle>
       <ShowcaseCard title='User avatars with initials'>
@@ -382,7 +409,6 @@ export default function PulseCheckShowcaseTab() {
               "MostRecentGaugeCard",
               "NoRecentPoll",
               "ScoreGaugeCard*",
-              "SessionScatterChart",
             ],
           },
         ].map((group) => (
