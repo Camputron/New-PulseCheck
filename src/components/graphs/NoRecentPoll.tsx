@@ -1,13 +1,12 @@
 import { Box, Card, CardContent, Typography } from "@mui/material"
-import { useAuthContext } from "@/lib/hooks"
-import { useEffect } from "react"
-import api from "@/lib/api/firebase"
-import { useState } from "react"
-import Image from "mui-image"
+import { PollOutlined } from "@mui/icons-material"
+import { useAuthContext } from "@/hooks"
+import { useEffect, useState } from "react"
+import api from "@/api"
 
 export default function NoRecentPolls() {
   const { user } = useAuthContext()
-  const [doc, setDoc] = useState<string>()
+  const [displayName, setDisplayName] = useState<string>()
 
   useEffect(() => {
     if (!user || user.isAnonymous) {
@@ -17,7 +16,7 @@ export default function NoRecentPolls() {
       .get(user.uid)
       .then((x) => {
         const name: string = x.display_name
-        setDoc(name)
+        setDisplayName(name)
       })
       .catch((err) => console.debug(err))
   }, [user])
@@ -25,19 +24,45 @@ export default function NoRecentPolls() {
   if (!user) {
     return <></>
   }
+
   return (
-    <Card variant='outlined' sx={{ marginTop: 4 }}>
-      <CardContent>
-        <Typography
-          variant='h6'
-          component='div'
-          align='center'
-          sx={{ textAlign: "center", marginTop: 2 }}>
-          Hello {doc}, Welcome to PulseCheck!
-        </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Image src='/favicon.png' width={100} height={100} />
+    <Card
+      variant='outlined'
+      sx={{
+        mt: 4,
+        borderRadius: 2,
+      }}>
+      <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 1.5,
+          py: 5,
+        }}>
+        <Box
+          sx={(theme) => ({
+            width: 56,
+            height: 56,
+            borderRadius: "50%",
+            display: "grid",
+            placeItems: "center",
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? "action.selected"
+                : "action.hover",
+          })}>
+          <PollOutlined sx={{ fontSize: 28, color: "primary.main" }} />
         </Box>
+        <Typography variant='h6' fontWeight={600}>
+          Welcome, {displayName}
+        </Typography>
+        <Typography
+          variant='body2'
+          color='text.secondary'
+          sx={{ maxWidth: 320, textAlign: "center" }}>
+          No recent polls yet — create or join one to get started!
+        </Typography>
       </CardContent>
     </Card>
   )

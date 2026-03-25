@@ -1,21 +1,21 @@
-import api from "@/lib/api/firebase"
-import { useAuthContext } from "@/lib/hooks"
-import { User } from "@/lib/types"
+import api from "@/api"
+import { useAuthContext } from "@/hooks"
+import { User } from "@/types"
 import { stoc, stoni } from "@/utils"
 import {
   Avatar,
-  Badge,
-  BadgeOrigin,
+  // Badge,
+  // BadgeOrigin,
   Box,
   CircularProgress,
-  styled,
+  // styled,
 } from "@mui/material"
 import { useEffect, useState } from "react"
 
-const origin: BadgeOrigin = {
-  vertical: "bottom",
-  horizontal: "right",
-}
+// const origin: BadgeOrigin = {
+//   vertical: "bottom",
+//   horizontal: "right",
+// }
 
 export default function ProfileIcon() {
   const { user } = useAuthContext()
@@ -25,12 +25,24 @@ export default function ProfileIcon() {
     if (!user || user.isAnonymous) {
       return
     }
-    api.users
-      .get(user.uid)
-      .then((x) => {
-        setDoc(x)
-      })
-      .catch((err) => console.debug(err))
+    let cancelled = false
+    const fetchUser = (retries = 3) => {
+      api.users
+        .get(user.uid)
+        .then((x) => {
+          if (!cancelled) setDoc(x)
+        })
+        .catch(() => {
+          if (!cancelled && retries > 0) {
+            setTimeout(() => fetchUser(retries - 1), 500)
+          }
+        })
+    }
+    fetchUser()
+    // eslint-disable-next-line consistent-return
+    return () => {
+      cancelled = true
+    }
   }, [user])
 
   if (!user) {
@@ -39,17 +51,18 @@ export default function ProfileIcon() {
 
   if (user.isAnonymous) {
     return (
-      <StyledBadge overlap='circular' anchorOrigin={origin} variant='dot'>
-        <Avatar />
-      </StyledBadge>
+      // <StyledBadge overlap='circular' anchorOrigin={origin} variant='dot'>
+      <Avatar />
+      // </StyledBadge>
     )
   } else if (doc) {
     return (
-      <StyledBadge
-        overlap='circular'
-        anchorOrigin={origin}
-        sx={{ cursor: "pointer" }}
-        variant='dot'>
+      // <StyledBadge
+      //   overlap='circular'
+      //   anchorOrigin={origin}
+      //   sx={{ cursor: "pointer" }}
+      //   variant='dot'>
+      <>
         {doc.photo_url ? (
           <Avatar src={doc.photo_url} />
         ) : (
@@ -57,7 +70,8 @@ export default function ProfileIcon() {
             {stoni(doc.display_name)}
           </Avatar>
         )}
-      </StyledBadge>
+      </>
+      // </StyledBadge>
     )
   } else {
     return (
@@ -68,31 +82,31 @@ export default function ProfileIcon() {
   }
 }
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    backgroundColor: "#44b700",
-    color: "#44b700",
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    "&::after": {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      borderRadius: "50%",
-      animation: "ripple 1.2s infinite ease-in-out",
-      border: "1px solid currentColor",
-      content: '""',
-    },
-  },
-  "@keyframes ripple": {
-    "0%": {
-      transform: "scale(.8)",
-      opacity: 1,
-    },
-    "100%": {
-      transform: "scale(2.4)",
-      opacity: 0,
-    },
-  },
-}))
+// const StyledBadge = styled(Badge)(() => ({
+// "& .MuiBadge-badge": {
+//   backgroundColor: "#44b700",
+//   color: "#44b700",
+//   boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+//   "&::after": {
+//     position: "absolute",
+//     top: 0,
+//     left: 0,
+//     width: "100%",
+//     height: "100%",
+//     borderRadius: "50%",
+//     animation: "ripple 1.2s infinite ease-in-out",
+//     border: "1px solid currentColor",
+//     content: '""',
+//   },
+// },
+// "@keyframes ripple": {
+//   "0%": {
+//     transform: "scale(.8)",
+//     opacity: 1,
+//   },
+//   "100%": {
+//     transform: "scale(2.4)",
+//     opacity: 0,
+//   },
+// },
+// }))

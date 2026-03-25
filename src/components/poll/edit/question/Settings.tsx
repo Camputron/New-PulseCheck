@@ -8,8 +8,8 @@ import {
 } from "@mui/material"
 import TimerSwitch from "./TimerSwitch"
 import React, { useEffect, useState } from "react"
-import useSnackbar from "@/lib/hooks/useSnackbar"
-import api from "@/lib/api/firebase"
+import useSnackbar from "@/hooks/useSnackbar"
+import api from "@/api"
 
 interface Props {
   pid: string /* poll id */

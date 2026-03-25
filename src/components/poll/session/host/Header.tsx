@@ -1,8 +1,8 @@
-import { Session, SessionUser } from "@/lib/types"
+import { Session, SessionUser } from "@/types"
 import { AppBar, Box, Toolbar as MUIToolbar, Typography } from "@mui/material"
 import LeaveButton from "../LeaveButton"
 import { DocumentReference, QuerySnapshot } from "firebase/firestore"
-import api from "@/lib/api/firebase"
+import api from "@/api"
 import { useNavigate } from "react-router-dom"
 import { ntops } from "@/utils"
 import HostButton from "./HostButton"
@@ -31,16 +31,28 @@ export default function Header(props: HeaderProps) {
   }
 
   return (
-    <AppBar color='inherit' position='relative'>
+    <AppBar
+      elevation={0}
+      position='relative'
+      sx={{
+        bgcolor: (t) =>
+          t.palette.mode === "dark"
+            ? "rgba(18, 18, 18, 0.8)"
+            : "rgba(255, 255, 255, 0.8)",
+        backdropFilter: "blur(12px)",
+        borderBottom: 1,
+        borderColor: "divider",
+        color: "text.primary",
+      }}>
       <MUIToolbar>
         <LeaveButton
           callback={handleKillSession}
           dialogTitle='Are you sure you want to end the session?'
           dialogContent='All answers submitted will be discarded!'
         />
-        <Box textAlign={"initial"}>
-          <Typography>{session?.title}</Typography>
-          <Typography variant='caption' component={"div"} color='textSecondary'>
+        <Box textAlign='initial'>
+          <Typography fontWeight={600}>{session?.title}</Typography>
+          <Typography variant='caption' component='div' color='text.secondary'>
             {ntops(users?.docs.length ?? 0)}
           </Typography>
         </Box>

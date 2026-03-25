@@ -1,4 +1,4 @@
-import api from "@/lib/api/firebase"
+import api from "@/api"
 import { mmsston, ntommss, stommss } from "@/utils"
 import {
   Box,

@@ -1,6 +1,6 @@
 import AsyncButton from "@/components/AsyncButton"
-import api from "@/lib/api/firebase"
-import { useSnackbar } from "@/lib/hooks"
+import api from "@/api"
+import { useSnackbar } from "@/hooks"
 import { Clear } from "@mui/icons-material"
 
 interface RemoveButtonProps {

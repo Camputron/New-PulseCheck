@@ -1,0 +1,29 @@
+# Runs the Vitest unit/integration test suite (with Playwright for browser tests).
+name: CI / Test
+
+on:
+    push:
+        branches: [main, dev]
+    pull_request:
+        branches: [main, dev]
+
+jobs:  
+  test:  
+    runs-on: ubuntu-latest  
+    steps:  
+      - name: Checkout Code  
+        uses: actions/checkout@v4  
+
+      - name: Enable Corepack and Install Yarn v4
+        run: |
+            corepack enable
+            corepack prepare yarn@stable --activate
+
+      - name: Install Dependencies
+        run: yarn install 
+
+      - name: Install Playwright
+        run: yarn playwright install
+
+      - name: Run Vitest  
+        run: yarn test  

@@ -1,5 +1,5 @@
 import SlideUpTransition from "@/components/transition/SlideUpTransition"
-import api, { storage } from "@/lib/api/firebase"
+import api, { storage } from "@/api"
 import { Upload } from "@mui/icons-material"
 import {
   Alert,
@@ -12,7 +12,7 @@ import {
   styled,
   Typography,
 } from "@mui/material"
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { ref, uploadBytes } from "firebase/storage"
 import React, { useState } from "react"
 
 interface UploadPDFBoxProps {
@@ -61,8 +61,7 @@ export default function UploadPDFDialog(props: UploadPDFBoxProps) {
   const uploadFile = async (payload: File): Promise<string> => {
     const fileRef = ref(storage, `ai/${payload.name}`)
     const ss = await uploadBytes(fileRef, payload)
-    const downloadURL = await getDownloadURL(ss.ref)
-    return downloadURL
+    return `gs://${ss.ref.bucket}/${ss.ref.fullPath}`
   }
 
   return (

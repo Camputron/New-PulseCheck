@@ -1,16 +1,7 @@
-import { Divider, MenuList } from "@mui/material"
+import { Divider, MenuList, useMediaQuery, useTheme } from "@mui/material"
 import MenuItem from "./MenuItem"
-import {
-  FileCopy,
-  Help,
-  Home,
-  HowToReg,
-  Info,
-  Login,
-  Security,
-  Star,
-} from "@mui/icons-material"
-import { useAuthContext } from "@/lib/hooks"
+import { Help, Info, Login, Star } from "@mui/icons-material"
+import { useAuthContext } from "@/hooks"
 
 interface GuestMenuListProps {
   handleClose?: () => void
@@ -19,6 +10,8 @@ interface GuestMenuListProps {
 export default function GuestMenuList(props: GuestMenuListProps) {
   const { handleClose } = props
   const { user, loading, error } = useAuthContext()
+  const theme = useTheme()
+  const isPhone = useMediaQuery(theme.breakpoints.down("sm"))
 
   if (error) {
     console.error(error)
@@ -29,49 +22,24 @@ export default function GuestMenuList(props: GuestMenuListProps) {
     return <></>
   }
 
-  if (user) {
+  if (user || !isPhone) {
     return <></>
   }
 
   return (
-    <MenuList>
-      <MenuItem icon={Home} to='/' onClick={handleClose}>
-        Home
-      </MenuItem>
-      <MenuItem
-        icon={Info}
-        to='/'
-        opts={{ state: { scrollTo: "about" } }}
-        onClick={handleClose}>
+    <MenuList sx={{ py: 1 }}>
+      <MenuItem icon={Info} to='/?section=about' onClick={handleClose}>
         About
       </MenuItem>
-      <MenuItem
-        icon={Star}
-        to='/'
-        opts={{ state: { scrollTo: "features" } }}
-        onClick={handleClose}>
+      <MenuItem icon={Star} to='/?section=features' onClick={handleClose}>
         Features
       </MenuItem>
-      <MenuItem
-        icon={Help}
-        to='/'
-        opts={{ state: { scrollTo: "faqs" } }}
-        onClick={handleClose}>
+      <MenuItem icon={Help} to='/?section=faqs' onClick={handleClose}>
         FAQs
       </MenuItem>
-      <Divider />
-      <MenuItem icon={FileCopy} to='/terms-of-service' onClick={handleClose}>
-        Terms of Service
-      </MenuItem>
-      <MenuItem icon={Security} to='/privacy-policy' onClick={handleClose}>
-        Privacy Policy
-      </MenuItem>
-      <Divider />
+      <Divider sx={{ my: 0.5 }} />
       <MenuItem icon={Login} to='/login' onClick={handleClose}>
-        Login
-      </MenuItem>
-      <MenuItem icon={HowToReg} to='/register' onClick={handleClose}>
-        Register
+        Sign In
       </MenuItem>
     </MenuList>
   )

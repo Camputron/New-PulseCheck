@@ -1,4 +1,4 @@
-import { Session, SessionState } from "@/lib/types"
+import { Session, SessionState } from "@/types"
 import { Typography } from "@mui/material"
 
 interface RoomCodeTitleProps {
