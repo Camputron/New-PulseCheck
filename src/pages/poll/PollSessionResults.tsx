@@ -10,7 +10,7 @@ import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore"
 import { Submission } from "@/types"
 import ScoreCard from "@/components/poll/results/submission/ScoreCard"
 import { ntops } from "@/utils"
-import SessionScatterCard from "@/components/graphs/SessionScatterCharrt"
+import ScoreHistogram from "@/components/graphs/ScoreHistogram"
 import useRequireAuth from "@/hooks/useRequireAuth"
 
 /**
@@ -64,7 +64,10 @@ export default function PollSessionResults() {
             timestamp={session?.created_at}
           />
           <PollMetricsCard sum={session?.summary}></PollMetricsCard>
-          <SessionScatterCard submissions={submissions.map((i) => i.data())} />
+          <ScoreHistogram
+            submissions={submissions.map((i) => i.data())}
+            summary={session?.summary}
+          />
           <Divider>
             <Typography>{ntops(submissions.length)}</Typography>
           </Divider>
