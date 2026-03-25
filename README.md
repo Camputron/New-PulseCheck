@@ -139,6 +139,7 @@ PulseCheck/
 |----------------------|------------------------------------------------|
 | `yarn dev`           | Start the Vite dev server                      |
 | `yarn build`         | Production build                               |
+| `yarn emulators`     | Start Firebase emulators locally               |
 | `yarn lint`          | Run ESLint                                     |
 | `yarn format`        | Format source code with Prettier               |
 | `yarn format:check`  | Check formatting without writing               |
