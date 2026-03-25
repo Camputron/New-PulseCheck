@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest",
+    "emulators": "firebase emulators:start",
     "build": "tsc -b && vite build",
     "lint": "eslint src",
     "format": "prettier src --write --list-different",
