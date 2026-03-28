@@ -47,7 +47,15 @@ export default function SessionCard(props: SessionCardProps) {
               color={theme.mode === "light" ? "inherit" : "action"}
             />
           </Avatar>
-          <Typography fontWeight={600} flex={1} noWrap>
+          <Typography
+            fontWeight={600}
+            flex={1}
+            sx={{
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}>
             {x.title}
           </Typography>
           {x.state === SessionState.CLOSED && (

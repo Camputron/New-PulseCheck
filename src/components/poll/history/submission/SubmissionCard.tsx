@@ -1,6 +1,6 @@
 import { Submission } from "@/types"
-import { stoc, stoni, tstos } from "@/utils"
-import { Avatar, Box, CardActionArea, Chip, Typography } from "@mui/material"
+import { tstos } from "@/utils"
+import { Box, CardActionArea, Chip, Typography } from "@mui/material"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -39,7 +39,7 @@ export default function SubmissionCard(props: SubmissionCardProps) {
           },
         }}>
         <Box display='flex' alignItems='center' mb={1}>
-          <Avatar
+          {/* <Avatar
             sx={{
               mr: 1.5,
               width: 28,
@@ -49,8 +49,16 @@ export default function SubmissionCard(props: SubmissionCardProps) {
             }}
             src={x.photo_url ?? ""}>
             {stoni(x.display_name)}
-          </Avatar>
-          <Typography fontWeight={600} flex={1} noWrap>
+          </Avatar> */}
+          <Typography
+            fontWeight={600}
+            flex={1}
+            sx={{
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}>
             {x.title}
           </Typography>
           <Chip size='small' label={scoreLabel} variant='outlined' />

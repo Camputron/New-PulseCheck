@@ -6,6 +6,7 @@ import { RA } from "@/styles"
 import { Download } from "@mui/icons-material"
 import {
   Box,
+  Grid2,
   IconButton,
   MenuItem,
   Select,
@@ -204,27 +205,22 @@ export default function PollSessionHistory(props: PollSessionHistoryProps) {
             </Tooltip>
           )}
         </Box>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "repeat(2, 1fr)",
-              md: "repeat(3, 1fr)",
-            },
-            gap: 2,
-          }}>
+        <Grid2 container spacing={2}>
           {fetching &&
             [0, 1, 2].map((i) => (
-              <Skeleton key={i} variant='rounded' height={120} />
+              <Grid2 key={i} size={{ xs: 12, sm: 6, md: 4 }}>
+                <Skeleton variant='rounded' height={120} />
+              </Grid2>
             ))}
           {!fetching &&
             filteredSessions.map((x) => (
-              <RA.Fade key={x.id} triggerOnce cascade>
-                <SessionCard sid={x.id} session={x.data()} />
-              </RA.Fade>
+              <Grid2 key={x.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                <RA.Fade triggerOnce cascade>
+                  <SessionCard sid={x.id} session={x.data()} />
+                </RA.Fade>
+              </Grid2>
             ))}
-        </Box>
+        </Grid2>
         {!fetching && filteredSessions.length === 0 && sessions.length > 0 && (
           <Typography
             variant='body2'
