@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import MemoryGame from "react-card-memory-game"
 import Confetti from "react-confetti"
 import useRequireAuth from "@/hooks/useRequireAuth"
+import { saveActiveSession, clearActiveSession } from "@/utils"
 
 const CHECK_INTERVAL_MS = 2000
 
@@ -32,6 +33,7 @@ export default function PollParticipate() {
   useEffect(() => {
     if (session && !sessionLoading) {
       if (session.state === SessionState.CLOSED) {
+        clearActiveSession()
         snackbar.show({
           message: "Host Ended Session",
           type: "info",
@@ -40,6 +42,7 @@ export default function PollParticipate() {
       } else if (session.state === SessionState.IN_PROGRESS) {
         setGettingStated(true)
       } else if (session.state === SessionState.FINISHED) {
+        clearActiveSession()
         snackbar.show({
           message: "Poll Session Finished!",
           type: "success",
@@ -59,6 +62,12 @@ export default function PollParticipate() {
       }
     }
   }, [session, sessionLoading, snackbar, navigate, sref.id, user])
+
+  useEffect(() => {
+    if (session && !sessionLoading) {
+      saveActiveSession({ sid, roomCode: session.room_code })
+    }
+  }, [session, sessionLoading, sid])
 
   useEffect(() => {
     const int = setInterval(() => {

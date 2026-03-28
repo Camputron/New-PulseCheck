@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import useSnackbar from "@/hooks/useSnackbar"
 import { useAuthContext } from "@/hooks"
 import useRequireAuth from "@/hooks/useRequireAuth"
+import { clearActiveSession } from "@/utils"
 
 const CHECK_INTERVAL_MS = 2000
 
@@ -48,7 +49,8 @@ export default function PollSession() {
         console.debug(err)
       }
     }
-    /* check every now and then if user has joined the session */
+    /* check immediately, then poll every few seconds */
+    void aux()
     const int = setInterval(() => {
       void aux()
     }, CHECK_INTERVAL_MS)
@@ -69,6 +71,7 @@ export default function PollSession() {
         } else if (await api.sessions.hasJoined(sid, uid)) {
           await api.sessions.leaveSession(sid, uid)
         }
+        clearActiveSession()
         snackbar.show({
           message: `You left the session`,
           type: "info",

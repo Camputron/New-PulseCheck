@@ -5,7 +5,7 @@ import { QuerySnapshot } from "firebase/firestore"
 import { useAuthContext, useSnackbar } from "@/hooks"
 import api from "@/api"
 import { useNavigate } from "react-router-dom"
-import { ntops } from "@/utils"
+import { ntops, clearActiveSession } from "@/utils"
 
 interface HeaderProps {
   sid: string
@@ -27,6 +27,7 @@ export default function Header(props: HeaderProps) {
       try {
         const uid = user.uid
         await api.sessions.leaveSession(sid, uid)
+        clearActiveSession()
         snackbar.show({
           message: "You left the session",
           type: "info",

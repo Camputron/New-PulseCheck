@@ -1,5 +1,6 @@
 import PollSessionHistory from "@/components/poll/history/session/PollSessionHistory"
 import PollSubmissionHistory from "@/components/poll/history/submission/PollSubmissionHistory"
+import RejoinBanner from "@/components/poll/join/RejoinBanner"
 import useRequireAuth from "@/hooks/useRequireAuth"
 import { RA } from "@/styles"
 import { Box, Container, Tab, Tabs, Typography } from "@mui/material"
@@ -83,6 +84,8 @@ export default function PollHistory() {
           History
         </Typography>
       </RA.Fade>
+
+      <RejoinBanner />
 
       <Box
         sx={{

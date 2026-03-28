@@ -8,6 +8,7 @@ import { Add, HowToVote } from "@mui/icons-material"
 import MostRecentGaugeCard from "@/components/graphs/MostRecentGaugeCard"
 import useRequireAuth from "@/hooks/useRequireAuth"
 import { RA } from "@/styles"
+import RejoinBanner from "@/components/poll/join/RejoinBanner"
 
 export default function Dashboard() {
   useRequireAuth({ blockGuests: true })
@@ -48,6 +49,7 @@ export default function Dashboard() {
         </Typography>
       </RA.Fade>
 
+      <RejoinBanner />
       <MostRecentGaugeCard mrpsd={1} />
 
       <Box

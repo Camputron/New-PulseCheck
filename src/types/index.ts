@@ -225,3 +225,8 @@ export type AIQuestions = {
   options: string[]
   correct_answer: string
 }[]
+
+export interface ActiveSession {
+  sid: string
+  roomCode: string
+}

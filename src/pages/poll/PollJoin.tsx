@@ -15,6 +15,7 @@ import { useAuthContext } from "@/hooks"
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
 import useRequireAuth from "@/hooks/useRequireAuth"
 import { RA } from "@/styles"
+import RejoinBanner from "@/components/poll/join/RejoinBanner"
 
 function DisplayNameField(props: {
   uid: string
@@ -113,6 +114,7 @@ export default function PollJoin() {
       }}>
       <Container maxWidth='xs'>
         <RA.Fade triggerOnce duration={600}>
+          <RejoinBanner />
           <Typography
             variant='overline'
             sx={{

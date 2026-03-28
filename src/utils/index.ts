@@ -1,4 +1,29 @@
 import { Timestamp } from "firebase/firestore"
+import { ActiveSession } from "@/types"
+
+const ACTIVE_SESSION_KEY = "active-session"
+
+export function saveActiveSession(session: ActiveSession): void {
+  try {
+    localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(session))
+  } catch (err) {
+    console.warn("Failed to save active session to localStorage", err)
+  }
+}
+
+export function getActiveSession(): ActiveSession | null {
+  try {
+    const raw = localStorage.getItem(ACTIVE_SESSION_KEY)
+    if (!raw) return null
+    return JSON.parse(raw) as ActiveSession
+  } catch {
+    return null
+  }
+}
+
+export function clearActiveSession(): void {
+  localStorage.removeItem(ACTIVE_SESSION_KEY)
+}
 
 /**
  * Converts string to a muted hex color that blends well in both light and dark mode.
