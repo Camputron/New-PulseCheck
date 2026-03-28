@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Divider,
   IconButton,
   Paper,
@@ -8,6 +9,8 @@ import {
 } from "@mui/material"
 import { Add, DarkMode, LightMode } from "@mui/icons-material"
 import { useThemeContext } from "@/hooks/useThemeContext"
+import useSnackbar from "@/hooks/useSnackbar"
+import { SeverityType } from "@/contexts/SnackbarContext"
 
 // PulseCheck components (standalone-renderable)
 import AsyncButton from "@/components/AsyncButton"
@@ -99,6 +102,7 @@ const mockSummary: SessionSummary = {
 export default function PulseCheckShowcaseTab() {
   const { mode, toggleTheme } = useThemeContext()
   const isDark = mode === "dark"
+  const snackbar = useSnackbar()
 
   return (
     <Box>
@@ -196,6 +200,67 @@ export default function PulseCheckShowcaseTab() {
           <Typography variant='body2' color='text.secondary'>
             Click the arrow to see the confirmation dialog
           </Typography>
+        </Stack>
+      </ShowcaseCard>
+
+      {/* SNACKBAR */}
+      <SectionTitle>Snackbar (Global)</SectionTitle>
+      <ShowcaseCard title='Snackbar variants — click to trigger each severity'>
+        <Stack direction='row' spacing={1.5} flexWrap='wrap' useFlexGap>
+          {(
+            ["success", "info", "warning", "error"] as SeverityType[]
+          ).map((severity) => (
+            <Button
+              key={severity}
+              variant='outlined'
+              color={severity === "info" ? "primary" : severity}
+              onClick={() =>
+                snackbar.show({
+                  message: `This is a ${severity} snackbar`,
+                  type: severity,
+                })
+              }>
+              {severity}
+            </Button>
+          ))}
+        </Stack>
+        <Stack direction='row' spacing={1.5} flexWrap='wrap' useFlexGap>
+          <Button
+            variant='text'
+            size='small'
+            onClick={() =>
+              snackbar.show({
+                message: "Bottom-left snackbar",
+                type: "info",
+                position: { vertical: "bottom", horizontal: "left" },
+              })
+            }>
+            Bottom Left
+          </Button>
+          <Button
+            variant='text'
+            size='small'
+            onClick={() =>
+              snackbar.show({
+                message: "Bottom-center snackbar",
+                type: "info",
+                position: { vertical: "bottom", horizontal: "center" },
+              })
+            }>
+            Bottom Center
+          </Button>
+          <Button
+            variant='text'
+            size='small'
+            onClick={() =>
+              snackbar.show({
+                message: "Custom duration (5s)",
+                type: "warning",
+                duration: 5000,
+              })
+            }>
+            5s Duration
+          </Button>
         </Stack>
       </ShowcaseCard>
 
