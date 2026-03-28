@@ -1,0 +1,53 @@
+# Deploys a Firebase Hosting preview build for PRs with the "preview" label.
+# - Deploys when the label is added or when new commits are pushed
+# - Skips draft PRs, doc-only changes, and test-only changes
+# - Cancels in-flight deploys when a new push arrives (only latest deploys)
+# - Preview channel build after 7 days
+name: CD / Preview
+on:
+  pull_request:
+    types: [labeled, synchronize]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "firebase/functions/src/**"
+      - "firebase/config/**"
+      - "package.json"
+      - "vite.config.ts"
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    if: >
+      contains(github.event.pull_request.labels.*.name, 'preview')
+      && github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable Corepack and Install Yarn v4
+        run: |
+          corepack enable
+          corepack prepare yarn@stable --activate
+
+      - name: Install App Dependencies
+        run: yarn install
+
+      - name: Build App
+        run: yarn build
+
+      - name: Deploy Preview Channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NEW_PULSECHECK }}
+          projectId: new-pulsecheck
+          expires: 7d
