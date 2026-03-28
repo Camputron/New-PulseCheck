@@ -4,7 +4,11 @@ import { SessionSubmission } from "@/types"
 import { clx } from "@/api"
 
 /**
- * Manages session submissions
+ * @deprecated DEAD CODE — slated for removal.
+ * Session submissions are created exclusively by the `finishSession` Cloud Function.
+ * No client-side code calls this store. The path construction in `doc()` is also
+ * buggy (clx args are swapped, producing `/submissions/{sid}/sessions/{uid}`
+ * instead of `/sessions/{sid}/submissions/{uid}`).
  */
 export default class SubmissionStore extends BaseStore {
   public doc(sid: string, uid: string): DocumentReference<SessionSubmission> {
