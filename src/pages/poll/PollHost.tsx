@@ -6,12 +6,11 @@ import { onSnapshot } from "firebase/firestore"
 import React, { useEffect, useState } from "react"
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore"
 import { useNavigate, useParams } from "react-router-dom"
-import RoomCodeTitle from "@/components/poll/session/host/RoomCodeTitle"
+import RoomCodeDisplay from "@/components/poll/session/host/RoomCodeDisplay"
 import UserSessionGrid from "@/components/poll/session/UserSessionGrid"
 import ResultsChart from "@/components/poll/session/ResultsChart"
 import Header from "@/components/poll/session/host/Header"
 import QuestionBox from "@/components/poll/session/host/QuestionBox"
-import { QRCodeSVG } from "qrcode.react"
 import useRequireAuth from "@/hooks/useRequireAuth"
 
 export default function PollHost() {
@@ -142,13 +141,8 @@ export default function PollHost() {
           <LinearProgress />
         ))}
       <Container sx={{ mt: 2, mb: 2 }}>
-        <RoomCodeTitle session={session} />
         {session?.state === SessionState.OPEN && (
-          <QRCodeSVG
-            value={`${window.location.origin}/get-started?code=${session.room_code}`}
-            width={256}
-            height={256}
-          />
+          <RoomCodeDisplay session={session} />
         )}
         {/* render the current question here */}
         {question && (
