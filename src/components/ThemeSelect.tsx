@@ -1,7 +1,7 @@
 import { MenuItem, Select, SelectChangeEvent, SelectProps } from "@mui/material"
 import React, { useState } from "react"
-import { ThemeType } from "@/lib/types"
-import { useThemeContext } from "@/lib/hooks"
+import { ThemeType } from "@/types"
+import { useThemeContext } from "@/hooks"
 
 type ThemeSelectProps = SelectProps
 

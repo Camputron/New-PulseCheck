@@ -1,5 +1,5 @@
-import api from "@/lib/api/firebase"
-import useSnackbar from "@/lib/hooks/useSnackbar"
+import api from "@/api"
+import useSnackbar from "@/hooks/useSnackbar"
 import { TextField } from "@mui/material"
 import React, { useEffect, useState } from "react"
 
@@ -44,11 +44,12 @@ export default function PromptField(props: Props) {
   return (
     <React.Fragment>
       <TextField
-        label='Type Your Question Here'
-        hiddenLabel
+        placeholder='Type Your Question Here'
         defaultValue={prompt}
         multiline
-        // variant='standard'
+        minRows={1}
+        maxRows={4}
+        size='small'
         onChange={(e) => setPrompt(e.target.value)}
       />
     </React.Fragment>

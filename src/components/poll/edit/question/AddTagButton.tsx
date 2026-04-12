@@ -1,5 +1,5 @@
 import AsyncButton from "@/components/AsyncButton"
-import api from "@/lib/api/firebase"
+import api from "@/api"
 import { Sell } from "@mui/icons-material"
 
 interface AddTagButtonProps {

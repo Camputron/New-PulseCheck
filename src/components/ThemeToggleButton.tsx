@@ -1,6 +1,6 @@
 import { IconButton } from "@mui/material"
 import { Brightness4, Brightness7 } from "@mui/icons-material"
-import { useThemeContext } from "@/lib/hooks/useThemeContext"
+import { useThemeContext } from "@/hooks/useThemeContext"
 
 const ThemeToggleButton = () => {
   const theme = useThemeContext()

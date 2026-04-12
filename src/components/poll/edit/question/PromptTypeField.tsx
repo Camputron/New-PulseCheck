@@ -1,6 +1,6 @@
-import api from "@/lib/api/firebase"
-import useSnackbar from "@/lib/hooks/useSnackbar"
-import { PROMPT_TYPE_CHOICES, PromptType } from "@/lib/types"
+import api from "@/api"
+import useSnackbar from "@/hooks/useSnackbar"
+import { PROMPT_TYPE_CHOICES, PromptType } from "@/types"
 import { MenuItem, TextField } from "@mui/material"
 import React, { useEffect, useState } from "react"
 
@@ -45,7 +45,7 @@ export default function PromptTypeField(props: Props) {
   return (
     <React.Fragment>
       <TextField
-        label='Type of Question'
+        placeholder='Type of Question'
         select
         value={promptType}
         onChange={(e) => setPromptType(e.target.value as PromptType)}>

@@ -1,99 +1,113 @@
 import { RA } from "@/styles"
-import { Box, Card, CardContent, Stack, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
+import {
+  BoltOutlined,
+  ScoreboardOutlined,
+  DashboardOutlined,
+  DevicesOutlined,
+  FactCheckOutlined,
+  ShuffleOutlined,
+} from "@mui/icons-material"
 import React from "react"
+
+const features = [
+  {
+    icon: <BoltOutlined sx={{ fontSize: 36 }} />,
+    title: "Real-Time Polling",
+    description:
+      "Create and deploy multiple-choice quizzes and polls that students respond to simultaneously, with results updating live as answers come in.",
+  },
+  {
+    icon: <ScoreboardOutlined sx={{ fontSize: 36 }} />,
+    title: "Automatic Scoring",
+    description:
+      "Quiz scores are calculated instantly, giving students immediate feedback after each question and a comprehensive performance summary at session end.",
+  },
+  {
+    icon: <DashboardOutlined sx={{ fontSize: 36 }} />,
+    title: "Host Dashboard",
+    description:
+      "Monitor participant data in real time during active sessions. Identify trends, gauge comprehension, and adjust your teaching on the fly.",
+  },
+  {
+    icon: <DevicesOutlined sx={{ fontSize: 36 }} />,
+    title: "Cross-Platform Access",
+    description:
+      "Works seamlessly on desktop, tablet, and mobile. No app download required -- just open your browser and join.",
+  },
+  {
+    icon: <FactCheckOutlined sx={{ fontSize: 36 }} />,
+    title: "Attendance Tracking",
+    description:
+      "Participation doubles as attendance verification. Non-participating users are flagged for review and can be managed at the host's discretion.",
+  },
+  {
+    icon: <ShuffleOutlined sx={{ fontSize: 36 }} />,
+    title: "Question Banks & Randomization",
+    description:
+      "Build reusable question banks for future sessions. Randomize question order to maintain assessment integrity across participants.",
+  },
+]
 
 function Features(props: { ref?: React.Ref<unknown> }) {
   return (
-    <Box textAlign={"center"} ref={props.ref}>
-      <RA.Bounce triggerOnce>
-        <Typography variant='h5' fontWeight={700} mb={2}>
+    <Box ref={props.ref}>
+      <RA.Fade triggerOnce duration={600}>
+        <Typography
+          variant='overline'
+          sx={{
+            letterSpacing: 2,
+            color: "primary.main",
+            fontWeight: 600,
+          }}>
           Features
         </Typography>
-      </RA.Bounce>
-      <Stack spacing={4}>
-        <Card>
-          <CardContent>
-            <RA.Bounce triggerOnce>
-              <Typography fontWeight={700}>Real-Time Questioning:</Typography>
-              <Typography>
-                Hosts are able to create and display multiple-choice <br></br>{" "}
-                question quizes and polls for participating users to respond to
-                simultaniously and in real-time.
+        <Typography variant='h4' fontWeight={700} sx={{ mb: 4 }}>
+          Built to Keep Every Student in the Conversation
+        </Typography>
+        <Typography variant='body1' sx={{ color: "text.secondary", mb: 5 }}>
+          From live polling to automatic grading, PulseCheck gives instructors
+          the tools to run interactive sessions without slowing down the lecture
+          -- and gives students a reason to stay engaged from start to finish.
+        </Typography>
+      </RA.Fade>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+          gap: 3,
+        }}>
+        {features.map((feature, index) => (
+          <RA.Fade
+            triggerOnce
+            duration={600}
+            delay={index * 100}
+            key={feature.title}>
+            <Box
+              sx={{
+                p: 3,
+                height: "100%",
+                borderRadius: 2,
+                border: 1,
+                borderColor: "divider",
+                transition: "border-color 0.2s, box-shadow 0.2s",
+                "&:hover": {
+                  borderColor: "primary.main",
+                  boxShadow: (theme) =>
+                    `0 0 0 1px ${theme.palette.primary.main}`,
+                },
+              }}>
+              <Box sx={{ color: "primary.main", mb: 1.5 }}>{feature.icon}</Box>
+              <Typography variant='subtitle1' fontWeight={700} gutterBottom>
+                {feature.title}
               </Typography>
-            </RA.Bounce>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <RA.Bounce triggerOnce>
-              <Typography fontWeight={700}>Automatic Scoring:</Typography>
-              <Typography>
-                PulseCheck automatically calculates a participant's quiz scores
-                in <br></br>
-                real-time giving them feedback on their performance following
-                each question with a complete overview on their preformance{" "}
-                <br></br>
-                after the session concludes.
+              <Typography variant='body2' color='text.secondary'>
+                {feature.description}
               </Typography>
-            </RA.Bounce>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <RA.Bounce triggerOnce>
-              <Typography fontWeight={700}>Host Dashboard:</Typography>
-              <Typography>
-                During polling Hosts have access to a dashboard which allows
-                them to monitor a participant's data in real time. Allowing for
-                Hosts to give feedback based on participant results and obtain{" "}
-                <br></br>
-                insight on participants understanding of the material.
-              </Typography>
-            </RA.Bounce>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <RA.Bounce triggerOnce>
-              <Typography fontWeight={700}>Web Access & UI:</Typography>
-              <Typography>
-                PulseCheck is a web application that works on Desktop, Tablets,
-                and Mobile Devices that support modern web browsers. Built using
-                Firebase, React, and Material UI in order to ensure both a fast
-                and optimal user experience.
-              </Typography>
-            </RA.Bounce>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <RA.Bounce triggerOnce>
-              <Typography fontWeight={700}>Attendance Tracking:</Typography>
-              <Typography>
-                User participation can serve as a check for who is in
-                attendance. Non-participating users are flagged for review and
-                can be removed from a poll at the Hosts discretion.
-              </Typography>
-            </RA.Bounce>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <RA.Bounce triggerOnce>
-              <Typography fontWeight={700}>
-                Question Banking & Randomization:
-              </Typography>
-              <Typography>
-                Hosts can create question banks to be able to reuse <br></br>
-                questions on future sessions. The order of questions can also be{" "}
-                <br></br>
-                randomized to prevent the sharing of answers between
-                participants should the host choose.
-              </Typography>
-            </RA.Bounce>
-          </CardContent>
-        </Card>
-      </Stack>
+            </Box>
+          </RA.Fade>
+        ))}
+      </Box>
     </Box>
   )
 }

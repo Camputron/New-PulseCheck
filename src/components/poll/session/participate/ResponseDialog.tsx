@@ -1,4 +1,4 @@
-import { Session, SessionOption } from "@/lib/types"
+import { Session, SessionOption } from "@/types"
 import {
   Dialog,
   Toolbar,
@@ -14,8 +14,8 @@ import Choice from "./Choice"
 
 import { DocumentReference } from "firebase/firestore"
 import { useEffect, useState } from "react"
-import api from "@/lib/api/firebase"
-import { useAuthContext } from "@/lib/hooks"
+import api from "@/api"
+import { useAuthContext } from "@/hooks"
 import Image from "mui-image"
 import { QuestionAnswer } from "@mui/icons-material"
 import SlideUpTransition from "@/components/transition/SlideUpTransition"

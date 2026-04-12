@@ -1,8 +1,8 @@
-import { Session, SessionState } from "@/lib/types"
+import { Session } from "@/types"
 import { Typography } from "@mui/material"
 
 interface RoomCodeTitleProps {
-  session?: Session
+  session: Session
 }
 
 /**
@@ -10,12 +10,9 @@ interface RoomCodeTitleProps {
  */
 export default function RoomCodeTitle(props: RoomCodeTitleProps) {
   const { session } = props
-  if (session && session.state === SessionState.OPEN) {
-    return (
-      <Typography variant='h5' mb={2}>
-        Room Code: {session.room_code}
-      </Typography>
-    )
-  }
-  return <></>
+  return (
+    <Typography variant='h5' mb={2}>
+      Room Code: {session.room_code}
+    </Typography>
+  )
 }

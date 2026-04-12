@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     open: true,
+    port: 3000,
   },
   resolve: {
     alias: {
@@ -16,12 +17,5 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    environment: "jsdom",
-    setupFiles: "src/__tests__/setup.ts",
-    browser: {
-      enabled: true,
-      provider: "playwright",
-      instances: [{ browser: "chromium" }],
-    },
   },
 })

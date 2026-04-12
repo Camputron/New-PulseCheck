@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generator: visioncortex VTracer 0.6.5 -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+
+<!-- Checkmark background shadow (light teal) -->
+<path d="M0,0 L46,0 L46,41 L-25,112 L-25,148 L-31,148 L-50,135 L-173,258 L-179,258 L-250,187 L-250,146 L-207,146 L-176,177 L-106,109 L-106,75 L-99,75 L-84,84 Z " fill="#d1f5f2" stroke="rgba(0,0,0,0.25)" stroke-width="5" stroke-linejoin="miter" transform="translate(345,32)"/>
+
+<!-- Checkbox square (white with subtle border) -->
+<path d="M0,0 L163,0 L163,16 L16,16 L16,180 L178,180 L178,91 L194,76 L194,197 L0,197 L0,0 Z " fill="#FEFEFE" stroke="rgba(0,0,0,0.25)" stroke-width="5" stroke-linejoin="miter" transform="translate(73,123)"/>
+
+<!-- Checkmark upper-right arm (teal) -->
+<path d="M0,0 L32,0 L26,7 L-34,67 L-35,133 L-39,131 L-84,86 L-82,82 Z " fill="#15C2B4" transform="translate(349,37)"/>
+
+<!-- Checkmark lower-left arm (teal) -->
+<path d="M0,0 L1,0 L1,28 L-68,97 L-72,95 L-133,34 L-133,33 L-105,33 L-72,66 L-66,66 Z " fill="#15C2B4" transform="translate(239,150)"/>
+
+<!-- Checkmark dark shadow (dark teal) -->
+<path d="M0,0 L1,0 L1,27 L-65,93 L-66,93 L-66,66 Z " fill="#0d9e91" transform="translate(385,42)"/>
+
+</svg>

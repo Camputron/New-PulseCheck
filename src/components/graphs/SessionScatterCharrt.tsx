@@ -1,4 +1,4 @@
-import { Submission } from "@/lib/types"
+import { Submission } from "@/types"
 import { Card, CardContent } from "@mui/material"
 import { ScatterChart } from "@mui/x-charts"
 import React from "react"
@@ -7,6 +7,9 @@ interface Props {
   submissions: Submission[]
 }
 
+/**
+ * @deprecated Use ScoreHistogram instead for better visualization of score distribution. Scatter plot can be misleading when there are many overlapping points.
+ */
 export default function SessionScatterCard(props: Props) {
   const { submissions } = props
   return (

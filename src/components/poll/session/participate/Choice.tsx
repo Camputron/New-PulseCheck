@@ -1,4 +1,4 @@
-import { PromptType } from "@/lib/types"
+import { PromptType } from "@/types"
 import {
   Card,
   CardActionArea,
@@ -8,7 +8,7 @@ import {
 } from "@mui/material"
 import { Dispatch, SetStateAction } from "react"
 import { DocumentReference, refEqual } from "firebase/firestore"
-import { SessionOption } from "@/lib/types"
+import { SessionOption } from "@/types"
 
 //chosenones changes to specify what type it is
 //string of objects in array

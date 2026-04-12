@@ -24,6 +24,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Claude Code
+.claude/
+CLAUDE.md
+
 # Yarn files
 .pnp.*
 .yarn/*

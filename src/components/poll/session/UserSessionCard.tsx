@@ -1,7 +1,7 @@
-import { SessionResponse, SessionUser } from "@/lib/types"
+import { SessionResponse, SessionUser } from "@/types"
 import { stoc, stoni } from "@/utils"
 import { Check, Clear } from "@mui/icons-material"
-import { Avatar, Box, Card, Chip, Typography } from "@mui/material"
+import { Avatar, Box, Chip, Typography } from "@mui/material"
 import { QueryDocumentSnapshot } from "firebase/firestore"
 import React from "react"
 
@@ -33,30 +33,41 @@ export default function UserSessionCard(props: Props) {
         />
       </Box>
       <Box display={{ xs: "none", sm: "block" }}>
-        <Card>
-          <Box m={1} display={"flex"} alignItems={"center"}>
-            {user.photo_url ? (
-              <Avatar src={user.photo_url} color={stoc(user.display_name)}>
-                {stoni(user.display_name)}
-              </Avatar>
-            ) : (
-              <Avatar color={stoc(user.display_name)}>
-                {stoni(user.display_name)}
-              </Avatar>
-            )}
-            <Typography ml={1}>{user.display_name}</Typography>
-            <Box flex={1} />
-            {res && !anonymous && (
-              <React.Fragment>
-                {res.correct ? (
-                  <Check fontSize={"large"} color='success' />
-                ) : (
-                  <Clear fontSize={"large"} color='error' />
-                )}
-              </React.Fragment>
-            )}
-          </Box>
-        </Card>
+        <Box
+          sx={{
+            p: 1.5,
+            display: "flex",
+            alignItems: "center",
+            borderRadius: 2,
+            border: 1,
+            borderColor: "divider",
+          }}>
+          {user.photo_url ? (
+            <Avatar
+              src={user.photo_url}
+              sx={{ width: 32, height: 32, bgcolor: stoc(user.display_name) }}>
+              {stoni(user.display_name)}
+            </Avatar>
+          ) : (
+            <Avatar
+              sx={{ width: 32, height: 32, bgcolor: stoc(user.display_name) }}>
+              {stoni(user.display_name)}
+            </Avatar>
+          )}
+          <Typography ml={1.5} fontWeight={500}>
+            {user.display_name}
+          </Typography>
+          <Box flex={1} />
+          {res && !anonymous && (
+            <React.Fragment>
+              {res.correct ? (
+                <Check color='success' />
+              ) : (
+                <Clear color='error' />
+              )}
+            </React.Fragment>
+          )}
+        </Box>
       </Box>
     </React.Fragment>
   )
