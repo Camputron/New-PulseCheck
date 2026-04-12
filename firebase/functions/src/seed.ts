@@ -861,6 +861,7 @@ async function seedFinishedSessionForPoll(config: {
         photo_url: s.photo_url,
         joined_at: ts(),
         incorrect: false,
+        status: "active",
       })
     }
     await userBatch.commit()

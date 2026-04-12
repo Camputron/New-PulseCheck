@@ -5,7 +5,18 @@ import UserSessionGrid from "@/components/poll/session/UserSessionGrid"
 import api from "@/api"
 import { useAuthContext, useSnackbar } from "@/hooks"
 import { SessionState } from "@/types"
-import { Box, Container, LinearProgress, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  LinearProgress,
+  Typography,
+} from "@mui/material"
 import { deleteDoc, doc } from "firebase/firestore"
 import React, { useEffect, useState } from "react"
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore"
@@ -29,11 +40,44 @@ export default function PollParticipate() {
   const [users] = useCollection(api.sessions.users.collect(sid))
   const [gettingstated, setGettingStated] = useState(false)
   const [completedGame, setCompletedGame] = useState(false)
+  const [allowNavigation, setAllowNavigation] = useState(false)
+
+  /* Block browser back / swipe-back via popstate.
+     Pushes a duplicate history entry so pressing back lands on the same page,
+     then shows a confirmation dialog instead of navigating away. */
+  const [showLeaveDialog, setShowLeaveDialog] = useState(false)
+
+  useEffect(() => {
+    if (allowNavigation) return undefined
+
+    // Push a sentinel entry so the first "back" stays on this page
+    window.history.pushState({ sentinel: true }, "")
+
+    const handlePopState = () => {
+      // User pressed back / swiped — block and show dialog
+      setShowLeaveDialog(true)
+      // Re-push so subsequent back presses are also caught
+      window.history.pushState({ sentinel: true }, "")
+    }
+
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [allowNavigation])
+
+  /* Block page refresh / tab close */
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (!allowNavigation) e.preventDefault()
+    }
+    window.addEventListener("beforeunload", handler)
+    return () => window.removeEventListener("beforeunload", handler)
+  }, [allowNavigation])
 
   useEffect(() => {
     if (session && !sessionLoading) {
       if (session.state === SessionState.CLOSED) {
         clearActiveSession()
+        setAllowNavigation(true)
         snackbar.show({
           message: "Host Ended Session",
           type: "info",
@@ -43,6 +87,7 @@ export default function PollParticipate() {
         setGettingStated(true)
       } else if (session.state === SessionState.FINISHED) {
         clearActiveSession()
+        setAllowNavigation(true)
         snackbar.show({
           message: "Poll Session Finished!",
           type: "success",
@@ -74,12 +119,14 @@ export default function PollParticipate() {
       /* check to ensure user is in session every few seconds */
       const aux = async () => {
         if (!user && !loading) {
+          setAllowNavigation(true)
           void navigate("/")
         }
         if (!user) return
         const uid = user.uid
         const hasJoined = await api.sessions.hasJoined(sid, uid)
         if (!hasJoined) {
+          setAllowNavigation(true)
           if (user.isAnonymous) {
             await user.delete()
             await navigate("/get-started")
@@ -116,7 +163,12 @@ export default function PollParticipate() {
     <React.Fragment>
       {completedGame && <Confetti tweenDuration={5000} recycle={false} />}
       <ResponseDialog session={session} sref={sref} />
-      <Header sid={sid} session={session} users={users} />
+      <Header
+        sid={sid}
+        session={session}
+        users={users}
+        onAllowNavigation={() => setAllowNavigation(true)}
+      />
       {!gettingstated && <LinearProgress />}
       <Container sx={{ mt: 2 }}>
         {!gettingstated && (
@@ -133,8 +185,8 @@ export default function PollParticipate() {
           <Box marginInline={8}>
             <MemoryGame
               gridNumber={4}
-              foundCardsColor='#e91e63'
-              holeCardsColor='#00796b'
+              foundCardsColor='hsl(45, 95%, 50%)'
+              holeCardsColor='hsl(174, 80%, 42%)'
               gameFinished={() => setCompletedGame(true)}
             />
           </Box>
@@ -149,6 +201,29 @@ export default function PollParticipate() {
           }
         />
       </Container>
+
+      {/* Navigation guard dialog — shown when user tries to leave via back/swipe */}
+      <Dialog open={showLeaveDialog}>
+        <DialogTitle>Leave session?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You are still in an active session. If you leave now, you can rejoin
+            from the banner on the dashboard.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowLeaveDialog(false)}>Stay</Button>
+          <Button
+            color='error'
+            onClick={() => {
+              setShowLeaveDialog(false)
+              setAllowNavigation(true)
+              void navigate(-1)
+            }}>
+            Leave
+          </Button>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   )
 }

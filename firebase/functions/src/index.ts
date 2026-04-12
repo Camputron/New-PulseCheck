@@ -365,6 +365,7 @@ export const finishSession = onCall<FinishSessionRequest>(
       }
 
       // Create top-level submission doc
+      const leftEarly = userData.status === "left"
       const submissionRef = await db.collection("submissions").add({
         title: session.title,
         user: db.doc(`users/${participantUid}`),
@@ -376,6 +377,7 @@ export const finishSession = onCall<FinishSessionRequest>(
         max_score: maxScore,
         score_100: maxScore > 0 ? (score / maxScore) * 100 : 0,
         submitted_at: FieldValue.serverTimestamp(),
+        ...(leftEarly && { left_early: true }),
       })
 
       // Create pointer in session's submissions subcollection

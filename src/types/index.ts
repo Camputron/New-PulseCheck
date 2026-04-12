@@ -160,11 +160,15 @@ export interface SessionChoice {
 //   created_at: Timestamp
 // }
 
+export type SessionUserStatus = "active" | "left"
+
 export interface SessionUser {
   photo_url: string | null
   display_name: string
   joined_at: Timestamp
   incorrect: boolean
+  status?: SessionUserStatus
+  left_at?: Timestamp
 }
 
 export interface WaitingUser {
@@ -214,6 +218,7 @@ export interface Submission {
   submitted_at: Timestamp
   photo_url: string | null
   email: string | null
+  left_early?: boolean
 }
 
 export interface SessionSubmission {

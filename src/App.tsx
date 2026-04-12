@@ -1,12 +1,18 @@
 import React from "react"
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, useLocation } from "react-router-dom"
 import { Page } from "./pages"
-import AppBar from "./components/header/AppBar"
+import AppBar from "./components/appbar/AppBar"
+
+/** Routes where the global AppBar is hidden (these pages render their own header) */
+const isSessionRoute = (pathname: string) =>
+  /^\/poll\/session\/[^/]+(\/host|\/participate)?$/.test(pathname)
 
 export default function App() {
+  const { pathname } = useLocation()
+
   return (
     <React.Fragment>
-      <AppBar />
+      {!isSessionRoute(pathname) && <AppBar />}
       <Routes>
         <Route path='/' element={<Page.Splash />} />
         <Route path='/debug' element={<Page.Debug />} />

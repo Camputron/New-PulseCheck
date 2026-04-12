@@ -5,12 +5,14 @@ import { getDoc } from "firebase/firestore"
 import api from "@/api"
 import { ActiveSession, SessionState } from "@/types"
 import { getActiveSession, clearActiveSession } from "@/utils"
-import { useAuthContext } from "@/hooks"
+import { useAuthContext, useSnackbar } from "@/hooks"
 
 export default function RejoinBanner() {
   const navigate = useNavigate()
   const { user } = useAuthContext()
+  const snackbar = useSnackbar()
   const [activeSession, setActiveSession] = useState<ActiveSession | null>(null)
+  const [leaving, setLeaving] = useState(false)
 
   useEffect(() => {
     const stored = getActiveSession()
@@ -52,9 +54,22 @@ export default function RejoinBanner() {
     void navigate(`/poll/session/${activeSession.sid}/participate`)
   }
 
-  const handleDismiss = () => {
-    clearActiveSession()
-    setActiveSession(null)
+  const handleLeave = async () => {
+    if (!user) return
+    setLeaving(true)
+    try {
+      await api.sessions.leaveSession(activeSession.sid, user.uid)
+      clearActiveSession()
+      setActiveSession(null)
+      snackbar.show({
+        message: "You left the session",
+        type: "info",
+      })
+    } catch (err) {
+      console.error("Failed to leave session", err)
+    } finally {
+      setLeaving(false)
+    }
   }
 
   return (
@@ -63,8 +78,12 @@ export default function RejoinBanner() {
       sx={{ mb: 3, borderRadius: 2 }}
       action={
         <Stack direction='row' spacing={1}>
-          <Button size='small' color='inherit' onClick={handleDismiss}>
-            Dismiss
+          <Button
+            size='small'
+            color='inherit'
+            disabled={leaving}
+            onClick={() => void handleLeave()}>
+            Leave Session
           </Button>
           <Button size='small' variant='contained' onClick={handleRejoin}>
             Rejoin

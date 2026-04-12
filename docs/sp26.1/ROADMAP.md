@@ -87,6 +87,7 @@ Completed and verified. Shipped in S1–S2.
 | F33.3 | **UI** — `PulseGauge` animation overhaul (requestAnimationFrame, ease-out) | S2 | UI-7 |
 | F33.4 | **UI** — `PulseGauge` dynamic score colors (red→teal gradient) | S2 | UI-7 |
 | F33.5 | **UI** — `PulseGauge` aspect ratio fix (4:3) | S2 | UI-7 |
+| F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 |
 
 ---
 
@@ -166,6 +167,7 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 | CHORE | **SnackBar improvements** — hide close button if auto-hide, animated progress | P3 | — | 1 day | None |
 | CHORE | **Mobile bottom nav** — phone-optimized navigation bar | P3 | — | 2 days | None |
 | CHORE | **Host edit ended session** — allow host to edit ended poll session | P3 | — | 1 day | None |
+| CHORE | **History state filter** — filter sessions/submissions by state (open, closed, done, finished); default to "finished" | P3 | — | 1 day | None |
 
 ---
 

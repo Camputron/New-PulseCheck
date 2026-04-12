@@ -11,10 +11,11 @@ interface HeaderProps {
   sid: string
   session?: Session
   users?: QuerySnapshot<SessionUser>
+  onAllowNavigation?: () => void
 }
 
 export default function Header(props: HeaderProps) {
-  const { sid, session, users } = props
+  const { sid, session, users, onAllowNavigation } = props
   const { user } = useAuthContext()
   const snackbar = useSnackbar()
   const navigate = useNavigate()
@@ -28,6 +29,7 @@ export default function Header(props: HeaderProps) {
         const uid = user.uid
         await api.sessions.leaveSession(sid, uid)
         clearActiveSession()
+        onAllowNavigation?.()
         snackbar.show({
           message: "You left the session",
           type: "info",
@@ -62,8 +64,8 @@ export default function Header(props: HeaderProps) {
       <Toolbar>
         <LeaveButton
           callback={leaveSession}
-          dialogTitle='Are you sure you want to leave?'
-          dialogContent='All answers you submitted will be discarded.'
+          dialogTitle='Leave this session?'
+          dialogContent='Your submitted answers are saved, but you will receive a 0 for any remaining questions.'
         />
         <Box textAlign='initial'>
           <Typography fontWeight={600}>{session?.title}</Typography>

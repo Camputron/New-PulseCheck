@@ -115,15 +115,16 @@ export default class SessionStore extends BaseStore {
   }
 
   /**
-   * Checks if the user is participating the session.
+   * Checks if the user is actively participating in the session.
+   * Returns false if the user doc does not exist or if the user has left.
    * @param sid - Session ID
    * @param uid - User ID
-   * @returns {Promise<boolean>} - True if the user is in the session, false otherwise.
    */
   public async hasJoined(sid: string, uid: string): Promise<boolean> {
-    const ref = doc(this.doc(sid), clx.users, uid)
-    const data = await getDoc(ref)
-    return data.exists()
+    const uref = this._users.doc(sid, uid)
+    const snap = await getDoc(uref)
+    if (!snap.exists()) return false
+    return snap.data().status !== "left"
   }
 
   /**
@@ -150,7 +151,10 @@ export default class SessionStore extends BaseStore {
   public async leaveSession(sid: string, uid: string) {
     const sref = this.doc(sid)
     const uref = doc(sref, clx.users, uid)
-    await deleteDoc(uref)
+    await updateDoc(uref, {
+      status: "left",
+      left_at: serverTimestamp(),
+    })
   }
 
   public async isHost(sid: string, uid: string): Promise<boolean> {

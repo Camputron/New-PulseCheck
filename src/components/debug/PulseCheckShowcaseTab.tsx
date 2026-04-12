@@ -27,7 +27,7 @@ import About from "@/components/splash/About"
 import FAQs from "@/components/splash/FAQs"
 import { SessionSummary, Submission } from "@/types"
 import { Timestamp } from "firebase/firestore"
-import AppTitle from "../header/AppTitle"
+import AppTitle from "../appbar/AppTitle"
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
