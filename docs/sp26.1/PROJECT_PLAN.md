@@ -163,7 +163,7 @@ F35 (Guest Upgrade) ────────► F11 (Fat Finger)
 | Dependency | Owner | Notes |
 |-----------|-------|-------|
 | Firebase Blaze plan | Google Cloud | Required for Cloud Functions |
-| Gemini 2.0 Flash API | Google Cloud | EOL June 2026 — plan migration to `gemini-2.5-flash` |
+| Gemini 2.5 Flash API | Google Cloud | EOL June 2026 — plan migration to `gemini-2.5-flash` |
 | MUI v7 templates | MUI team | Reference only (cloned locally) |
 | `@fontsource/inter` | npm | — |
 

@@ -63,8 +63,8 @@ export default class ResponseStore extends BaseStore {
     } else {
       await setDoc(ref, {
         user: doc(this.db, clx.users, uid),
-        choices: payload.choices,
-        correct: payload.correct,
+        choices: payload.choices!,
+        correct: payload.correct!,
         created_at: serverTimestamp(),
       })
     }
@@ -93,6 +93,7 @@ export default class ResponseStore extends BaseStore {
         {
           user: doc(this.db, clx.users, uid),
           choices: choices,
+          updated_at: serverTimestamp(),
         },
         { merge: true }
       )

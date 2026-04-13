@@ -11,6 +11,7 @@ import { Submission } from "@/types"
 import ScoreCard from "@/components/poll/results/submission/ScoreCard"
 import { ntops } from "@/utils"
 import ScoreHistogram from "@/components/graphs/ScoreHistogram"
+import LeaderboardAccordion from "@/components/poll/results/LeaderboardAccordion"
 import useRequireAuth from "@/hooks/useRequireAuth"
 
 /**
@@ -68,6 +69,12 @@ export default function PollSessionResults() {
             submissions={submissions.map((i) => i.data())}
             summary={session?.summary}
           />
+          {session?.leaderboard_scores && (
+            <LeaderboardAccordion
+              leaderboard={session.leaderboard_scores}
+              isAnonymous={Boolean(session?.anonymous)}
+            />
+          )}
           <Divider>
             <Typography>{ntops(submissions.length)}</Typography>
           </Divider>

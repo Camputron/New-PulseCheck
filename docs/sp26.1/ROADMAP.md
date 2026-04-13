@@ -177,9 +177,9 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
 
 ### Critical
 
-- [ ] **BUG-1: Firestore listener leaks — no useEffect cleanup** — `SessionView.tsx`
-  - **Sprint:** S5 (TODO)
-  - `listenToSession`, `listenToWaitingRoom`, `listenToResponses`, and `listenToSubmissions` are called in `useEffect` but no cleanup/unsubscribe function is returned. Each navigation away and back creates new listeners without removing old ones, causing duplicate state updates, increasing memory/network usage, and potential stale data overwrites.
+- [x] **BUG-1: Firestore listener leak — unnecessary re-attachment** — `PollHost.tsx`
+  - **Sprint:** S5 (DONE)
+  - The `onSnapshot` listener on `waiting_users` included `session` in its `useEffect` dependency array, causing the listener to tear down and re-create on every session state change. Fixed by using a `useRef` to track current session state and removing `session` from the dependency array.
 
 - [ ] **BUG-2: No double-join protection** — `join/[code]/page.tsx`
   - **Sprint:** S5 (TODO)

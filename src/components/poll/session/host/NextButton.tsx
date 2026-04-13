@@ -25,12 +25,16 @@ export default function NextButton(props: NextButtonProps) {
     if (!session) throw new Error("session is null!")
     const currentQuestion = session.question
     if (currentQuestion) {
+      await api.sessions.closeQuestion(currentQuestion.ref)
       await api.sessions.gradeQuestion(sref, currentQuestion)
       await api.sessions.clearQuestion(sref)
+      if (session.leaderboard) {
+        await api.sessions.computeLeaderboard(sref, currentQuestion.ref.id)
+      }
       await api.sessions.displayUserResponses(sref, currentQuestion)
       setText("Next")
     } else {
-      /* grade user responses */
+      /* load next question or mark session as DONE */
       await api.sessions.nextQuestion(sref)
       setText("Show Results")
     }

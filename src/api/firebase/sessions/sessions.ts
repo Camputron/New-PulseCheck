@@ -15,6 +15,7 @@ import {
   setDoc,
   updateDoc,
   where,
+  Timestamp,
   writeBatch,
   QueryDocumentSnapshot,
 } from "firebase/firestore"
@@ -22,6 +23,7 @@ import { Functions, httpsCallable } from "firebase/functions"
 import BaseStore from "../store"
 import {
   CurrentQuestion,
+  HostSettings,
   Poll,
   Session,
   SessionQuestion,
@@ -169,7 +171,11 @@ export default class SessionStore extends BaseStore {
   /**
    * Creates Poll Session by given poll id
    */
-  public async host(pid: string, uid: string): Promise<string> {
+  public async host(
+    pid: string,
+    uid: string,
+    settings: HostSettings
+  ): Promise<string> {
     const uref = api.users.doc(uid)
     const pref = api.polls.doc(pid)
     const pollDoc = await getDoc(pref)
@@ -202,10 +208,13 @@ export default class SessionStore extends BaseStore {
       room_code: generateRoomCode(),
       title: poll.title,
       async: poll.async,
-      anonymous: poll.anonymous,
+      anonymous: settings.isAnonymous,
+      leaderboard: settings.hasLeaderboard,
       time: poll.time,
       question: null,
       results: null,
+      leaderboard_scores: null,
+      leaderboard_cumulative: null,
       questions_left: [],
       questions: [],
       state: SessionState.OPEN,
@@ -330,12 +339,20 @@ export default class SessionStore extends BaseStore {
         options: opts.docs.map((x) => ({ ref: x.ref, text: x.data().text })),
         anonymous: q.anonymous,
         time: q.time,
+        displayed_at: serverTimestamp() as unknown as Timestamp,
       }
+      /* persist displayed_at on the SessionQuestion doc for Cloud Function access */
+      await setDoc(
+        nextQuestion,
+        { displayed_at: serverTimestamp() },
+        { merge: true }
+      )
       await setDoc(
         ref,
         {
           question: payload,
           results: null,
+          leaderboard_scores: null,
           questions_left: arrayRemove(nextQuestion),
         },
         { merge: true }
@@ -362,6 +379,21 @@ export default class SessionStore extends BaseStore {
       },
       { merge: true }
     )
+  }
+
+  public async closeQuestion(questionRef: DocumentReference<SessionQuestion>) {
+    await setDoc(questionRef, { closed_at: serverTimestamp() }, { merge: true })
+  }
+
+  public async computeLeaderboard(
+    sref: DocumentReference<Session>,
+    questionId: string
+  ) {
+    const callable = httpsCallable<
+      { sessionId: string; questionId: string },
+      { success: boolean }
+    >(this._functions, "computeLeaderboard")
+    await callable({ sessionId: sref.id, questionId })
   }
 
   public async displayUserResponses(

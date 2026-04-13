@@ -110,6 +110,7 @@ export interface Session {
   title: string
   async: boolean
   anonymous: boolean | null
+  leaderboard: boolean
   time: number | null
   /* the current question to display */
   question: CurrentQuestion | null
@@ -121,6 +122,8 @@ export interface Session {
   questions: DocumentReference<SessionQuestion>[]
   /* current state of the session */
   state: SessionState
+  leaderboard_scores: LeaderboardData | null
+  leaderboard_cumulative: Record<string, number> | null
   created_at: Timestamp
 }
 
@@ -133,6 +136,7 @@ export interface CurrentQuestion {
   options: SessionChoice[]
   anonymous: boolean | null
   time: number | null
+  displayed_at: Timestamp | null
 }
 
 /** data model to display question results of user responses  */
@@ -192,6 +196,8 @@ export interface SessionQuestion {
   points: number
   anonymous: boolean | null
   time: number | null
+  displayed_at?: Timestamp
+  closed_at?: Timestamp
 }
 
 export interface SessionOption {
@@ -204,6 +210,7 @@ export interface SessionResponse {
   choices: DocumentReference<SessionOption>[]
   correct: boolean
   created_at: Timestamp
+  updated_at?: Timestamp
 }
 
 /** data model to display a user's score */
@@ -234,4 +241,22 @@ export type AIQuestions = {
 export interface ActiveSession {
   sid: string
   roomCode: string
+}
+
+export interface HostSettings {
+  isAnonymous: boolean
+  hasLeaderboard: boolean
+}
+
+export interface LeaderboardEntry {
+  uid: string
+  displayName: string
+  photoUrl: string | null
+  questionScore: number
+  cumulativeScore: number
+}
+
+export interface LeaderboardData {
+  questionId: string
+  entries: LeaderboardEntry[]
 }
