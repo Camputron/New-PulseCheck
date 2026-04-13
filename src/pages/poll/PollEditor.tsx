@@ -6,8 +6,9 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Header from "@/components/poll/edit/header/Header"
+import PreSessionConfig from "@/components/poll/edit/PreSessionConfig"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDocumentData } from "react-firebase-hooks/firestore"
 import QuestionList from "@/components/poll/edit/question/QuestionList"
@@ -29,6 +30,8 @@ export default function PollEditor() {
       void navigate(-1)
     }
   }, [id, navigate])
+
+  const [isConfiguring, setIsConfiguring] = useState(false)
 
   const pollRef = api.polls.doc(id)
   const [poll, loading, error] = useDocumentData(pollRef, {
@@ -63,9 +66,25 @@ export default function PollEditor() {
     return <Typography>Failed to load Poll ({id})</Typography>
   }
 
+  if (isConfiguring && poll) {
+    return (
+      <PreSessionConfig
+        pid={id}
+        poll={poll}
+        onBack={() => setIsConfiguring(false)}
+      />
+    )
+  }
+
   return (
     <React.Fragment>
-      {poll && <Header pid={id} poll={poll} />}
+      {poll && (
+        <Header
+          pid={id}
+          poll={poll}
+          onStartConfig={() => setIsConfiguring(true)}
+        />
+      )}
       <Container sx={{ marginBlock: 2 }} maxWidth='xl'>
         <Stack spacing={2} alignItems={"center"}>
           <QuestionList pid={id} questions={poll?.questions ?? []} />

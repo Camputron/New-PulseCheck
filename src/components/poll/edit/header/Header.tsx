@@ -6,8 +6,6 @@ import {
   Typography,
   AppBar,
   Stack,
-  FormControlLabel,
-  Switch,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -17,7 +15,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import api from "@/api"
 import useSnackbar from "@/hooks/useSnackbar"
 import {
@@ -28,7 +26,6 @@ import {
   MenuOpen,
   ScreenShare,
 } from "@mui/icons-material"
-import { useAuthContext } from "@/hooks"
 import { useNavigate } from "react-router-dom"
 import { Poll } from "@/types"
 import DeleteMenuItem from "./DeleteMenuItem"
@@ -37,9 +34,7 @@ import UploadPDFDialog from "../UploadPDFDialog"
 interface HeaderProps {
   pid: string /* poll id */
   poll: Poll
-  // title: string /* poll title from firestore */
-  // anonymous: boolean | null
-  // time: number | null
+  onStartConfig: () => void
 }
 
 /**
@@ -50,38 +45,16 @@ interface HeaderProps {
  * @returns {JSX.Element}
  */
 export default function Header(props: HeaderProps) {
-  const { pid, poll } = props
-  const auth = useAuthContext()
+  const { pid, poll, onStartConfig } = props
   const [title, setTitle] = useState(poll.title)
   const [isEditing, setIsEditing] = useState(false)
   const snackbar = useSnackbar()
-  const [anonymous, setAnonymous] = useState(poll.anonymous)
   const [anchorElPoll, setAnchorElPoll] = useState<HTMLElement | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const navigate = useNavigate()
   const [generateWithAIModal, setGenerateWithAIModal] = useState(false)
   const muiTheme = useTheme()
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
-
-  useEffect(() => {
-    async function saveAnonymous(bool: boolean | null) {
-      try {
-        if (bool === poll.anonymous) {
-          return
-        }
-        const ref = api.polls.doc(pid)
-        await api.polls.update(ref, {
-          anonymous: bool,
-        })
-      } catch {
-        snackbar.show({
-          message: "Failed to update",
-          type: "error",
-        })
-      }
-    }
-    void saveAnonymous(anonymous)
-  }, [pid, poll, anonymous, snackbar])
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (isMobile) {
@@ -137,16 +110,7 @@ export default function Header(props: HeaderProps) {
   }
 
   const handleHostClick = () => {
-    if (auth.user) {
-      const user = auth.user
-      /* create a poll session and host it */
-      api.sessions
-        .host(pid, user.uid)
-        .then((sessionId) => {
-          void navigate(`/poll/session/${sessionId}/host`)
-        })
-        .catch((err) => console.debug(err))
-    }
+    onStartConfig()
     handleClose()
   }
 
@@ -234,18 +198,6 @@ export default function Header(props: HeaderProps) {
                       },
                     },
                   }}>
-                  <MenuItem>
-                    <FormControlLabel
-                      label='Anonymous'
-                      checked={Boolean(anonymous)}
-                      control={
-                        <Switch
-                          onChange={(e) => setAnonymous(e.target.checked)}
-                        />
-                      }
-                    />
-                  </MenuItem>
-                  <Divider />
                   <MenuItem onClick={openGenerateWithAI}>
                     <ListItemIcon>
                       <AutoAwesome />
@@ -295,18 +247,6 @@ export default function Header(props: HeaderProps) {
                     sx={{ px: 2, pb: 1 }}>
                     Poll Options
                   </Typography>
-                  <Divider />
-                  <MenuItem sx={{ py: 1.5 }}>
-                    <FormControlLabel
-                      label='Anonymous'
-                      checked={Boolean(anonymous)}
-                      control={
-                        <Switch
-                          onChange={(e) => setAnonymous(e.target.checked)}
-                        />
-                      }
-                    />
-                  </MenuItem>
                   <Divider />
                   <MenuItem onClick={openGenerateWithAI} sx={{ py: 1.5 }}>
                     <ListItemIcon>

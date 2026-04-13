@@ -110,6 +110,7 @@ export interface Session {
   title: string
   async: boolean
   anonymous: boolean | null
+  leaderboard: boolean
   time: number | null
   /* the current question to display */
   question: CurrentQuestion | null
@@ -234,4 +235,9 @@ export type AIQuestions = {
 export interface ActiveSession {
   sid: string
   roomCode: string
+}
+
+export interface HostSettings {
+  isAnonymous: boolean
+  hasLeaderboard: boolean
 }

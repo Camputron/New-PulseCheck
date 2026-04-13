@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore"
-import { ActiveSession } from "@/types"
+import { ActiveSession, HostSettings } from "@/types"
 
 const ACTIVE_SESSION_KEY = "active-session"
 
@@ -23,6 +23,33 @@ export function getActiveSession(): ActiveSession | null {
 
 export function clearActiveSession(): void {
   localStorage.removeItem(ACTIVE_SESSION_KEY)
+}
+
+const HOST_SETTINGS_PREFIX = "host-settings"
+
+export function saveHostSettings(uid: string, settings: HostSettings): void {
+  try {
+    localStorage.setItem(
+      `${HOST_SETTINGS_PREFIX}:${uid}`,
+      JSON.stringify(settings)
+    )
+  } catch (err) {
+    console.warn("Failed to save host settings to localStorage", err)
+  }
+}
+
+export function getHostSettings(uid: string): HostSettings | null {
+  try {
+    const raw = localStorage.getItem(`${HOST_SETTINGS_PREFIX}:${uid}`)
+    if (!raw) return null
+    return JSON.parse(raw) as HostSettings
+  } catch {
+    return null
+  }
+}
+
+export function clearHostSettings(uid: string): void {
+  localStorage.removeItem(`${HOST_SETTINGS_PREFIX}:${uid}`)
 }
 
 /**

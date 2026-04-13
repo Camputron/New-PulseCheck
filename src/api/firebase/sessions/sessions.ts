@@ -22,6 +22,7 @@ import { Functions, httpsCallable } from "firebase/functions"
 import BaseStore from "../store"
 import {
   CurrentQuestion,
+  HostSettings,
   Poll,
   Session,
   SessionQuestion,
@@ -169,7 +170,11 @@ export default class SessionStore extends BaseStore {
   /**
    * Creates Poll Session by given poll id
    */
-  public async host(pid: string, uid: string): Promise<string> {
+  public async host(
+    pid: string,
+    uid: string,
+    settings: HostSettings
+  ): Promise<string> {
     const uref = api.users.doc(uid)
     const pref = api.polls.doc(pid)
     const pollDoc = await getDoc(pref)
@@ -202,7 +207,8 @@ export default class SessionStore extends BaseStore {
       room_code: generateRoomCode(),
       title: poll.title,
       async: poll.async,
-      anonymous: poll.anonymous,
+      anonymous: settings.isAnonymous,
+      leaderboard: settings.hasLeaderboard,
       time: poll.time,
       question: null,
       results: null,
