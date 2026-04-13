@@ -3,7 +3,7 @@ import { useAuthContext } from "@/hooks"
 import { SessionState, WaitingUser } from "@/types"
 import { Box, Container, LinearProgress } from "@mui/material"
 import { onSnapshot } from "firebase/firestore"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore"
 import { useNavigate, useParams } from "react-router-dom"
 import RoomCodeDisplay from "@/components/poll/session/host/RoomCodeDisplay"
@@ -26,6 +26,8 @@ export default function PollHost() {
   /** the current questiont to be shown */
   const question = session?.question
   const [timeLeft, setTimeLeft] = useState(0)
+  const sessionRef = useRef(session)
+  sessionRef.current = session
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
@@ -113,7 +115,10 @@ export default function PollHost() {
           const userId = change.doc.id
           const userData = change.doc.data()
           /* if the session state is open, then allow the user to join */
-          if (session && session.state === SessionState.OPEN) {
+          if (
+            sessionRef.current &&
+            sessionRef.current.state === SessionState.OPEN
+          ) {
             void addUser(userId, userData)
           }
         }
@@ -123,7 +128,7 @@ export default function PollHost() {
     return () => {
       unsubscribeUsers()
     }
-  }, [sid, session])
+  }, [sid])
 
   if (sessionLoading) {
     return <LinearProgress />
