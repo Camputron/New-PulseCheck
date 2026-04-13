@@ -15,6 +15,7 @@ import {
   setDoc,
   updateDoc,
   where,
+  Timestamp,
   writeBatch,
   QueryDocumentSnapshot,
 } from "firebase/firestore"
@@ -212,6 +213,8 @@ export default class SessionStore extends BaseStore {
       time: poll.time,
       question: null,
       results: null,
+      leaderboard_scores: null,
+      leaderboard_cumulative: null,
       questions_left: [],
       questions: [],
       state: SessionState.OPEN,
@@ -336,12 +339,20 @@ export default class SessionStore extends BaseStore {
         options: opts.docs.map((x) => ({ ref: x.ref, text: x.data().text })),
         anonymous: q.anonymous,
         time: q.time,
+        displayed_at: serverTimestamp() as unknown as Timestamp,
       }
+      /* persist displayed_at on the SessionQuestion doc for Cloud Function access */
+      await setDoc(
+        nextQuestion,
+        { displayed_at: serverTimestamp() },
+        { merge: true }
+      )
       await setDoc(
         ref,
         {
           question: payload,
           results: null,
+          leaderboard_scores: null,
           questions_left: arrayRemove(nextQuestion),
         },
         { merge: true }
@@ -368,6 +379,21 @@ export default class SessionStore extends BaseStore {
       },
       { merge: true }
     )
+  }
+
+  public async closeQuestion(questionRef: DocumentReference<SessionQuestion>) {
+    await setDoc(questionRef, { closed_at: serverTimestamp() }, { merge: true })
+  }
+
+  public async computeLeaderboard(
+    sref: DocumentReference<Session>,
+    questionId: string
+  ) {
+    const callable = httpsCallable<
+      { sessionId: string; questionId: string },
+      { success: boolean }
+    >(this._functions, "computeLeaderboard")
+    await callable({ sessionId: sref.id, questionId })
   }
 
   public async displayUserResponses(

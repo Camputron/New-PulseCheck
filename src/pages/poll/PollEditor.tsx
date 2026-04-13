@@ -66,6 +66,7 @@ export default function PollEditor() {
     return <Typography>Failed to load Poll ({id})</Typography>
   }
 
+  /* user wants to host poll, render poll session config view */
   if (isConfiguring && poll) {
     return (
       <PreSessionConfig

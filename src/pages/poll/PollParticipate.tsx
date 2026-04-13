@@ -1,6 +1,7 @@
 import Header from "@/components/poll/session/participate/Header"
 import ResponseDialog from "@/components/poll/session/participate/ResponseDialog"
 import ResultsChart from "@/components/poll/session/ResultsChart"
+import LeaderboardCard from "@/components/poll/session/LeaderboardCard"
 import UserSessionGrid from "@/components/poll/session/UserSessionGrid"
 import api from "@/api"
 import { useAuthContext, useSnackbar } from "@/hooks"
@@ -180,6 +181,15 @@ export default function PollParticipate() {
           <Box marginBlock={2}>
             <ResultsChart results={session.results} />
           </Box>
+        )}
+        {session?.results && session?.leaderboard_scores && (
+          <LeaderboardCard
+            leaderboard={session.leaderboard_scores}
+            isAnonymous={
+              Boolean(session?.anonymous) ||
+              Boolean(session?.results?.question?.anonymous)
+            }
+          />
         )}
         {session?.state === SessionState.OPEN && (
           <Box marginInline={8}>

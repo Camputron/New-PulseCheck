@@ -11,6 +11,7 @@ import UserSessionGrid from "@/components/poll/session/UserSessionGrid"
 import ResultsChart from "@/components/poll/session/ResultsChart"
 import Header from "@/components/poll/session/host/Header"
 import QuestionBox from "@/components/poll/session/host/QuestionBox"
+import LeaderboardCard from "@/components/poll/session/LeaderboardCard"
 import useRequireAuth from "@/hooks/useRequireAuth"
 
 export default function PollHost() {
@@ -154,6 +155,15 @@ export default function PollHost() {
           <Box marginBlock={2}>
             <ResultsChart results={session.results} />
           </Box>
+        )}
+        {session?.results && session?.leaderboard_scores && (
+          <LeaderboardCard
+            leaderboard={session.leaderboard_scores}
+            isAnonymous={
+              Boolean(session?.anonymous) ||
+              Boolean(session?.results?.question?.anonymous)
+            }
+          />
         )}
         {/* render users currently in the poll session */}
         <UserSessionGrid
