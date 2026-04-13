@@ -161,6 +161,7 @@ export default function PollHost() {
             <ResultsChart results={session.results} />
           </Box>
         )}
+        {/* if we have results and leaderboard is enabled, render this */}
         {session?.results && session?.leaderboard_scores && (
           <LeaderboardCard
             leaderboard={session.leaderboard_scores}

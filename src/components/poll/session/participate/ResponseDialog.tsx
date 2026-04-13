@@ -40,7 +40,7 @@ export default function ResponseDialog(props: ResponseDialogProps) {
 
   useEffect(() => {
     return () => {
-      console.debug("goodbye world")
+      /* reset the selected options on unmount */
       setSelectedOptions([])
     }
   }, [currentQuestion])

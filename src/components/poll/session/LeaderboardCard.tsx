@@ -39,13 +39,9 @@ export default function LeaderboardCard(props: LeaderboardCardProps) {
         border: 1,
         borderColor: "divider",
         borderRadius: 2,
-        mt: 2,
+        my: 2,
       }}>
-      <Stack
-        direction='row'
-        alignItems='center'
-        spacing={1}
-        sx={{ px: 2, pt: 2, pb: 1 }}>
+      <Stack direction='row' alignItems='center' spacing={1}>
         <EmojiEvents sx={{ color: "secondary.main" }} />
         <Typography variant='h6' fontWeight={600}>
           Leaderboard

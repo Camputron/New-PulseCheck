@@ -11,6 +11,7 @@ import { getDoc } from "firebase/firestore"
 import { Session } from "@/types"
 import Confetti from "react-confetti"
 import ScoreGaugeCard from "@/components/graphs/ScoreGaugeCard"
+import LeaderboardAccordion from "@/components/poll/results/LeaderboardAccordion"
 import useRequireAuth from "@/hooks/useRequireAuth"
 
 /**
@@ -62,6 +63,12 @@ export default function PollSubmissionResults() {
               <PollMetricsCard sum={session?.summary}></PollMetricsCard>
             )}
           </Stack>
+          {session?.leaderboard_scores && (
+            <LeaderboardAccordion
+              leaderboard={session.leaderboard_scores}
+              isAnonymous={Boolean(session?.anonymous)}
+            />
+          )}
           <Stack spacing={1}>
             {session?.questions.map((x) => (
               <AnswerCard

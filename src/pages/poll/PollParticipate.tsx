@@ -22,8 +22,8 @@ import { deleteDoc, doc } from "firebase/firestore"
 import React, { useEffect, useState } from "react"
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore"
 import { useNavigate, useParams } from "react-router-dom"
-import MemoryGame from "react-card-memory-game"
-import Confetti from "react-confetti"
+// import MemoryGame from "react-card-memory-game"
+// import Confetti from "react-confetti"
 import useRequireAuth from "@/hooks/useRequireAuth"
 import { saveActiveSession, clearActiveSession } from "@/utils"
 
@@ -40,7 +40,7 @@ export default function PollParticipate() {
   const [session, sessionLoading] = useDocumentData(sref)
   const [users] = useCollection(api.sessions.users.collect(sid))
   const [gettingstated, setGettingStated] = useState(false)
-  const [completedGame, setCompletedGame] = useState(false)
+  // const [completedGame, setCompletedGame] = useState(false)
   const [allowNavigation, setAllowNavigation] = useState(false)
 
   /* Block browser back / swipe-back via popstate.
@@ -162,7 +162,7 @@ export default function PollParticipate() {
 
   return (
     <React.Fragment>
-      {completedGame && <Confetti tweenDuration={5000} recycle={false} />}
+      {/* {completedGame && <Confetti tweenDuration={5000} recycle={false} />} */}
       <ResponseDialog session={session} sref={sref} />
       <Header
         sid={sid}
@@ -182,6 +182,7 @@ export default function PollParticipate() {
             <ResultsChart results={session.results} />
           </Box>
         )}
+        {/* if we have results and leaderboard is enabled, render this */}
         {session?.results && session?.leaderboard_scores && (
           <LeaderboardCard
             leaderboard={session.leaderboard_scores}
@@ -190,16 +191,6 @@ export default function PollParticipate() {
               Boolean(session?.results?.question?.anonymous)
             }
           />
-        )}
-        {session?.state === SessionState.OPEN && (
-          <Box marginInline={8}>
-            <MemoryGame
-              gridNumber={4}
-              foundCardsColor='hsl(45, 95%, 50%)'
-              holeCardsColor='hsl(174, 80%, 42%)'
-              gameFinished={() => setCompletedGame(true)}
-            />
-          </Box>
         )}
         {/* render the users who are in the poll session */}
         <UserSessionGrid
@@ -210,6 +201,16 @@ export default function PollParticipate() {
             Boolean(session?.results?.question?.anonymous)
           }
         />
+        {/* {session?.state === SessionState.OPEN && (
+          <Box marginInline={8}>
+            <MemoryGame
+              gridNumber={4}
+              foundCardsColor='hsl(45, 95%, 50%)'
+              holeCardsColor='hsl(174, 80%, 42%)'
+              gameFinished={() => setCompletedGame(true)}
+            />
+          </Box>
+        )} */}
       </Container>
 
       {/* Navigation guard dialog — shown when user tries to leave via back/swipe */}
