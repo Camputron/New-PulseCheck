@@ -207,22 +207,22 @@ export default function PulseCheckShowcaseTab() {
       <SectionTitle>Snackbar (Global)</SectionTitle>
       <ShowcaseCard title='Snackbar variants — click to trigger each severity'>
         <Stack direction='row' spacing={1.5} flexWrap='wrap' useFlexGap>
-          {(
-            ["success", "info", "warning", "error"] as SeverityType[]
-          ).map((severity) => (
-            <Button
-              key={severity}
-              variant='outlined'
-              color={severity === "info" ? "primary" : severity}
-              onClick={() =>
-                snackbar.show({
-                  message: `This is a ${severity} snackbar`,
-                  type: severity,
-                })
-              }>
-              {severity}
-            </Button>
-          ))}
+          {(["success", "info", "warning", "error"] as SeverityType[]).map(
+            (severity) => (
+              <Button
+                key={severity}
+                variant='outlined'
+                color={severity === "info" ? "primary" : severity}
+                onClick={() =>
+                  snackbar.show({
+                    message: `This is a ${severity} snackbar`,
+                    type: severity,
+                  })
+                }>
+                {severity}
+              </Button>
+            )
+          )}
         </Stack>
         <Stack direction='row' spacing={1.5} flexWrap='wrap' useFlexGap>
           <Button
