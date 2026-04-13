@@ -35,7 +35,7 @@ export default function DeleteMenuItem(props: DeleteMenuItemProps) {
         const pref = api.polls.doc(pid)
         console.debug(pref.path)
         await api.polls.delete(pref)
-        await navigate("/dashboard")
+        void navigate("/dashboard")
       } catch (err) {
         console.debug(err)
       } finally {

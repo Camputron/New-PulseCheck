@@ -83,7 +83,7 @@ export default function PollJoin() {
           display_name: displayName,
           photo_url: user.photoURL,
         })
-        await navigate(`/poll/session/${sref.id}`)
+        void navigate(`/poll/session/${sref.id}`)
       } catch (err: unknown) {
         if (err instanceof Error) {
           snackbar.show({

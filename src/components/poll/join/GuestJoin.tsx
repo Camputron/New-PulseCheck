@@ -39,7 +39,7 @@ export default function GuestJoin() {
           display_name: displayName,
           photo_url: null,
         })
-        await navigate(`/poll/session/${sref.id}`)
+        void navigate(`/poll/session/${sref.id}`)
       } catch (err: unknown) {
         console.debug(err)
         if (err instanceof Error) {

@@ -140,9 +140,9 @@ export default function PollParticipate() {
           setAllowNavigation(true)
           if (user.isAnonymous) {
             await user.delete()
-            await navigate("/get-started")
+            void navigate("/get-started")
           } else {
-            await navigate("/poll/join")
+            void navigate("/poll/join")
           }
         } else {
           const wuref = api.sessions.waiting_users.collect(sid)

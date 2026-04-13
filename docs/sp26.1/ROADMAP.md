@@ -1,6 +1,6 @@
 # PulseCheck — Roadmap
 
-> **Last Updated:** 2026-03-25
+> **Last Updated:** 2026-04-13
 > **Sprint:** S3 (Weeks 4–5)
 > **Timeline:** 2026-03-11 → 2026-05-06 (8 weeks)
 
@@ -88,6 +88,10 @@ Completed and verified. Shipped in S1–S2.
 | F33.4 | **UI** — `PulseGauge` dynamic score colors (red→teal gradient) | S2 | UI-7 |
 | F33.5 | **UI** — `PulseGauge` aspect ratio fix (4:3) | S2 | UI-7 |
 | F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 |
+| F2 | **Peer Pulse** — optional ranked leaderboard (host toggle, per-question, top-10 filter) | S3 | AR-10 |
+| F34 | **Design System Overhaul** — MUI v7 template design language adoption | S3 | UI-9 |
+| BUG | **Firestore listener leaks** — `useEffect` cleanup in `SessionView.tsx` | S3 | — |
+| BUG-3 | **Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx` | S3 | — |
 
 ---
 
@@ -110,15 +114,11 @@ Scheduled for upcoming sprints. Ready to be picked up.
 | F12 | **Auto-Fill Prompts** — duplicate questions, quick templates, topic field in AI dialog | S3 | PM-6, PM-7, AI-6 | 1–2 days | None |
 | F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 | 1–2 days | None |
 | F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | S3 | RG-6 | 3–5 days | None |
-| F2 | **Peer Pulse** — optional ranked leaderboard (host toggle, per-question, top-10 filter) | S3 | AR-10 | 2–3 days | None |
 | F14 | **Async Results** — show results to participants post-session (gated behind submission) | S3 | SL-9 | 3–5 days | None |
 | F3 | **AI Summaries** — post-session AI analysis (accuracy, misconceptions, review topics) | S4 | AI-5 | 3–4 days | F16 |
 | F13a | **Poll Templates** — Quick Quiz, Survey, Exit Ticket pre-built templates | S4 | PM-8 | 3–5 days | None |
-| F34 | **Design System Overhaul** — MUI v7 template design language adoption | S5 | UI-9 | 5–8 days | None |
 | — | **Bug fixes, testing, polish** | S5 | — | — | — |
-| BUG | **Firestore listener leaks** — no `useEffect` cleanup in `SessionView.tsx` | S5 | — | 1 day | None |
 | BUG | **No double-join protection** — `joinSession` called twice in React Strict Mode | S5 | — | 0.5 day | None |
-| BUG | **Incorrect `await navigate()`** — React Router `navigate()` is not a Promise | S5 | — | 0.5 day | None |
 | BUG | **`poll.updated_at` not updating** on question/option edits | S5 | PM-11 | 0.5 day | None |
 | BUG | **Rejoin after host ends** — participant sees white screen instead of redirect | S5 | SL-10 | 1 day | None |
 
@@ -187,8 +187,8 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
 
 ### High
 
-- [ ] **BUG-3: Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx`
-  - **Sprint:** S5 (TODO)
+- [x] **BUG-3: Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx`
+  - **Sprint:** S3 (DONE)
   - React Router's `navigate()` does not return a Promise. Using `await` on it is a no-op and allows subsequent code (like error throws) to execute when it shouldn't.
 
 - [ ] **BUG-4: NaN / division-by-zero in score calculations** — `sessions.ts`, `ScoreCard.tsx`, `PollMetricsCard.tsx`
@@ -260,7 +260,7 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
 |--------|-------|---------|-----------|-----------|
 | **S1** | Mar 11–17 | F11, F17, F31, F16 P1–P2 | F11, F17 (11 items), F31 (6 items), F16 P1 (7 items), F16 P2 | F16.8 |
 | **S2** | Mar 18–24 | F32, F33, F12, F4 | F32 (8 items), F33 (6 items) | F12, F4 |
-| **S3** | Apr 1–14 | F12, F4, F1, F2, F14, F16.8 | — | — |
+| **S3** | Apr 1–14 | F12, F4, F1, F2, F14, F16.8 | F2, F34, BUG (listener leak), BUG-3 | F12, F4, F1, F14, F16.8 |
 | **S4** | Apr 15–28 | F3, F13a | — | — |
 | **S5** | Apr 29 – May 6 | F34, bugs, polish | — | — |
 

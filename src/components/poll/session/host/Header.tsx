@@ -22,7 +22,7 @@ export default function Header(props: HeaderProps) {
     async function killAsync() {
       try {
         await api.sessions.close(sref)
-        await navigate("/dashboard", { replace: true })
+        void navigate("/dashboard", { replace: true })
       } catch (err) {
         console.debug(err)
       }

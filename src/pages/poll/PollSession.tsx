@@ -36,10 +36,10 @@ export default function PollSession() {
           setStatus("Access Denied!")
           if (user.isAnonymous) {
             await user.delete()
-            await navigate("/get-started", { replace: true })
+            void navigate("/get-started", { replace: true })
             throw new Error("Unauthorized (Guest-Poll-Session)")
           } else {
-            await navigate("/poll/join", { replace: true })
+            void navigate("/poll/join", { replace: true })
             throw new Error("Unauthorized (User-Poll-Session)")
           }
         } else {
