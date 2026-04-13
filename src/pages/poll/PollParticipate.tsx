@@ -19,7 +19,7 @@ import {
   Typography,
 } from "@mui/material"
 import { deleteDoc, doc } from "firebase/firestore"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore"
 import { useNavigate, useParams } from "react-router-dom"
 // import MemoryGame from "react-card-memory-game"
@@ -42,6 +42,7 @@ export default function PollParticipate() {
   const [gettingstated, setGettingStated] = useState(false)
   // const [completedGame, setCompletedGame] = useState(false)
   const [allowNavigation, setAllowNavigation] = useState(false)
+  const hasHandledTerminalState = useRef(false)
 
   /* Block browser back / swipe-back via popstate.
      Pushes a duplicate history entry so pressing back lands on the same page,
@@ -76,7 +77,15 @@ export default function PollParticipate() {
 
   useEffect(() => {
     if (session && !sessionLoading) {
+      if (
+        hasHandledTerminalState.current &&
+        (session.state === SessionState.CLOSED ||
+          session.state === SessionState.FINISHED)
+      ) {
+        return
+      }
       if (session.state === SessionState.CLOSED) {
+        hasHandledTerminalState.current = true
         clearActiveSession()
         setAllowNavigation(true)
         snackbar.show({
@@ -87,6 +96,7 @@ export default function PollParticipate() {
       } else if (session.state === SessionState.IN_PROGRESS) {
         setGettingStated(true)
       } else if (session.state === SessionState.FINISHED) {
+        hasHandledTerminalState.current = true
         clearActiveSession()
         setAllowNavigation(true)
         snackbar.show({
