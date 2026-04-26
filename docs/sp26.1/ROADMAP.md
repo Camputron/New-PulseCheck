@@ -1,6 +1,6 @@
 # PulseCheck — Roadmap
 
-> **Last Updated:** 2026-04-13
+> **Last Updated:** 2026-04-15
 > **Sprint:** S3 (Weeks 4–5)
 > **Timeline:** 2026-03-11 → 2026-05-06 (8 weeks)
 
@@ -111,12 +111,17 @@ Scheduled for upcoming sprints. Ready to be picked up.
 
 | ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
 |----|------|--------|---------|----------|-------------|
-| F12 | **Auto-Fill Prompts** — duplicate questions, quick templates, topic field in AI dialog | S3 | PM-6, PM-7, AI-6 | 1–2 days | None |
+| F12 | **Auto-Fill Prompts** — quick-fill option presets (T/F, Agree Scale, Rating 1-5, etc.), duplicate questions, topic field in AI dialog | S4 | PM-6, PM-7, AI-6 | 1–2 days | None |
 | F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 | 1–2 days | None |
 | F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | S3 | RG-6 | 3–5 days | None |
 | F14 | **Async Results** — show results to participants post-session (gated behind submission) | S3 | SL-9 | 3–5 days | None |
 | F3 | **AI Summaries** — post-session AI analysis (accuracy, misconceptions, review topics) | S4 | AI-5 | 3–4 days | F16 |
-| F13a | **Poll Templates** — Quick Quiz, Survey, Exit Ticket pre-built templates | S4 | PM-8 | 3–5 days | None |
+| F13a | **Poll Templates** — 8 pre-built templates (Quick Quiz, T/F, Vocab, Exit Ticket, Survey, Icebreaker, Muddiest Point, Discussion Prep), template picker empty state, preview dialog, post-apply acceleration (auto-expand, auto-focus, tab-through, completion bar) | S4 | PM-8 | 3–5 days | None |
+| F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
+| F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
+| F37 | **Clone Polls** — deep-copy entire poll (questions + options) into new poll document | S4 | PM-13 | 1 day | None |
+| F41 | **Question Difficulty Ranking** — per-question % correct stats ranked most→least difficult on session results | S4 | AR-15 | 2–3 days | None |
+| F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
 | — | **Bug fixes, testing, polish** | S5 | — | — | — |
 | BUG | **No double-join protection** — `joinSession` called twice in React Strict Mode | S5 | — | 0.5 day | None |
 | BUG | **`poll.updated_at` not updating** on question/option edits | S5 | PM-11 | 0.5 day | None |
@@ -132,8 +137,8 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 |----|------|----------|---------|----------|-------------|
 | F10 | **Instructor Dashboard** — engagement metrics over time (line/bar charts, stats) | P2 | AR-11 | 4–6 days | None |
 | F15 | **Sharing Polls** — share with view/edit permissions via email | P2 | PM-9 | 3–5 days | None |
-| F8 | **Topics Struggled With** — tag-based weak topic identification | P2 | — | 4–6 days | F5 |
-| F19 | **Testing & CI/CD** — E2E (Playwright), Firestore rules tests, GitHub Actions | P1 | IO-4, IO-5 | 5–8 days | F16 |
+| F8 | **Poll Tags & Topic Identification** — free-form tags, combo-box selection, `tag:` search, weak topic identification | P2 | PM-12 | 4–6 days | F5 |
+| F19 | **Testing & CI/CD** — business logic tests, Cloud Functions tests (emulator), E2E (Playwright), Firestore rules tests, GitHub Actions CI/CD | P1 | IO-4, IO-5 | 5–8 days | F16 |
 | F20 | **Build Security** — disable source maps, App Check, security rules hardening | P3 | IO-6, IO-7, IO-8 | 1–2 days | F16 |
 | F5 | **Learning Pulse Dashboard** — student performance over time, weak areas | P3 | AR-12 | 5–8 days | F8 |
 | F6 | **Weekly Reflection** — aggregated weekly performance summaries | P3 | AR-13 | 3–4 days | F5 |
@@ -147,10 +152,13 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 | F13b | **UI Customization** — per-user color theme, font size, font family | P4 | UI-11 | 3–5 days | None |
 | F23 | **LMS Integration** — Canvas/Blackboard via LTI 1.3 | P4 | IO-9 | 8–12 days | F16 |
 | F24 | **AI Learning Analytics** — cross-session misconception analysis | P4 | AI-11 | 5–8 days | F3, F8 |
-| F25 | **AI Study Guides** — personalized study material from wrong answers | P4 | AI-9 | 3–5 days | F3, F9 |
+| F25 | **Personalized Study Guides** — wrong-answer compilation, self-quiz mode with timed input, attempt history for improvement tracking, tag-filtered study guides | P4 | AI-9 | 5–8 days | F3, F8, F9 |
 | F26 | **Bloom's Taxonomy Tagging** — AI auto-tags questions by cognitive level | P4 | AI-7 | 2–3 days | F18 |
 | F27 | **Misconception Detection** — AI wrong-answer pattern analysis | P4 | AI-8 | 3–5 days | F3 |
 | F9 | **Study Resources** — attach source PDF + AI study suggestions | P3 | AI-10 | 3–5 days | F8, F16 |
+| F38 | **Download Poll to PDF** — export poll as printable PDF with numbered questions, options, and answer blanks for paper-based participation | P3 | PM-14 | 2–3 days | None |
+| F39 | **Cloud Poll Session Settings** — move session defaults (leaderboard, anonymous, timer) from localStorage to Firestore user profile; editable in Settings page | P3 | PM-15 | 1–2 days | None |
+| F40 | **Question Bank** — named reusable question collections; bulk add; import into polls; works with F13a templates | P2 | PM-16 | 4–6 days | F13a |
 | BUG | **Undefined data access in `gradeSubmission`** — missing `.exists()` check | High | — | 0.5 day | None |
 | BUG | **Array index out of bounds on `currentQuestion`** — no bounds check | High | — | 0.5 day | None |
 | BUG | **Missing error handling in Vertex AI calls** — no try/catch on AI grading | High | — | 0.5 day | None |
@@ -166,7 +174,6 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 | CHORE | **Multi-session guard** — enforce single active session per user | P2 | — | 1 day | None |
 | CHORE | **SnackBar improvements** — hide close button if auto-hide, animated progress | P3 | — | 1 day | None |
 | CHORE | **Mobile bottom nav** — phone-optimized navigation bar | P3 | — | 2 days | None |
-| CHORE | **Host edit ended session** — allow host to edit ended poll session | P3 | — | 1 day | None |
 | CHORE | **History state filter** — filter sessions/submissions by state (open, closed, done, finished); default to "finished" | P3 | — | 1 day | None |
 
 ---

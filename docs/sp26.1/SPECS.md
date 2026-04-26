@@ -40,6 +40,13 @@
   - [F33 — Dashboard Card Redesign + PulseGauge Overhaul](#f33--dashboard-card-redesign--pulsegauge-overhaul-p1-low-1-day-no-deps--done)
   - [F34 — Design System Overhaul](#f34--design-system-overhaul-p1-med-high-5-8-days-no-deps)
   - [F35 — Guest Account Upgrade](#f35--guest-account-upgrade-stretch-med-3-5-days-deps-f11)
+  - [F36 — Host Response Progress](#f36--host-response-progress-p2-low-1-2-days-no-deps)
+  - [F37 — Clone Polls](#f37--clone-polls-p2-low-1-day-no-deps)
+  - [F38 — Download Poll to PDF](#f38--download-poll-to-pdf-p3-med-2-3-days-no-deps)
+  - [F39 — Cloud Poll Session Settings](#f39--cloud-poll-session-settings-p3-low-1-2-days-no-deps)
+  - [F40 — Question Bank](#f40--question-bank-p2-med-high-4-6-days-deps-f13a)
+  - [F41 — Question Difficulty Ranking](#f41--question-difficulty-ranking-p2-low-med-2-3-days-no-deps)
+  - [F42 — Host Edit Ended Session](#f42--host-edit-ended-session-p2-med-3-5-days-no-deps)
 - [Competitive Positioning](#competitive-positioning)
 
 Also see: [SRS](SRS.md) | [Architecture](ARCHITECTURE.md) | [Project Plan](PROJECT_PLAN.md) | [Roadmap](ROADMAP.md)
@@ -137,17 +144,27 @@ Aggregated weekly performance for students
 - **What Exists:** `SubmissionResults.tsx` renders `AnswerCard` per question w/ user's answer vs correct answer
 - **What's Needed:** Enhance with color coding + confidence (if F1 done)
 
-#### F8 — Topics Struggled With `P2` `Med-High` `4-6 days` `Deps: F5`
-Tag-based weak topic identification
+#### F8 — Poll Tags & Topic Identification `P2` `Med-High` `4-6 days` `Deps: F5`
+Tag-based poll categorization and weak topic identification
 
 - **What Exists:** `Poll.title` as rough topic proxy; `Question.prompt` extractable by AI; `Submission.score_100` for thresholding; no tag field exists
-- **What's Needed:** Add `tags: string[]` to `Poll`; tag input (MUI `Autocomplete` freeSolo); AI auto-tagging; `WeakTopicsCard` component; threshold logic (<60% = struggling)
+- **What's Needed:**
+  - Add `tags: string[]` to `Poll` type
+  - Free-form tag input on first use (MUI `Autocomplete` freeSolo)
+  - On subsequent tags, render combo box with checkboxes showing existing tags + free-form entry; "Apply" to confirm
+  - Tags enable categorization — helpful when a user owns many polls
+  - Polls searchable by tag (`tag:example` syntax in history search)
+  - Tags feed into F25 (Personalized Study Guide) — build study guides from sessions tagged with a given topic
+  - AI auto-tagging: have Gemini return topic tags during question generation
+  - `WeakTopicsCard` component; threshold logic (<60% = struggling)
 - **Action Plan:**
   1. Add `tags` to `Poll` type
-  2. Add tag input in editor `Header.tsx`
-  3. Have Gemini return topic tags during generation
-  4. Build `WeakTopicsCard`
-  5. Integrate into Dashboard (F5)
+  2. Build `TagInput` component (free-form first tag, combo box for subsequent)
+  3. Add tag input in editor `Header.tsx`
+  4. Have Gemini return topic tags during generation
+  5. Add `tag:` search syntax to poll history
+  6. Build `WeakTopicsCard`
+  7. Integrate into Dashboard (F5)
 - **Risk:** Manual tagging = friction. AI tagging = extra API calls. Use optional manual + AI suggestion
 
 #### F9 — Study Resources `P3` `Med` `3-5 days` `Deps: F8, F16`
@@ -192,30 +209,50 @@ Rejoin session after accidental back-out
 - **Risk:** Very low. Infrastructure already exists
 
 #### F12 — Auto-Fill Prompts `P0` `Low` `1-2 days` `No deps`
-Duplicate questions, quick templates, targeted AI generation
+Question-level quick-fill presets, duplicate questions, targeted AI generation
 
 - **What Exists:** `QuestionEditor.tsx` w/ `PromptField`/`PromptOptionList`; `UploadPDFDialog.tsx` for AI bulk gen; `questions.ts` → `add()` creates blanks; no duplicate/template features
-- **What's Needed:** "Duplicate Question" button; quick templates (T/F, Agree scale, blank MCQ); topic field in `UploadPDFDialog`; validation indicator for correct answer
+- **What's Needed:**
+  - **Quick-Fill Chips:** When a question has 0 options, show a horizontal chip row inside `QuestionEditor` with presets: `T/F`, `Yes/No`, `Agree Scale`, `Rating 1-5`, `Confidence`, `Frequency`, `Blank (4)`. One-click fills options via existing `api.polls.questions.options.create()` + `updateByRef()`. Chips auto-dismiss when options appear (Firestore-reactive).
+  - **Duplicate Question:** "Duplicate" button in `AccordionActions` clones question structure (type, options, points, settings) with blank prompt.
+  - **Topic field in `UploadPDFDialog`:** Optional text field for topic/focus area.
+  - **Correct-answer validation indicator:** Visual cue when no correct answer is marked.
 - **Action Plan:**
-  1. Add "Duplicate" icon to `QuestionEditor.tsx`
-  2. Implement `duplicateQuestion()` in `questions.ts`
-  3. Add "Quick Template" dropdown
-  4. Add topic field in `UploadPDFDialog.tsx`
-  5. Add correct-answer validation indicator
+  1. Define `OptionPreset` type in `src/types/index.ts`
+  2. Create `optionPresets.ts` constants (7 presets)
+  3. Create `QuickFillChips.tsx` component
+  4. Render in `QuestionEditor.tsx` when `data.options.length === 0`
+  5. Add "Duplicate" button in `QuestionEditor.tsx` `AccordionActions`
+  6. Add topic field in `UploadPDFDialog.tsx`
+  7. Add correct-answer validation indicator
 - **Risk:** None. QoL improvement, high usability impact
 
 #### F13a — Poll Templates `P2` `Med` `3-5 days` `No deps`
-Pre-built poll structures (Quick Quiz, Survey, Exit Ticket)
+Pre-built poll structures with post-apply editing acceleration
 
-- **What Exists:** `Poll` has `anonymous`/`time` globals; `Question` inherits/overrides per-question; `Settings.tsx` exists; no template system
-- **What's Needed:** `PollTemplate` type; 3 built-in templates as constants; "Create from Template" dialog on Dashboard; "Save as Template" on editor menu
+- **What Exists:** `Poll` has `anonymous`/`time` globals; `Question` inherits/overrides per-question; `Settings.tsx` exists; `api.polls.generateQuestions(pid, AIQuestions)` creates bulk questions (used by AI/PDF flow); no template system
+- **What's Needed:**
+  - **Template Picker (empty state):** When `poll.questions.length === 0` in PollEditor, show a card grid with 8 templates across 3 categories (Assessment, Feedback, Engagement). One-click applies via existing `generateQuestions()` method. Auto-dismisses when questions appear.
+  - **8 Built-in Templates:** Quick Quiz (5 MCQ), True/False (5 T/F), Vocabulary Check (4 MCQ), Exit Ticket (3 multi-select), Course Survey (4 ranking), Icebreaker (3 MCQ), Muddiest Point (2 multi-select), Discussion Prep (3 MCQ). Feedback/engagement templates have pre-filled usable prompts; assessment templates have pre-filled option structure with empty prompts.
+  - **Template Preview Dialog:** Read-only preview of questions/options before applying.
+  - **Post-Apply Acceleration:**
+    - Auto-expand all question accordions after template apply (no click-to-open each one)
+    - Auto-focus first question's prompt field (cursor ready immediately)
+    - Tab-through keyboard flow between all expanded questions (free once expanded)
+    - Completion progress bar ("3/5 questions ready") with Host shortcut button
+  - **Browse Templates (stretch):** Menu item in Header for appending templates to non-empty polls.
 - **Action Plan:**
-  1. Define `PollTemplate` type
-  2. Add 3 built-in templates
-  3. Build template selection dialog
-  4. Create poll + pre-configured questions on select
-  5. Optional: save current poll as template
-- **Risk:** Low risk for Part A
+  1. Define `PollTemplate`, `TemplateCategory` types in `src/types/index.ts`
+  2. Create `pollTemplates.ts` with 8 template definitions using `AIQuestions` type
+  3. Create `TemplateCard.tsx` (card grid item with icon, name, description, loading state)
+  4. Create `TemplatePicker.tsx` (empty-state component with category filter + card grid)
+  5. Create `TemplatePreviewDialog.tsx` (read-only preview before applying)
+  6. Modify `QuestionList.tsx` to render `TemplatePicker` when `questions.length === 0`
+  7. Add `expandAll` state to `PollEditor.tsx` — auto-expand after template apply
+  8. Add `autoFocus` to `PromptField.tsx` for first question
+  9. Create `CompletionBar.tsx` (progress indicator + Host shortcut)
+  10. Stretch: "Browse Templates" menu item in `Header.tsx`
+- **Risk:** Low for core (templates + picker). Post-apply acceleration is all client-side state, no backend changes.
 
 #### F13b — UI Customization `P4` `Med` `3-5 days` `No deps`
 Per-user color theme, font size, font family
@@ -341,39 +378,51 @@ Restructure AI question generation: structured output, single API call, validati
 - **Relevant files:** `src/lib/api/firebase/vertex.ts`, `src/lib/api/firebase/index.ts`, `src/lib/types/index.ts` (`AIQuestions` type)
 
 #### F19 — Testing & CI/CD `P1` `Med-High` `5-8 days` `Deps: F16 (for Functions tests)`
-Set up testing infrastructure: unit, component, E2E, Firebase rules, and CI pipeline
+Set up testing infrastructure focused on business logic and Cloud Functions — no UI/E2E testing (too expensive for project timeline)
 
-- **What Exists:** Vitest 3.x with browser mode (Playwright provider), React Testing Library, jsdom already installed. One existing test (`NotFound.test.tsx`). No Firebase Cloud Functions directory yet
+- **What Exists:** Vitest 3.x already installed. Cloud Functions directory exists with `finishSession`, `computeLeaderboard`, and `generateQuestions`. Grading logic, metrics computation, and leaderboard scoring are currently embedded in Cloud Functions and client-side stores.
+- **Scope:** Logic tests only. No UI/component/E2E testing — visual testing requires expensive tooling and is brittle with frequent UI changes. Focus on ensuring the **business logic is correct and robust**.
 - **What's Needed:**
-  - E2E tests via Playwright (`@playwright/test` + `playwright.config.ts`)
-  - Firebase Functions tests (Vitest + `firebase-functions-test`) — after F16
-  - Firestore Rules tests (Vitest + `@firebase/rules-unit-testing`)
-  - Firebase Emulator Suite config in `firebase.json`
-  - CI/CD via GitHub Actions (unit + E2E as parallel jobs)
-  - `playwright-firebase` plugin for Auth in E2E
+  - **Decouple logic from Firestore** — extract pure functions for grading, metrics, leaderboard scoring so they can be tested in isolation without database calls
+  - **Unit tests for business logic** — test grading logic (`gradeResponse` per prompt type), `calcMetrics`, leaderboard speed scoring, score normalization. Cover simple cases AND edge cases (empty sessions, zero participants, NaN inputs, all-correct, all-incorrect, single participant, tied scores)
+  - **Cloud Functions integration tests** — Vitest + `firebase-functions-test` + Firebase Emulator for `finishSession`, `computeLeaderboard`, `regradeSession`, `generateQuestions`. Seed Firestore with test data, invoke function, assert outputs
+  - **Firestore Rules tests** — Vitest + `@firebase/rules-unit-testing` to verify security rules enforce proper access control
+  - **CI/CD** — GitHub Actions workflow running tests against Firebase Emulator Suite
 - **Action Plan:**
-  1. Install `@playwright/test`, `@firebase/rules-unit-testing`, `firebase-functions-test`
-  2. Create `playwright.config.ts`
-  3. Add Firebase Emulator config to `firebase.json`:
+  1. Install `@firebase/rules-unit-testing`, `firebase-functions-test`
+  2. Decouple logic into pure functions:
+     - Extract `gradeResponse(promptType, choices, correctOptions): boolean` from `responses.ts`
+     - Extract `calcMetrics(scores, maxScore)` (already standalone in Cloud Functions)
+     - Extract `calcSpeedScore(responseTime, displayedAt, questionDuration): number` from leaderboard logic
+  3. Write unit tests for extracted pure functions (Vitest, no emulator needed):
+     - `gradeResponse`: all 3 prompt types × correct/incorrect/partial/empty
+     - `calcMetrics`: normal distribution, single value, empty array, NaN inputs
+     - `calcSpeedScore`: instant answer (1000), timeout (0), negative values, null timestamps
+  4. Write Cloud Functions integration tests (Vitest + emulator):
+     - `finishSession`: seed session with users/questions/responses → invoke → assert submissions + summary
+     - `computeLeaderboard`: seed timed responses → invoke → assert speed scores + cumulative
+     - `regradeSession` (F42): change correct answer → invoke → assert updated scores
+  5. Write Firestore Rules tests:
+     - Users can only read/write own data
+     - Session participants can read session data
+     - Only hosts can modify session state
+  6. Configure Firebase Emulator in `firebase.json` for CI:
      ```json
      "emulators": {
        "auth": { "port": 9099 },
        "functions": { "port": 5001 },
        "firestore": { "port": 8080 },
-       "storage": { "port": 9199 },
-       "ui": { "enabled": true }
+       "storage": { "port": 9199 }
      }
      ```
-  4. Write unit/component tests for core components
-  5. Write E2E tests for critical flows (login, create poll, join session, submit answers)
-  6. Write Firestore Rules tests
-  7. Create GitHub Actions workflow (unit + E2E parallel, emulator-backed, Playwright traces on failure)
-  8. Add Firebase Functions tests after F16
+  7. Create GitHub Actions workflow: start emulator → run tests → report results
 - **Notes:**
-  - Vitest over Jest: native Vite integration, ESM/TS out of the box, ~10x faster watch mode
-  - Playwright over Cypress: multi-browser, built-in parallelism, `playwright-firebase` plugin, fully free
-  - Dual test modes: fast jsdom unit tests for dev feedback, browser-mode tests for MUI component integration
-- **Risk:** E2E tests are brittle if UI changes frequently. Keep E2E focused on critical paths only
+  - Firebase Emulator Suite runs fully in CI (GitHub Actions) — no external services needed
+  - Vitest over Jest: native Vite integration, ESM/TS out of the box, faster watch mode
+  - `firebase-functions-test` provides offline and online (emulator) modes for testing Cloud Functions
+  - `@firebase/rules-unit-testing` seeds mock data and asserts rule allow/deny without a real project
+  - Productization mindset: ensure grading, scoring, and metrics are provably correct before shipping
+- **Risk:** Emulator startup adds ~10s to CI. Keep test suite fast by preferring pure function unit tests over integration tests where possible
 
 #### F20 — Build Security & Obfuscation `P3` `Low` `1-2 days` `Deps: F16`
 Harden production build: disable source maps, App Check, security rules, optional obfuscation
@@ -419,12 +468,26 @@ Post-session AI analysis: which topics students struggled with, auto-identified 
 - **What's Needed:** Aggregate wrong-answer patterns across sessions; AI identifies misconceptions ("most students confused X with Y"); topic-level performance breakdown
 - **Risk:** Requires meaningful data volume across multiple sessions
 
-#### F25 — AI Study Guides `Stretch` `Med` `3-5 days` `Deps: F3, F9`
-Auto-generate personalized study guides per student based on what they got wrong
+#### F25 — Personalized Study Guides `Stretch` `Med-High` `5-8 days` `Deps: F3, F9, F8`
+Auto-generate personalized study guides per student based on what they got wrong, with self-quiz and progress tracking
 
 - **Competitors:** Completely unique — no competitor offers this
-- **What's Needed:** Per-student wrong-answer analysis; Gemini prompt to generate targeted study material; PDF/markdown export
-- **Risk:** AI hallucination on study content. Ground in source material (F9)
+- **What's Needed:**
+  - **Wrong-answer compilation** — for questions the user got incorrect, compile these into a study guide
+  - **Self-quiz mode** — allow the user to re-quiz themselves on their weak questions with a timed input system
+  - **Attempt history** — log previous self-quiz attempts so students can track improvement over time
+  - **Tag integration (F8)** — allow the study guide to pull from sessions tagged with a specific topic, building topic-focused study material
+  - **AI generation** — Gemini prompt to generate targeted study material grounded in original source content
+  - **Export** — PDF/markdown export of study guide
+- **Action Plan:**
+  1. Build wrong-answer aggregation query (per-student, per-session or per-tag)
+  2. Build `StudyGuide` page with compiled incorrect questions + correct answers
+  3. Build self-quiz mode (re-present questions, accept answers, grade, time responses)
+  4. Build attempt history log (store attempts in Firestore, show improvement chart)
+  5. Integrate with F8 tags — filter study guide by poll tags
+  6. AI-generate supplementary study notes via Gemini
+  7. Add PDF/markdown export
+- **Risk:** AI hallucination on study content. Ground in source material (F9). Self-quiz timing adds UI complexity
 
 #### F26 — Bloom's Taxonomy Tagging `Stretch` `Low-Med` `2-3 days` `Deps: F18`
 AI auto-tags questions by cognitive level (remember/understand/apply/analyze)
@@ -556,18 +619,149 @@ Allow guest participants to upgrade to a registered account after a session, pre
 - **What Exists:** Guests join via anonymous auth; their `SessionUser` doc persists in Firestore for grading/metrics. On tab close or session end, their anonymous auth identity is lost. Guest data is never deleted to preserve session metrics accuracy
 - **What's Needed:**
   - Persist guest identity in `localStorage` during session (UID + session info)
-  - After session finishes, prompt guest with "Register to save your results"
-  - If they register, link anonymous UID to new account via Firebase Auth account linking (`linkWithCredential`)
-  - Migrate `SessionUser` docs and `submissions` from anonymous UID to new UID (or keep anonymous UID if Firebase linking preserves it)
+  - **Prompt on session finish** — when a guest finishes a poll session, prompt them to register/login to preserve their results
+  - Be clear about what the guest gains: "Register to save this poll and your results to your account"
+  - **Auth linkage** — link anonymous UID to new account via Firebase Auth account linking (`linkWithCredential`), making the previous poll data accessible under the new account
+  - If they register, migrate `SessionUser` docs and `submissions` from anonymous UID to new UID (or keep anonymous UID if Firebase linking preserves it)
   - If they decline or close tab, guest data remains in Firestore under anonymous UID (metrics preserved)
   - Enable rejoin for guests during active session via `localStorage` identity
 - **Action Plan:**
   1. Extend `localStorage` session persistence (from F11) to include guest UID
-  2. Add post-session registration prompt component
-  3. Implement Firebase Auth anonymous-to-permanent account linking
-  4. Handle UID migration in Firestore if needed
-  5. Add "Save my results" CTA on session results page for guests
+  2. Add post-session registration prompt component (shown after session FINISHED)
+  3. Clear messaging: explain what upgrading preserves (this poll + results)
+  4. Implement Firebase Auth anonymous-to-permanent account linking
+  5. Handle UID migration in Firestore if needed
+  6. Add "Save my results" CTA on session results page for guests
 - **Risk:** Firebase Auth account linking has edge cases (email already in use, provider conflicts). Needs careful error handling
+
+#### F36 — Host Response Progress `P2` `Low` `1-2 days` `No deps`
+Real-time progress bar showing how many participants have answered the current question
+
+- **What Exists:** `UserSessionGrid` shows individual participant cards during session; `session.results` contains response data; `/sessions/{sid}/questions/{qid}/responses/` subcollection tracks individual responses; host can see `waiting_users` count
+- **What's Needed:**
+  - **Linear progress bar** on the host view showing percentage of participants who have selected an answer for the current question
+  - Display format: "12 / 30 responded" + MUI `LinearProgress` bar
+  - Count of responses from `/sessions/{sid}/questions/{qid}/responses/` vs total users in `/sessions/{sid}/users/`
+  - Real-time updates via Firestore listener on response collection
+  - List the participants who have answered (name or avatar) vs those who haven't
+- **Action Plan:**
+  1. Add `ResponseProgressBar` component with real-time response count listener
+  2. Integrate into `PollHost.tsx` below the current question display
+  3. Show participant names/avatars who have/haven't responded
+  4. Update in real time as responses come in
+- **Risk:** Low. Data already exists in Firestore. Listener on responses collection may be chatty with 300 participants — consider snapshot count query
+
+#### F37 — Clone Polls `P2` `Low` `1 day` `No deps`
+Duplicate an entire poll (questions + options) into a new poll document
+
+- **What Exists:** PM-6 duplicates a single question within a poll; `api.polls.add()` creates polls; `api.polls.questions.add()` creates questions; `api.polls.questions.options.create()` creates options; no poll-level duplication
+- **What's Needed:**
+  - "Clone" action in poll editor header menu or dashboard poll card context menu
+  - Deep-copy: create new poll doc, then copy all questions and their options into the new poll's subcollections
+  - New poll name: `"${original_poll_name} (Copy)"`
+  - Clone preserves: questions, options, correct answers, points, prompt types, settings
+  - Clone does NOT preserve: sessions, submissions, created_at (gets new timestamp)
+- **Action Plan:**
+  1. Add `clone(pid: string)` method to `PollStore`
+  2. Implement deep copy: read poll → create new poll → iterate questions → create copies → iterate options → create copies
+  3. Add "Clone" button to poll editor header menu and/or dashboard card menu
+  4. Navigate to new poll editor after clone
+- **Risk:** None. Straightforward CRUD operation
+
+#### F38 — Download Poll to PDF `P3` `Med` `2-3 days` `No deps`
+Export a poll or session results as a printable PDF document
+
+- **What Exists:** CSV export in poll history (F17.9); no PDF generation; polls and sessions have all data needed
+- **What's Needed:**
+  - **Poll export** — render all questions + options as a printable PDF (useful for instructors who need a paper backup)
+  - **Use case: student without a phone** — instructor prints the poll, student fills it out on paper, instructor manually inputs the student's responses into the poll session to allow for regrading (ties into F42)
+  - Client-side PDF generation via a library (e.g., `jspdf`, `react-pdf`, or `@react-pdf/renderer`)
+  - "Download PDF" button in poll editor header and/or session results header
+  - PDF layout: poll title, date, questions numbered with options (A/B/C/D), answer blanks for paper submissions
+- **Action Plan:**
+  1. Install PDF generation library (`@react-pdf/renderer` or `jspdf`)
+  2. Build `PollPDFDocument` component rendering poll structure
+  3. Add "Download PDF" button to poll editor header
+  4. Optional: session results PDF with charts (stretch)
+- **Risk:** PDF styling is fiddly. Keep the layout simple — focus on printability over aesthetics
+
+#### F39 — Cloud Poll Session Settings `P3` `Low` `1-2 days` `No deps`
+Persist poll session default settings (leaderboard, anonymous, timer) in Firestore user profile instead of localStorage
+
+- **What Exists:** `PreSessionConfig.tsx` stores poll session settings (leaderboard toggle, anonymous toggle, timer) in `localStorage`; settings are device-local and don't sync across devices
+- **What's Needed:**
+  - Move remembered poll session settings from `localStorage` to Firestore under the user's document (e.g., `users/{uid}/preferences/poll_session`)
+  - Settings sync across all devices the user logs into
+  - Add a "Poll Session Defaults" section in the Settings page (`/settings`) where the user can edit their default session configuration
+  - Fallback to `localStorage` if Firestore read fails (offline resilience)
+- **Action Plan:**
+  1. Add `session_defaults` field to `User` type (or a `preferences` subcollection)
+  2. Update `PreSessionConfig.tsx` to read/write from Firestore instead of localStorage
+  3. Add "Poll Session Defaults" section to `Settings.tsx`
+  4. Migrate existing localStorage settings on first login after update
+- **Risk:** Low. Minor Firestore schema addition. Must handle offline gracefully
+
+#### F40 — Question Bank `P2` `Med-High` `4-6 days` `Deps: F13a`
+Allow users to create reusable question banks that can be used to quickly populate polls
+
+- **What Exists:** Polls contain questions; AI generates questions from PDFs; F13a provides poll templates; no standalone question repository
+- **What's Needed:**
+  - **Question bank** — a named collection of questions owned by a user, stored as a Firestore collection (`/users/{uid}/question_banks/{bid}/questions/{qid}`)
+  - Questions can be batched into a bank (bulk add)
+  - When creating/editing a poll, user can "Import from Question Bank" to pick individual questions or entire banks
+  - Works in conjunction with F13a (Poll Templates) — templates + question banks = rapid poll creation
+  - Questions in a bank have same structure as poll questions (prompt, options, correct answers, points, prompt_type)
+  - Bank management UI: create, rename, delete banks; add/remove/reorder questions within a bank
+- **Action Plan:**
+  1. Define `QuestionBank` and `BankQuestion` types
+  2. Create Firestore collection structure under user doc
+  3. Build `QuestionBankStore` with CRUD methods
+  4. Build `QuestionBankManager` page/dialog for managing banks
+  5. Build `ImportFromBankDialog` for poll editor
+  6. Add "Save to Bank" action on individual poll questions
+  7. Integrate with poll editor header menu
+- **Risk:** Additional Firestore reads when importing. Keep bank size reasonable (<100 questions). UI complexity for bank management
+
+#### F41 — Question Difficulty Ranking `P2` `Low-Med` `2-3 days` `No deps`
+Statistical ranking of questions by participant difficulty after a session completes
+
+- **What Exists:** `SessionQuestionResults` has per-question response aggregates (barchart, piechart); `SessionResponse.correct` tracks correctness per user; `finishSession` Cloud Function iterates all questions and responses
+- **What's Needed:**
+  - After a session finishes, compute per-question statistics: % correct, % incorrect, average response time
+  - Rank questions from most difficult (lowest % correct) to easiest
+  - Display on `PollSessionResults` as a "Question Difficulty" card/accordion
+  - Help instructors identify which concepts students struggled with most
+  - Store difficulty stats in session doc or as a computed view
+- **Action Plan:**
+  1. Extend `finishSession` (or add post-processing) to compute per-question % correct
+  2. Store as `question_stats: { qid: string, prompt: string, percent_correct: number, avg_response_time: number }[]` on session doc
+  3. Build `QuestionDifficultyCard` component (sorted bar chart or ranked list)
+  4. Add to `PollSessionResults.tsx`
+- **Risk:** Low. Data already exists — just needs aggregation
+
+#### F42 — Host Edit Ended Session `P2` `Med` `3-5 days` `No deps`
+Allow host to edit a finished session's questions/options and trigger automatic regrading
+
+- **What Exists:** Sessions deep-copy poll questions/options at start time; `finishSession` Cloud Function grades all responses and creates submissions; `computeLeaderboard` Cloud Function calculates speed-based scores; session questions/options are independent Firestore docs
+- **What's Needed:**
+  - **Edit UI** — full-screen dialog on `PollSessionResults` page allowing the host to edit question prompts, option text, correct answer toggles, and point values for a FINISHED session
+  - **Cosmetic edits** (typo fixes) — direct Firestore update on session question/option docs
+  - **Grade-affecting edits** (correct answer change, point value change) — trigger a `regradeSession` Cloud Function that:
+    1. Re-evaluates every response's `correct` boolean against updated correct options
+    2. Recalculates every user's total score
+    3. Updates all `Submission` docs (score, max_score, score_100)
+    4. Recomputes `SessionSummary` metrics (average, median, quartiles)
+    5. Replays leaderboard scoring if enabled
+  - Edits do NOT propagate back to the original poll (session is an independent copy)
+  - Cannot add/remove questions or options, cannot change prompt type
+- **Action Plan:**
+  1. Add `update()` methods to session `QuestionStore` and `OptionStore`
+  2. Create `regradeSession` Cloud Function (auth check, re-grade, recompute scores/metrics/leaderboard)
+  3. Add `regrade()` client method to `SessionStore`
+  4. Build `EditSessionDialog` component
+  5. Add "Edit" button to session results `Header`
+  6. Wire into `PollSessionResults.tsx` with live data refresh
+- **Risk:** Batch write limits (500 ops) for large sessions — chunk batches. Leaderboard replay must process all questions in order. Partial update visibility during regrade is acceptable for MVP
 
 ### Competitive Positioning
 

@@ -55,8 +55,9 @@ The project follows a single-developer Scrum workflow with 1–2 week sprints. I
 | Priority | Features |
 |----------|---------|
 | **Must ship** (P0) | F11 Fat Finger, F17 Poll History, F16 Backend Migration, F31 UI Improvements |
-| **Should ship** (P1) | F1 Knowledge Pulse, F2 Peer Pulse, F14 Async Results, F32–F34 UI Modernization |
-| **Nice to have** (P2) | F3 AI Summaries, F13a Poll Templates, F10 Instructor Dashboard |
+| **Should ship** (P1) | F1 Knowledge Pulse, F2 Peer Pulse, F14 Async Results, F19 Testing, F32–F34 UI Modernization |
+| **Nice to have** (P2) | F3 AI Summaries, F13a Poll Templates, F42 Host Edit Session, F36 Response Progress, F37 Clone Polls, F41 Difficulty Ranking, F8 Poll Tags, F40 Question Bank, F10 Instructor Dashboard |
+| **Desirable** (P3+) | F38 Download PDF, F39 Cloud Settings, F25 Study Guides, F35 Guest Upgrade |
 
 ---
 
@@ -106,23 +107,31 @@ The project follows a single-developer Scrum workflow with 1–2 week sprints. I
 
 ### S4 — AI & Instructor Tools (Apr 15–28)
 
-**Theme:** Expand AI capabilities and instructor workflow tools.
+**Theme:** Expand AI capabilities, instructor workflow tools, and session management features.
 
 | Deliverable | Features | Estimate |
 |------------|----------|----------|
 | Post-session AI summary | F3 | 3–4 days |
-| Poll templates | F13a | 3–5 days |
+| Poll templates + editing acceleration | F13a (8 templates, picker, preview, auto-expand, auto-focus, completion bar) | 3–5 days |
+| Auto-fill prompts | F12 (quick-fill chips, duplicate question) | 1–2 days |
+| Host edit ended session + regrade | F42 | 3–5 days |
+| Host response progress bar | F36 | 1–2 days |
+| Clone polls | F37 | 1 day |
+| Question difficulty ranking | F41 | 2–3 days |
+| Poll tags | F8 (tag input, search by tag) | 4–6 days |
 
 ---
 
 ### S5 — Polish & Delivery (Apr 29 – May 6)
 
-**Theme:** Bug fixes, design system completion, final polish for capstone presentation.
+**Theme:** Bug fixes, testing, final polish for capstone presentation.
 
 | Deliverable | Features | Estimate |
 |------------|----------|----------|
-| Design system overhaul | F34 | 5–8 days |
-| Critical bug fixes | See BUGS.md | 2–3 days |
+| Automated test cases | F19 (business logic tests, Cloud Functions tests, CI/CD) | 5–8 days |
+| Critical bug fixes | See Bug Tracker | 2–3 days |
+| Cloud poll session settings | F39 (if time permits) | 1–2 days |
+| Download poll to PDF | F38 (if time permits) | 2–3 days |
 | Instructor dashboard | F10 (if time permits) | 4–6 days |
 
 ---
@@ -156,6 +165,8 @@ F9 (Study Resources) ───────► F8 + F16
 F21 (Word Clouds) ──────────► F22 (Open-Ended Questions)
 F30 (Exit Tickets) ─────────► F13a (Poll Templates)
 F35 (Guest Upgrade) ────────► F11 (Fat Finger)
+F40 (Question Bank) ────────► F13a (Poll Templates)
+F25 (Study Guides) ─────────► F3 + F8 + F9
 ```
 
 ### External Dependencies

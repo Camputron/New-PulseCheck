@@ -327,6 +327,11 @@ Requirements are organized by domain. Each requirement has a unique ID and prior
 | **PM-9** | The system shall allow a poll owner to share a poll with other authenticated users via email, with configurable view or edit permissions. | P2 |
 | **PM-10** | The system shall support a `true-false` prompt type as a simplified variant of `multiple-choice` with exactly two options. | P4 |
 | **PM-11** | The system shall update the poll's `updated_at` timestamp when any question or option within the poll is modified, not only when the title changes. | P0 |
+| **PM-12** | The system shall allow the poll owner to add free-form tags to a poll for categorization. On subsequent tag additions, the system shall present existing tags as selectable options alongside free-form entry. Polls shall be searchable by tag (`tag:example`) in history views. | P2 |
+| **PM-13** | The system shall allow the poll owner to clone an entire poll (deep copy of all questions and options) into a new poll document named `"${original_name} (Copy)"`. | P2 |
+| **PM-14** | The system shall allow the poll owner to export a poll as a printable PDF document containing numbered questions with options and answer blanks, suitable for paper-based participation. | P3 |
+| **PM-15** | The system shall persist poll session default settings (leaderboard, anonymous, timer) in the user's Firestore profile instead of `localStorage`, enabling cross-device consistency. The user shall be able to edit these defaults from the Settings page. | P3 |
+| **PM-16** | The system shall allow authenticated users to create named question banks — reusable collections of questions that can be imported into polls individually or in bulk to accelerate poll creation. | P2 |
 
 ---
 
@@ -344,7 +349,9 @@ Requirements are organized by domain. Each requirement has a unique ID and prior
 | **SL-8** | The system shall allow guest (unauthenticated) users to join a session via anonymous Firebase Auth. Guest data shall persist in Firestore for session metrics accuracy. | P0 |
 | **SL-9** | The system shall support optional asynchronous result display — participants can view aggregate response charts for each question after submitting their own answer, gated behind submission. | P1 |
 | **SL-10** | The system shall prevent a participant from rejoining a session that has transitioned to `FINISHED` or `CLOSED`, redirecting them to the dashboard with a notification. | P0 |
-| **SL-11** | The system shall allow a guest participant to upgrade to a registered account after a session completes, preserving their session data via Firebase Auth account linking. | P4 |
+| **SL-11** | The system shall allow a guest participant to upgrade to a registered account after a session completes, preserving their session data via Firebase Auth account linking. The system shall prompt the guest upon session finish with clear messaging about what upgrading preserves. | P4 |
+| **SL-12** | The system shall display a real-time progress indicator on the host view showing the number and percentage of participants who have submitted a response for the current question, with a list of who has/hasn't responded. | P2 |
+| **SL-13** | The system shall allow the host to edit a finished session's question prompts, option text, correct answer designations, and point values. Grade-affecting edits shall trigger an automatic regrade that recalculates all response correctness, submission scores, session summary metrics, and leaderboard data. | P2 |
 
 ---
 
@@ -380,6 +387,7 @@ Requirements are organized by domain. Each requirement has a unique ID and prior
 | **AR-12** | The system shall provide a student dashboard showing personal performance over time: score trend (line chart), weak topic identification, and session history. | P3 |
 | **AR-13** | The system shall provide weekly reflection summaries for students: sessions attended, average score, improvement trend, with optional AI-generated reflection. | P3 |
 | **AR-14** | The system shall allow additional search/filter/export capabilities on session history beyond the current implementation. | P0 |
+| **AR-15** | The system shall compute and display per-question difficulty statistics (% correct, average response time) after a session completes, ranked from most to least difficult, to help instructors identify concepts students struggled with. | P2 |
 
 ---
 
@@ -395,7 +403,7 @@ Requirements are organized by domain. Each requirement has a unique ID and prior
 | **AI-6** | The system shall allow instructors to specify a topic or focus area when generating AI questions, in addition to uploading source material. | P0 |
 | **AI-7** | The system shall auto-tag AI-generated questions with Bloom's Taxonomy cognitive level (remember, understand, apply, analyze). Tags shall be filterable in the instructor dashboard. | P4 |
 | **AI-8** | The system shall analyze wrong-answer patterns across responses and use AI to identify common misconceptions per question (requires 10+ responses for meaningful analysis). | P4 |
-| **AI-9** | The system shall generate personalized study guides per student based on their incorrect answers, grounded in the original source material. | P4 |
+| **AI-9** | The system shall generate personalized study guides per student based on their incorrect answers, grounded in the original source material. The study guide shall include a self-quiz mode with timed input and an attempt history log so students can track improvement over time. Study guides shall optionally filter by poll tags (PM-12). | P4 |
 | **AI-10** | The system shall provide AI-suggested study resources linked to topics where a student scored below 60%. | P4 |
 | **AI-11** | The system shall provide an AI learning analytics dashboard aggregating misconception patterns and topic-level performance across multiple sessions. | P4 |
 
@@ -437,8 +445,8 @@ Requirements are organized by domain. Each requirement has a unique ID and prior
 | **IO-1** | All AI inference (question generation, grading) shall execute server-side via Firebase Cloud Functions. No client-side Vertex AI SDK usage. | P0 |
 | **IO-2** | The system shall support Firebase Emulator Suite for local development (Auth on port 9099, Firestore on 8080, Storage on 9199, Functions on 5001). | P0 |
 | **IO-3** | Cloud Functions shall be deployed to production and verified end-to-end. | P0 |
-| **IO-4** | The system shall provide E2E tests via Playwright for critical flows (login, create poll, join session, submit answers) and Firestore Rules tests. | P1 |
-| **IO-5** | The system shall provide a CI/CD pipeline via GitHub Actions running unit tests and E2E tests as parallel jobs with Firebase Emulator backing. | P1 |
+| **IO-4** | The system shall provide unit tests for business logic (grading, metrics computation, leaderboard scoring) and integration tests for Cloud Functions via Firebase Emulator Suite. Logic shall be decoupled into testable pure functions. Firestore Security Rules shall have dedicated test coverage. | P1 |
+| **IO-5** | The system shall provide a CI/CD pipeline via GitHub Actions that starts the Firebase Emulator Suite, runs all logic and integration tests, and reports results. | P1 |
 | **IO-6** | The production build shall disable source maps (`build.sourcemap: false` in Vite config). | P3 |
 | **IO-7** | The system shall enable Firebase App Check with reCAPTCHA to prevent unauthorized API access. | P3 |
 | **IO-8** | Firestore Security Rules shall enforce: users can only read/write their own data, session participants can only read session data, only hosts can modify session state. | P0 |
