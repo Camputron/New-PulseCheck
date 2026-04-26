@@ -12,9 +12,9 @@ Also see: [SRS](SRS.md) | [Architecture](ARCHITECTURE.md) | [Project Plan](PROJE
 
 - [Board](#board)
   - [Legend](#legend)
-  - [DONE](#done)
-  - [IN PROGRESS](#in-progress)
   - [TODO](#todo)
+  - [IN PROGRESS](#in-progress)
+  - [DONE](#done)
   - [BACKLOG](#backlog)
 - [Bug Tracker](#bug-tracker)
   - [Critical](#critical)
@@ -39,6 +39,40 @@ Also see: [SRS](SRS.md) | [Architecture](ARCHITECTURE.md) | [Project Plan](PROJE
 | `P4` | Stretch — future consideration |
 | `S1`–`S5` | Sprint assignment |
 | `[SRS: XX-N]` | Traceability to SRS requirement ID |
+
+---
+
+### TODO
+
+Scheduled for upcoming sprints. Ready to be picked up.
+
+| ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
+|----|------|--------|---------|----------|-------------|
+| F12 | **Auto-Fill Prompts** — quick-fill option presets (T/F, Agree Scale, Rating 1-5, etc.), duplicate questions, topic field in AI dialog | S4 | PM-6, PM-7, AI-6 | 1–2 days | None |
+| F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 | 1–2 days | None |
+| F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | S3 | RG-6 | 3–5 days | None |
+| F14 | **Async Results** — show results to participants post-session (gated behind submission) | S3 | SL-9 | 3–5 days | None |
+| F3 | **AI Summaries** — post-session AI analysis (accuracy, misconceptions, review topics) | S4 | AI-5 | 3–4 days | F16 |
+| F13a | **Poll Templates** — 8 pre-built templates (Quick Quiz, T/F, Vocab, Exit Ticket, Survey, Icebreaker, Muddiest Point, Discussion Prep), template picker empty state, preview dialog, post-apply acceleration (auto-expand, auto-focus, tab-through, completion bar) | S4 | PM-8 | 3–5 days | None |
+| F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
+| F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
+| F37 | **Clone Polls** — deep-copy entire poll (questions + options) into new poll document | S4 | PM-13 | 1 day | None |
+| F41 | **Question Difficulty Ranking** — per-question % correct stats ranked most→least difficult on session results | S4 | AR-15 | 2–3 days | None |
+| F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
+| — | **Bug fixes, testing, polish** | S5 | — | — | — |
+| BUG | **No double-join protection** — `joinSession` called twice in React Strict Mode | S5 | — | 0.5 day | None |
+| BUG | **`poll.updated_at` not updating** on question/option edits | S5 | PM-11 | 0.5 day | None |
+| BUG | **Rejoin after host ends** — participant sees white screen instead of redirect | S5 | SL-10 | 1 day | None |
+
+---
+
+### IN PROGRESS
+
+Actively being worked on this sprint.
+
+| ID | Item | Sprint | SRS Ref | Owner | Notes |
+|----|------|--------|---------|-------|-------|
+| F16.8 | **Backend** — deploy Cloud Functions to production + verify | S3 | IO-3 | Michael | Last step of F16. Blocked on final testing. |
 
 ---
 
@@ -92,40 +126,6 @@ Completed and verified. Shipped in S1–S2.
 | F34 | **Design System Overhaul** — MUI v7 template design language adoption | S3 | UI-9 |
 | BUG | **Firestore listener leaks** — `useEffect` cleanup in `SessionView.tsx` | S3 | — |
 | BUG-3 | **Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx` | S3 | — |
-
----
-
-### IN PROGRESS
-
-Actively being worked on this sprint.
-
-| ID | Item | Sprint | SRS Ref | Owner | Notes |
-|----|------|--------|---------|-------|-------|
-| F16.8 | **Backend** — deploy Cloud Functions to production + verify | S3 | IO-3 | Michael | Last step of F16. Blocked on final testing. |
-
----
-
-### TODO
-
-Scheduled for upcoming sprints. Ready to be picked up.
-
-| ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
-|----|------|--------|---------|----------|-------------|
-| F12 | **Auto-Fill Prompts** — quick-fill option presets (T/F, Agree Scale, Rating 1-5, etc.), duplicate questions, topic field in AI dialog | S4 | PM-6, PM-7, AI-6 | 1–2 days | None |
-| F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 | 1–2 days | None |
-| F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | S3 | RG-6 | 3–5 days | None |
-| F14 | **Async Results** — show results to participants post-session (gated behind submission) | S3 | SL-9 | 3–5 days | None |
-| F3 | **AI Summaries** — post-session AI analysis (accuracy, misconceptions, review topics) | S4 | AI-5 | 3–4 days | F16 |
-| F13a | **Poll Templates** — 8 pre-built templates (Quick Quiz, T/F, Vocab, Exit Ticket, Survey, Icebreaker, Muddiest Point, Discussion Prep), template picker empty state, preview dialog, post-apply acceleration (auto-expand, auto-focus, tab-through, completion bar) | S4 | PM-8 | 3–5 days | None |
-| F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
-| F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
-| F37 | **Clone Polls** — deep-copy entire poll (questions + options) into new poll document | S4 | PM-13 | 1 day | None |
-| F41 | **Question Difficulty Ranking** — per-question % correct stats ranked most→least difficult on session results | S4 | AR-15 | 2–3 days | None |
-| F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
-| — | **Bug fixes, testing, polish** | S5 | — | — | — |
-| BUG | **No double-join protection** — `joinSession` called twice in React Strict Mode | S5 | — | 0.5 day | None |
-| BUG | **`poll.updated_at` not updating** on question/option edits | S5 | PM-11 | 0.5 day | None |
-| BUG | **Rejoin after host ends** — participant sees white screen instead of redirect | S5 | SL-10 | 1 day | None |
 
 ---
 
