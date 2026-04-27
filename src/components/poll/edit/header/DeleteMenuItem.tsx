@@ -47,29 +47,26 @@ export default function DeleteMenuItem(props: DeleteMenuItemProps) {
   }
 
   const handleClose = () => setOpen(false)
-
+  /* TODO, decouple dialog to header */
   return (
-    <React.Fragment>
+    <>
       <MenuItem icon={Delete} onClick={onClick}>
         Delete
       </MenuItem>
-      {createPortal(
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Confirm</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {"Are you sure you want to delete me? :("}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleDelete} color='error'>
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>,
-        document.body
-      )}
-    </React.Fragment>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Confirm</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {"Are you sure you want to delete me? :("}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleDelete} color='error'>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
