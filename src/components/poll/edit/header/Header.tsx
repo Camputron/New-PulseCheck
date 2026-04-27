@@ -21,6 +21,7 @@ import useSnackbar from "@/hooks/useSnackbar"
 import {
   ArrowBack,
   AutoAwesome,
+  ContentCopy,
   Done,
   Edit,
   MenuOpen,
@@ -31,6 +32,7 @@ import { Poll } from "@/types"
 import DeleteMenuItem from "./DeleteMenuItem"
 import DownloadPDFMenuItem from "./DownloadPDFMenuItem"
 import UploadPDFDialog from "../UploadPDFDialog"
+import { useAuthContext } from "@/hooks"
 
 interface HeaderProps {
   pid: string /* poll id */
@@ -55,8 +57,10 @@ export default function Header(props: HeaderProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const navigate = useNavigate()
   const [generateWithAIModal, setGenerateWithAIModal] = useState(false)
+  const [isCloning, setIsCloning] = useState(false)
   const muiTheme = useTheme()
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
+  const { user } = useAuthContext()
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (isMobile) {
@@ -114,6 +118,30 @@ export default function Header(props: HeaderProps) {
   const handleHostClick = () => {
     onStartConfig()
     handleClose()
+  }
+
+  const handleClone = async () => {
+    if (!user) return
+    handleClose()
+    setIsCloning(true)
+    try {
+      const ownerRef = api.users.doc(user.uid)
+      const newPollRef = await api.polls.clone(pid, ownerRef)
+      snackbar.show({
+        type: "success",
+        message: "Poll cloned",
+      })
+      void navigate("/dashboard", { replace: true })
+      void navigate(`/poll/${newPollRef.id}/edit`)
+    } catch (err) {
+      console.error(`Failed to clone poll ${pid}`, err)
+      snackbar.show({
+        type: "error",
+        message: "Failed to clone poll",
+      })
+    } finally {
+      setIsCloning(false)
+    }
   }
 
   return (
@@ -207,6 +235,16 @@ export default function Header(props: HeaderProps) {
                     <ListItemText>Generate with AI</ListItemText>
                   </MenuItem>
                   <DownloadPDFMenuItem poll={poll} onClick={handleClose} />
+                  <MenuItem
+                    onClick={() => void handleClone()}
+                    disabled={isCloning || !user}>
+                    <ListItemIcon>
+                      <ContentCopy />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {isCloning ? "Cloning..." : "Clone Poll"}
+                    </ListItemText>
+                  </MenuItem>
                   <Divider />
                   <DeleteMenuItem pid={pid} onClick={handleClose} />
                   <Divider />
@@ -258,6 +296,17 @@ export default function Header(props: HeaderProps) {
                     <ListItemText>Generate with AI</ListItemText>
                   </MenuItem>
                   <DownloadPDFMenuItem poll={poll} onClick={handleClose} />
+                  <MenuItem
+                    onClick={() => void handleClone()}
+                    disabled={isCloning || !user}
+                    sx={{ py: 1.5 }}>
+                    <ListItemIcon>
+                      <ContentCopy />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {isCloning ? "Cloning..." : "Clone Poll"}
+                    </ListItemText>
+                  </MenuItem>
                   <Divider />
                   <DeleteMenuItem pid={pid} onClick={handleClose} />
                   <Divider />

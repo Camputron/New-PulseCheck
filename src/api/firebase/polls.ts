@@ -10,6 +10,7 @@ import {
   DocumentData,
   DocumentReference,
   Firestore,
+  getDoc,
   getDocs,
   Query,
   query,
@@ -89,6 +90,63 @@ export default class PollStore extends BaseStore {
   public async delete(pref: DocumentReference<Poll>) {
     await deleteDoc(pref)
     // await api.sessions.deleteAllByPREF(pref)
+  }
+
+  public async clone(
+    pid: string,
+    owner: DocumentReference<User>
+  ): Promise<DocumentReference<Poll>> {
+    /* fetch source poll */
+    const sourceRef = this.doc(pid)
+    const sourceSnap = await getDoc(sourceRef)
+    const source = sourceSnap.data()
+    if (!source) {
+      throw new Error(`Failed to clone poll ${pid}: source poll not found`)
+    }
+    /* create new poll doc with copied settings */
+    const pcref = collection(this.db, clx.polls) as CollectionReference<Poll>
+    const newPollRef = await addDoc(pcref, {
+      owner: owner,
+      title: `${source.title} (Copy)`,
+      async: source.async,
+      anonymous: source.anonymous,
+      time: source.time,
+      questions: [],
+      created_at: serverTimestamp(),
+      updated_at: serverTimestamp(),
+    })
+    /* iterate source questions sequentially to preserve order in poll.questions array */
+    const newQclx = this.questions.collect(newPollRef.id)
+    for (const srcQref of source.questions) {
+      const srcQsnap = await getDoc(srcQref)
+      const srcQ = srcQsnap.data()
+      if (!srcQ) continue
+      const newQref = await this.questions.add(newQclx)
+      await this.questions.update(newQref, {
+        prompt: srcQ.prompt,
+        prompt_type: srcQ.prompt_type,
+        prompt_img: srcQ.prompt_img,
+        points: srcQ.points,
+        anonymous: srcQ.anonymous,
+        time: srcQ.time,
+      })
+      /* iterate options sequentially to preserve order in question.options array */
+      const newOptsClx = this.questions.options.collect({
+        pid: newPollRef.id,
+        qid: newQref.id,
+      })
+      for (const srcOref of srcQ.options) {
+        const srcOsnap = await getDoc(srcOref)
+        const srcO = srcOsnap.data()
+        if (!srcO) continue
+        const newOref = await this.questions.options.create(newOptsClx)
+        await this.questions.options.updateByRef(newOref, {
+          text: srcO.text,
+          correct: srcO.correct,
+        })
+      }
+    }
+    return newPollRef
   }
 
   public async generateQuestions(pid: string, questions: AIQuestions) {

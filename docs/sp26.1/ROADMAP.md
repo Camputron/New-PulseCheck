@@ -1,6 +1,6 @@
 # PulseCheck — Roadmap
 
-> **Last Updated:** 2026-04-15
+> **Last Updated:** 2026-04-27
 > **Sprint:** S3 (Weeks 4–5)
 > **Timeline:** 2026-03-11 → 2026-05-06 (8 weeks)
 
@@ -52,7 +52,6 @@ Scheduled for upcoming sprints. Ready to be picked up.
 | F14 | **Async Results** — show results to participants post-session (gated behind submission) | S3 | SL-9 | 3–5 days | None |
 | F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
 | F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
-| F37 | **Clone Polls** — deep-copy entire poll (questions + options) into new poll document | S4 | PM-13 | 1 day | None |
 | F41 | **Question Difficulty Ranking** — per-question % correct stats ranked most→least difficult on session results | S4 | AR-15 | 2–3 days | None |
 | F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
 | F19 | **Testing & CI/CD** — business logic tests, Cloud Functions tests (emulator), Firestore rules tests, GitHub Actions CI/CD | S5 | IO-4, IO-5 | 5–8 days | F16 |
@@ -131,6 +130,7 @@ Completed and verified.
 | BUG | **Firestore listener leaks** — `useEffect` cleanup in `SessionView.tsx` | S3 | — |
 | BUG-3 | **Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx` | S3 | — |
 | F38 | **Download Poll to PDF** — export poll as printable PDF with numbered questions, options, and answer blanks | S3 | PM-14 |
+| F37 | **Clone Polls** — deep-copy entire poll (questions + options) into new poll; "Clone Poll" in editor menu + 3-dot menu on dashboard cards | S4 | PM-13 |
 
 ---
 
