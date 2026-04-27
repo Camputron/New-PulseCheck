@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@mui/material"
 import React, { useState } from "react"
+import { createPortal } from "react-dom"
 import { useNavigate } from "react-router-dom"
 
 interface DeleteMenuItemProps {
@@ -52,20 +53,23 @@ export default function DeleteMenuItem(props: DeleteMenuItemProps) {
       <MenuItem icon={Delete} onClick={onClick}>
         Delete
       </MenuItem>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Confirm</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {"Are you sure you want to delete me? :("}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete} color='error'>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {createPortal(
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Confirm</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {"Are you sure you want to delete me? :("}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleDelete} color='error'>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>,
+        document.body
+      )}
     </React.Fragment>
   )
 }
