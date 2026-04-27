@@ -34,6 +34,7 @@ import UploadPDFDialog from "../UploadPDFDialog"
 interface HeaderProps {
   pid: string /* poll id */
   poll: Poll
+  canHost: boolean
   onStartConfig: () => void
 }
 
@@ -45,7 +46,7 @@ interface HeaderProps {
  * @returns {JSX.Element}
  */
 export default function Header(props: HeaderProps) {
-  const { pid, poll, onStartConfig } = props
+  const { pid, poll, canHost, onStartConfig } = props
   const [title, setTitle] = useState(poll.title)
   const [isEditing, setIsEditing] = useState(false)
   const snackbar = useSnackbar()
@@ -207,7 +208,7 @@ export default function Header(props: HeaderProps) {
                   <Divider />
                   <DeleteMenuItem pid={pid} onClick={handleClose} />
                   <Divider />
-                  <MenuItem onClick={handleHostClick}>
+                  <MenuItem onClick={handleHostClick} disabled={!canHost}>
                     <ListItemIcon>
                       <ScreenShare />
                     </ListItemIcon>
@@ -257,7 +258,10 @@ export default function Header(props: HeaderProps) {
                   <Divider />
                   <DeleteMenuItem pid={pid} onClick={handleClose} />
                   <Divider />
-                  <MenuItem onClick={handleHostClick} sx={{ py: 1.5 }}>
+                  <MenuItem
+                    onClick={handleHostClick}
+                    disabled={!canHost}
+                    sx={{ py: 1.5 }}>
                     <ListItemIcon>
                       <ScreenShare />
                     </ListItemIcon>

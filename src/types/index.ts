@@ -260,3 +260,21 @@ export interface LeaderboardData {
   questionId: string
   entries: LeaderboardEntry[]
 }
+
+export type TemplateCategory = "assessment" | "feedback" | "engagement"
+
+export interface PollTemplate {
+  id: string
+  name: string
+  description: string
+  icon: string
+  category: TemplateCategory
+  questions: AIQuestions
+}
+
+export interface OptionPreset {
+  id: string
+  label: string
+  options: string[]
+  correctIndex?: number
+}

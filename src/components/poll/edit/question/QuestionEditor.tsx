@@ -20,12 +20,14 @@ import PromptOptionList from "./option/PromptOptionList"
 import { useDocumentData } from "react-firebase-hooks/firestore"
 import { DocumentReference } from "firebase/firestore"
 import RemoveButton from "./RemoveButton"
+import QuickFillChips from "../templates/QuickFillChips"
 
 interface Props {
   pid: string
   qid: string
   index: number
   defaultExpanded?: boolean
+  autoFocus?: boolean
   qref: DocumentReference<Question>
 }
 
@@ -61,13 +63,19 @@ export default function QuestionEditor(props: Props) {
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing={1}>
-          <PromptField pid={pid} qid={qid} prompt={data.prompt} />
+          <PromptField
+            pid={pid}
+            qid={qid}
+            prompt={data.prompt}
+            autoFocus={props.autoFocus}
+          />
           <UploadImageBox pid={pid} qid={qid} url={data.prompt_img} />
           <PromptTypeField pid={pid} qid={qid} promptType={data.prompt_type} />
           <PromptOptionList
             options={data.options}
             promptType={data.prompt_type}
           />
+          {data.options.length === 0 && <QuickFillChips pid={pid} qid={qid} />}
           <Box flex={1} display={"flex"} justifyContent={"center"}>
             <Button startIcon={<Add />} onClick={handleAddOption}>
               Add Option
