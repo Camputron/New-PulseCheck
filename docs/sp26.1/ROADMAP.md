@@ -48,12 +48,10 @@ Scheduled for upcoming sprints. Ready to be picked up.
 
 | ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
 |----|------|--------|---------|----------|-------------|
-| F12 | **Auto-Fill Prompts** — quick-fill option presets (T/F, Agree Scale, Rating 1-5, etc.), duplicate questions, topic field in AI dialog | S4 | PM-6, PM-7, AI-6 | 1–2 days | None |
 | F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 | 1–2 days | None |
 | F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | S3 | RG-6 | 3–5 days | None |
 | F14 | **Async Results** — show results to participants post-session (gated behind submission) | S3 | SL-9 | 3–5 days | None |
 | F3 | **AI Summaries** — post-session AI analysis (accuracy, misconceptions, review topics) | S4 | AI-5 | 3–4 days | F16 |
-| F13a | **Poll Templates** — 8 pre-built templates (Quick Quiz, T/F, Vocab, Exit Ticket, Survey, Icebreaker, Muddiest Point, Discussion Prep), template picker empty state, preview dialog, post-apply acceleration (auto-expand, auto-focus, tab-through, completion bar) | S4 | PM-8 | 3–5 days | None |
 | F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
 | F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
 | F37 | **Clone Polls** — deep-copy entire poll (questions + options) into new poll document | S4 | PM-13 | 1 day | None |
@@ -78,10 +76,12 @@ Actively being worked on this sprint.
 
 ### DONE
 
-Completed and verified. Shipped in S1–S2.
+Completed and verified.
 
 | ID | Item | Sprint | SRS Ref |
 |----|------|--------|---------|
+| F12 | **Auto-Fill Prompts** — quick-fill option presets (T/F, Agree Scale, Rating 1-5, Confidence, Frequency, Blank), question-level chips in editor | S4 | PM-6, PM-7, AI-6 |
+| F13a | **Poll Templates** — 8 pre-built templates (Quick Quiz, T/F, Vocab, Exit Ticket, Survey, Icebreaker, Muddiest Point, Discussion Prep), template picker empty state, preview dialog, post-apply acceleration (auto-expand, auto-focus, tab-through, completion bar) | S4 | PM-8 |
 | F11 | **Fat Finger** — rejoin after accidental back-out via `localStorage` persistence + "Rejoin" banner on Dashboard/Join | S1 | SL-7 |
 | F17.1 | **Poll History** — fix `setTimeout` cleanup in `PollSessionHistory` and `PollSubmissionHistory` | S1 | AR-1 |
 | F17.2 | **Poll History** — sort dropdown (date, score, participants/alpha) on both history views | S1 | AR-2 |
@@ -268,7 +268,7 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
 | **S1** | Mar 11–17 | F11, F17, F31, F16 P1–P2 | F11, F17 (11 items), F31 (6 items), F16 P1 (7 items), F16 P2 | F16.8 |
 | **S2** | Mar 18–24 | F32, F33, F12, F4 | F32 (8 items), F33 (6 items) | F12, F4 |
 | **S3** | Apr 1–14 | F12, F4, F1, F2, F14, F16.8 | F2, F34, BUG (listener leak), BUG-3 | F12, F4, F1, F14, F16.8 |
-| **S4** | Apr 15–28 | F3, F13a | — | — |
+| **S4** | Apr 15–28 | F3, F13a, F12, F42, F36, F37, F41, F8 | F12, F13a | — |
 | **S5** | Apr 29 – May 6 | F34, bugs, polish | — | — |
 
 ---
