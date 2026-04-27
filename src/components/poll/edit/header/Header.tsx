@@ -29,6 +29,7 @@ import {
 import { useNavigate } from "react-router-dom"
 import { Poll } from "@/types"
 import DeleteMenuItem from "./DeleteMenuItem"
+import DownloadPDFMenuItem from "./DownloadPDFMenuItem"
 import UploadPDFDialog from "../UploadPDFDialog"
 
 interface HeaderProps {
@@ -205,6 +206,7 @@ export default function Header(props: HeaderProps) {
                     </ListItemIcon>
                     <ListItemText>Generate with AI</ListItemText>
                   </MenuItem>
+                  <DownloadPDFMenuItem poll={poll} onClick={handleClose} />
                   <Divider />
                   <DeleteMenuItem pid={pid} onClick={handleClose} />
                   <Divider />
@@ -255,6 +257,7 @@ export default function Header(props: HeaderProps) {
                     </ListItemIcon>
                     <ListItemText>Generate with AI</ListItemText>
                   </MenuItem>
+                  <DownloadPDFMenuItem poll={poll} onClick={handleClose} />
                   <Divider />
                   <DeleteMenuItem pid={pid} onClick={handleClose} />
                   <Divider />

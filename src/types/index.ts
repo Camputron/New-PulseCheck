@@ -278,3 +278,15 @@ export interface OptionPreset {
   options: string[]
   correctIndex?: number
 }
+
+export interface PollPDFData {
+  title: string
+  createdAt: Date
+  questions: PollPDFQuestion[]
+}
+
+export interface PollPDFQuestion {
+  prompt: string
+  promptType: PromptType
+  options: { text: string }[]
+}

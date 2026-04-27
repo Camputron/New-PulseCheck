@@ -18,6 +18,10 @@ export default function PromptTypeField(props: Props) {
   const snackbar = useSnackbar()
 
   useEffect(() => {
+    setPromptType(props.promptType)
+  }, [props.promptType])
+
+  useEffect(() => {
     async function savePromptType(text: PromptType) {
       try {
         if (text === props.promptType) {
