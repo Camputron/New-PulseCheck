@@ -9,7 +9,7 @@ import {
   Button,
   Skeleton,
 } from "@mui/material"
-import { Add, DragHandle, ExpandMore } from "@mui/icons-material"
+import { Add, BookmarkAdd, DragHandle, ExpandMore } from "@mui/icons-material"
 import UploadImageBox from "./UploadImageBox"
 import { Question } from "@/types"
 import PromptField from "./PromptField"
@@ -21,6 +21,8 @@ import { useDocumentData } from "react-firebase-hooks/firestore"
 import { DocumentReference } from "firebase/firestore"
 import RemoveButton from "./RemoveButton"
 import QuickFillChips from "../templates/QuickFillChips"
+import SaveQuestionToBankDialog from "./SaveQuestionToBankDialog"
+import { useState } from "react"
 
 interface Props {
   pid: string
@@ -34,6 +36,7 @@ interface Props {
 export default function QuestionEditor(props: Props) {
   const { pid, qid, index, qref } = props
   const [data, loading, error] = useDocumentData(qref)
+  const [saveOpen, setSaveOpen] = useState(false)
 
   const handleAddOption = () => {
     const aux = async () => {
@@ -56,7 +59,7 @@ export default function QuestionEditor(props: Props) {
       }}
       sx={{ width: "90vw" }}>
       <AccordionSummary expandIcon={<ExpandMore />} draggable>
-        <DragHandle color='action' />
+        <DragHandle color="action" />
         <Typography ml={1} sx={{ wordBreak: "break-word" }}>
           <strong>{index + 1}.</strong> {data.prompt}
         </Typography>
@@ -92,8 +95,20 @@ export default function QuestionEditor(props: Props) {
       </AccordionDetails>
       <AccordionActions>
         {/* <AddTagButton pid={pid} qid={qid} /> */}
+        <Button
+          startIcon={<BookmarkAdd />}
+          onClick={() => setSaveOpen(true)}
+          color="primary">
+          Save to Bank
+        </Button>
         <RemoveButton pid={pid} qid={qid} />
       </AccordionActions>
+      <SaveQuestionToBankDialog
+        open={saveOpen}
+        onClose={() => setSaveOpen(false)}
+        pid={pid}
+        qid={qid}
+      />
     </Accordion>
   )
 }

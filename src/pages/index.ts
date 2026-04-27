@@ -18,6 +18,8 @@ import Splash from "./Splash"
 import TermsOfService from "./legal/TermsOfService"
 import PollParticipate from "./poll/PollParticipate"
 import PollHistory from "./poll/PollHistory"
+import BankManager from "./banks/BankManager"
+import BankDetail from "./banks/BankDetail"
 
 export const Page = {
   Splash,
@@ -39,5 +41,7 @@ export const Page = {
   PollHistory,
   PollView,
   Settings,
+  BankManager,
+  BankDetail,
   NotFound,
 }

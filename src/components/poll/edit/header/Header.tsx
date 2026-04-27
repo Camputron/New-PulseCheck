@@ -21,6 +21,7 @@ import useSnackbar from "@/hooks/useSnackbar"
 import {
   ArrowBack,
   AutoAwesome,
+  BookmarkAdd,
   ContentCopy,
   Done,
   Edit,
@@ -31,6 +32,8 @@ import { useNavigate } from "react-router-dom"
 import { Poll } from "@/types"
 import DeleteMenuItem from "./DeleteMenuItem"
 import DownloadPDFMenuItem from "./DownloadPDFMenuItem"
+import ImportFromBankMenuItem from "./ImportFromBankMenuItem"
+import SavePollToBankDialog from "./SavePollToBankDialog"
 import UploadPDFDialog from "../UploadPDFDialog"
 import { useAuthContext } from "@/hooks"
 
@@ -58,6 +61,7 @@ export default function Header(props: HeaderProps) {
   const navigate = useNavigate()
   const [generateWithAIModal, setGenerateWithAIModal] = useState(false)
   const [isCloning, setIsCloning] = useState(false)
+  const [saveToBankOpen, setSaveToBankOpen] = useState(false)
   const muiTheme = useTheme()
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
   const { user } = useAuthContext()
@@ -148,7 +152,7 @@ export default function Header(props: HeaderProps) {
     <React.Fragment>
       <AppBar
         elevation={0}
-        position='relative'
+        position="relative"
         sx={{
           bgcolor: (t) =>
             t.palette.mode === "dark"
@@ -160,7 +164,7 @@ export default function Header(props: HeaderProps) {
           color: "text.primary",
         }}>
         <Toolbar>
-          <Stack direction='row' alignItems='center' flex={1}>
+          <Stack direction="row" alignItems="center" flex={1}>
             <IconButton
               onClick={() => {
                 void navigate(-1)
@@ -169,8 +173,8 @@ export default function Header(props: HeaderProps) {
             </IconButton>
             {isEditing ? (
               <TextField
-                size='small'
-                placeholder='Poll Title'
+                size="small"
+                placeholder="Poll Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 onKeyDown={handleKeyPress}
@@ -178,7 +182,7 @@ export default function Header(props: HeaderProps) {
                 slotProps={{
                   input: {
                     endAdornment: isEditing && (
-                      <IconButton color='primary' onClick={handleClickEdit}>
+                      <IconButton color="primary" onClick={handleClickEdit}>
                         <Done />
                       </IconButton>
                     ),
@@ -188,22 +192,22 @@ export default function Header(props: HeaderProps) {
             ) : (
               <Typography
                 onDoubleClick={handleTitleClick}
-                textAlign='left'
+                textAlign="left"
                 fontWeight={600}>
                 {title}
               </Typography>
             )}
             {!isEditing && (
               <IconButton
-                size='small'
-                color='primary'
+                size="small"
+                color="primary"
                 onClick={handleClickEdit}>
                 <Edit />
               </IconButton>
             )}
             <Box flex={1} marginInline={2} />
             <Box>
-              <IconButton onClick={handleOpen} color='inherit'>
+              <IconButton onClick={handleOpen} color="inherit">
                 <MenuOpen />
               </IconButton>
               {/* Desktop: dropdown menu */}
@@ -234,6 +238,17 @@ export default function Header(props: HeaderProps) {
                     </ListItemIcon>
                     <ListItemText>Generate with AI</ListItemText>
                   </MenuItem>
+                  <ImportFromBankMenuItem pid={pid} onClick={handleClose} />
+                  <MenuItem
+                    onClick={() => {
+                      handleClose()
+                      setSaveToBankOpen(true)
+                    }}>
+                    <ListItemIcon>
+                      <BookmarkAdd />
+                    </ListItemIcon>
+                    <ListItemText>Save All to Bank</ListItemText>
+                  </MenuItem>
                   <DownloadPDFMenuItem poll={poll} onClick={handleClose} />
                   <MenuItem
                     onClick={() => void handleClone()}
@@ -259,7 +274,7 @@ export default function Header(props: HeaderProps) {
               {/* Mobile: bottom sheet drawer */}
               {isMobile && (
                 <SwipeableDrawer
-                  anchor='bottom'
+                  anchor="bottom"
                   open={drawerOpen}
                   onClose={handleClose}
                   onOpen={() => setDrawerOpen(true)}
@@ -282,8 +297,8 @@ export default function Header(props: HeaderProps) {
                     }}
                   />
                   <Typography
-                    variant='body2'
-                    color='text.secondary'
+                    variant="body2"
+                    color="text.secondary"
                     fontWeight={600}
                     sx={{ px: 2, pb: 1 }}>
                     Poll Options
@@ -294,6 +309,22 @@ export default function Header(props: HeaderProps) {
                       <AutoAwesome />
                     </ListItemIcon>
                     <ListItemText>Generate with AI</ListItemText>
+                  </MenuItem>
+                  <ImportFromBankMenuItem
+                    pid={pid}
+                    onClick={handleClose}
+                    mobile
+                  />
+                  <MenuItem
+                    onClick={() => {
+                      handleClose()
+                      setSaveToBankOpen(true)
+                    }}
+                    sx={{ py: 1.5 }}>
+                    <ListItemIcon>
+                      <BookmarkAdd />
+                    </ListItemIcon>
+                    <ListItemText>Save All to Bank</ListItemText>
                   </MenuItem>
                   <DownloadPDFMenuItem poll={poll} onClick={handleClose} />
                   <MenuItem
@@ -334,6 +365,12 @@ export default function Header(props: HeaderProps) {
         pid={pid}
         open={generateWithAIModal}
         onClose={() => setGenerateWithAIModal(false)}
+      />
+      <SavePollToBankDialog
+        open={saveToBankOpen}
+        onClose={() => setSaveToBankOpen(false)}
+        pid={pid}
+        poll={poll}
       />
     </React.Fragment>
   )

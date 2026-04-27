@@ -290,3 +290,34 @@ export interface PollPDFQuestion {
   promptType: PromptType
   options: { text: string }[]
 }
+
+/**
+ * A user-owned named collection of reusable question snapshots.
+ * Stored at /users/{uid}/question_banks/{bid}.
+ * `question_count` is denormalized and maintained by `BankQuestionStore`.
+ */
+export interface QuestionBank {
+  owner: DocumentReference<User>
+  name: string
+  description: string | null
+  question_count: number
+  created_at: Timestamp
+  updated_at: Timestamp
+}
+
+/**
+ * A question snapshot stored in a question bank.
+ * Options are inline (not refs) so the snapshot is fully self-contained.
+ * Stored at /users/{uid}/question_banks/{bid}/questions/{qid}.
+ */
+export interface BankQuestion {
+  prompt: string
+  prompt_type: PromptType
+  prompt_img: string | null
+  options: PromptOption[]
+  points: number
+  anonymous: boolean
+  time: number | null
+  created_at: Timestamp
+  updated_at: Timestamp
+}

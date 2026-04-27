@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 const items = [
   { label: "Dashboard", to: "/dashboard" },
   { label: "Join Poll", to: "/poll/join" },
+  { label: "Banks", to: "/banks" },
   { label: "History", to: "/poll/history" },
 ] as const
 
@@ -20,7 +21,7 @@ export default function AuthNavItems() {
   }
 
   return (
-    <Box display='flex' alignItems='center' gap={0.5}>
+    <Box display="flex" alignItems="center" gap={0.5}>
       {items.map((item) => {
         const isActive = location.pathname === item.to
         return (
