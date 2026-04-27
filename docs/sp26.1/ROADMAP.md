@@ -59,7 +59,6 @@ Scheduled for upcoming sprints. Ready to be picked up.
 | F15 | **Sharing Polls** — share with view/edit permissions via email | S4 | PM-9 | 3–5 days | None |
 | F25 | **Personalized Study Guides** — wrong-answer compilation, self-quiz mode with timed input, attempt history for improvement tracking, tag-filtered study guides | S4 | AI-9 | 5–8 days | F3, F8, F9 |
 | F35 | **Guest Account Upgrade** — anonymous → registered account linking | S5 | SL-11 | 3–5 days | F11 |
-| F38 | **Download Poll to PDF** — export poll as printable PDF with numbered questions, options, and answer blanks | S5 | PM-14 | 2–3 days | None |
 | F39 | **Cloud Poll Session Settings** — move session defaults from localStorage to Firestore user profile; editable in Settings page | S5 | PM-15 | 1–2 days | None |
 | F40 | **Question Bank** — named reusable question collections; bulk add; import into polls; works with F13a templates | S4 | PM-16 | 4–6 days | F13a |
 | — | **Bug fixes, testing, polish** | S5 | — | — | — |
@@ -131,6 +130,7 @@ Completed and verified.
 | F34 | **Design System Overhaul** — MUI v7 template design language adoption | S3 | UI-9 |
 | BUG | **Firestore listener leaks** — `useEffect` cleanup in `SessionView.tsx` | S3 | — |
 | BUG-3 | **Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx` | S3 | — |
+| F38 | **Download Poll to PDF** — export poll as printable PDF with numbered questions, options, and answer blanks | S3 | PM-14 |
 
 ---
 
