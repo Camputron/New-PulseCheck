@@ -83,7 +83,7 @@ export default function UploadImageBox(props: Props) {
     "polls",
     props.pid,
     "questions",
-    props.qid
+    props.qid,
   )
 
   const [imageURL, setImageURL] = useState<string | null>("") // Sets image url once image is uploaded to cloud firestore
@@ -170,7 +170,7 @@ export default function UploadImageBox(props: Props) {
         width: "100%",
       }}>
       <Card
-        variant='outlined'
+        variant="outlined"
         sx={{
           // padding: 5,
           borderStyle: imageURL ? "none" : "dashed",
@@ -180,34 +180,34 @@ export default function UploadImageBox(props: Props) {
         {imageURL && (
           <CardMedia
             sx={{ objectFit: "contain" }}
-            component='img'
-            alt='img'
+            component="img"
+            alt="img"
             // height='200'
             // width='113'
             image={imageURL}
           />
         )}
         <Stack
-          direction='row'
+          direction="row"
           sx={{ alignItems: "center", justifyContent: "center" }}>
           {loading ? (
-            <CircularProgress color='primary' size={25} />
+            <CircularProgress color="primary" size={25} />
           ) : (
-            <Tooltip title='Upload Image'>
-              <IconButton component='label' color='primary' size='large'>
-                <CloudUpload fontSize='inherit' />
+            <Tooltip title="Upload Image">
+              <IconButton component="label" color="primary" size="large">
+                <CloudUpload fontSize="inherit" />
                 <VisuallyHiddenInput
-                  type='file'
-                  accept='image/*'
+                  type="file"
+                  accept="image/*"
                   onChange={handleFile}
                 />
               </IconButton>
             </Tooltip>
           )}
           {imageURL && (
-            <Tooltip title='Delete Image'>
-              <IconButton onClick={handleDelete} color='primary' size='large'>
-                <Delete fontSize='inherit' />
+            <Tooltip title="Delete Image">
+              <IconButton onClick={handleDelete} color="primary" size="large">
+                <Delete fontSize="inherit" />
               </IconButton>
             </Tooltip>
           )}

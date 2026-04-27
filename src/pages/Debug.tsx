@@ -12,12 +12,12 @@ export default function Debug() {
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
         <Tabs value={tab} onChange={handleTabChange}>
-          <Tab label='Design System' />
-          <Tab label='Component Showcase' />
-          <Tab label='PulseCheck Components' />
+          <Tab label="Design System" />
+          <Tab label="Component Showcase" />
+          <Tab label="PulseCheck Components" />
         </Tabs>
       </Box>
       {tab === 0 && <DesignSystemTab />}

@@ -14,7 +14,7 @@ export default function NotFound() {
   }, [])
 
   return (
-    <Container maxWidth='sm'>
+    <Container maxWidth="sm">
       <Box
         sx={{
           display: "flex",
@@ -57,9 +57,9 @@ export default function NotFound() {
               }}>
               <RA.Hinge triggerOnce duration={3000}>
                 <Box
-                  component='img'
-                  src='/not-found.png'
-                  alt='Easter egg'
+                  component="img"
+                  src="/not-found.png"
+                  alt="Easter egg"
                   sx={{
                     width: { xs: 100, md: 130 },
                     pointerEvents: "none",
@@ -74,28 +74,28 @@ export default function NotFound() {
           )}
         </Box>
         <RA.Fade triggerOnce duration={600} delay={100}>
-          <Typography variant='h5' fontWeight={700}>
+          <Typography variant="h5" fontWeight={700}>
             Page not found
           </Typography>
         </RA.Fade>
         <RA.Fade triggerOnce duration={600} delay={200}>
           <Typography
-            variant='body1'
-            color='text.secondary'
+            variant="body1"
+            color="text.secondary"
             sx={{ maxWidth: 360 }}>
             The page you're looking for doesn't exist or has been moved.
           </Typography>
         </RA.Fade>
         <RA.Fade triggerOnce duration={600} delay={300}>
-          <Stack direction='row' spacing={1.5} sx={{ mt: 1 }}>
+          <Stack direction="row" spacing={1.5} sx={{ mt: 1 }}>
             <Button
-              variant='outlined'
+              variant="outlined"
               startIcon={<ArrowBack />}
               onClick={() => void navigate(-1)}>
               Go Back
             </Button>
             <Button
-              variant='contained'
+              variant="contained"
               startIcon={<Home />}
               onClick={() => void navigate("/")}>
               Home

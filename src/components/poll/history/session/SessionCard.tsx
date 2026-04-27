@@ -39,7 +39,7 @@ export default function SessionCard(props: SessionCardProps) {
             boxShadow: (t) => `0 0 0 1px ${t.palette.primary.main}`,
           },
         }}>
-        <Box display='flex' alignItems='center' mb={1}>
+        <Box display="flex" alignItems="center" mb={1}>
           <Avatar
             sx={{ width: 28, height: 28, mr: 1.5, bgcolor: stoc(x.title) }}>
             <BarChart
@@ -59,25 +59,25 @@ export default function SessionCard(props: SessionCardProps) {
             {x.title}
           </Typography>
           {x.state === SessionState.CLOSED && (
-            <Chip size='small' label='Closed' color='warning' sx={{ ml: 1 }} />
+            <Chip size="small" label="Closed" color="warning" sx={{ ml: 1 }} />
           )}
         </Box>
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
-          <Typography variant='body2' color='text.secondary'>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="body2" color="text.secondary">
             {questionCount} question{questionCount !== 1 ? "s" : ""}
           </Typography>
           {avg !== null && avg !== undefined && isFinite(avg) && (
             <Chip
-              size='small'
+              size="small"
               label={`Avg ${avg.toFixed(0)}%`}
-              variant='outlined'
+              variant="outlined"
             />
           )}
         </Box>
-        <Typography variant='body2' color='text.secondary'>
+        <Typography variant="body2" color="text.secondary">
           {ntops(x.summary?.total_participants)}
         </Typography>
-        <Typography variant='body2' color='text.secondary'>
+        <Typography variant="body2" color="text.secondary">
           Hosted {tstos(x.created_at)}
         </Typography>
       </CardActionArea>

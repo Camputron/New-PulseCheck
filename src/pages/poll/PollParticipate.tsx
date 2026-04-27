@@ -183,7 +183,7 @@ export default function PollParticipate() {
       {!gettingstated && <LinearProgress />}
       <Container sx={{ mt: 2 }}>
         {!gettingstated && (
-          <Typography variant='h5' mb={2}>
+          <Typography variant="h5" mb={2}>
             Waiting for Host...
           </Typography>
         )}
@@ -235,7 +235,7 @@ export default function PollParticipate() {
         <DialogActions>
           <Button onClick={() => setShowLeaveDialog(false)}>Stay</Button>
           <Button
-            color='error'
+            color="error"
             onClick={() => {
               setShowLeaveDialog(false)
               setAllowNavigation(true)

@@ -59,13 +59,13 @@ export default function PromptField(props: Props) {
   return (
     <React.Fragment>
       <TextField
-        placeholder='Type Your Question Here'
+        placeholder="Type Your Question Here"
         value={prompt}
         autoFocus={props.autoFocus}
         multiline
         minRows={1}
         maxRows={4}
-        size='small'
+        size="small"
         onChange={handleChange}
       />
     </React.Fragment>

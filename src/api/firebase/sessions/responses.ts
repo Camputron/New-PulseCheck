@@ -27,7 +27,7 @@ export default class ResponseStore extends BaseStore {
       clx.questions,
       qid,
       clx.responses,
-      rid
+      rid,
     ) as DocumentReference<SessionResponse>
   }
 
@@ -38,7 +38,7 @@ export default class ResponseStore extends BaseStore {
       sid,
       clx.questions,
       qid,
-      clx.responses
+      clx.responses,
     ) as CollectionReference<SessionResponse>
   }
 
@@ -46,7 +46,7 @@ export default class ResponseStore extends BaseStore {
     sid: string,
     qid: string,
     uid: string,
-    payload: Partial<SessionResponse>
+    payload: Partial<SessionResponse>,
   ) {
     const ref = this.doc(sid, qid, uid)
     const ss = await getDoc(ref)
@@ -58,7 +58,7 @@ export default class ResponseStore extends BaseStore {
           choices: payload.choices,
           correct: payload.correct,
         },
-        { merge: true }
+        { merge: true },
       )
     } else {
       await setDoc(ref, {
@@ -82,7 +82,7 @@ export default class ResponseStore extends BaseStore {
     sid: string,
     qid: string,
     uid: string,
-    choices: DocumentReference<SessionOption>[]
+    choices: DocumentReference<SessionOption>[],
   ) {
     /* init path to response doc */
     const ref = this.doc(sid, qid, uid)
@@ -95,7 +95,7 @@ export default class ResponseStore extends BaseStore {
           choices: choices,
           updated_at: serverTimestamp(),
         },
-        { merge: true }
+        { merge: true },
       )
     } else {
       await setDoc(
@@ -105,7 +105,7 @@ export default class ResponseStore extends BaseStore {
           choices: choices,
           created_at: serverTimestamp(),
         },
-        { merge: false }
+        { merge: false },
       )
     }
   }
@@ -119,7 +119,7 @@ export default class ResponseStore extends BaseStore {
   public async grade(
     rref: DocumentReference<SessionResponse>,
     prompt_type: PromptType,
-    correct_opts: QueryDocumentSnapshot<SessionOption>[]
+    correct_opts: QueryDocumentSnapshot<SessionOption>[],
   ) {
     const r_ss = await getDoc(rref)
     if (!r_ss.exists()) throw new Error(`${rref.path} does not exist!`)
@@ -134,7 +134,7 @@ export default class ResponseStore extends BaseStore {
       }
       case "multiple-choice": {
         correct = correct_opts.some((x) =>
-          choices.some((y) => refEqual(x.ref, y))
+          choices.some((y) => refEqual(x.ref, y)),
         )
         break
       }

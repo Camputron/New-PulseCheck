@@ -35,7 +35,7 @@ interface PollSubmissionHistoryProps {
   onParamChange: (
     key: string,
     value: string,
-    defaults?: Record<string, string>
+    defaults?: Record<string, string>,
   ) => void
 }
 
@@ -49,7 +49,7 @@ function matchesDateFilter(millis: number, dateFilter: DateFilter): boolean {
 function sortSubmissions(
   a: QueryDocumentSnapshot<Submission>,
   b: QueryDocumentSnapshot<Submission>,
-  sortBy: SortOption
+  sortBy: SortOption,
 ): number {
   const ad = a.data()
   const bd = b.data()
@@ -70,7 +70,7 @@ function sortSubmissions(
 }
 
 function exportSubmissionsCSV(
-  submissions: QueryDocumentSnapshot<Submission>[]
+  submissions: QueryDocumentSnapshot<Submission>[],
 ) {
   const header = "Title,Date,Score,Max Score,Score %\n"
   const rows = submissions.map((x) => {
@@ -90,7 +90,7 @@ function exportSubmissionsCSV(
 }
 
 export default function PollSubmissionHistory(
-  props: PollSubmissionHistoryProps
+  props: PollSubmissionHistoryProps,
 ) {
   const { query, sort, dateFilter: dateFilterParam, onParamChange } = props
   const { user, loading } = useAuthContext()
@@ -115,7 +115,7 @@ export default function PollSubmissionHistory(
             .includes(query.toLowerCase())
           const matchesDate = matchesDateFilter(
             d.submitted_at.toMillis(),
-            dateFilter
+            dateFilter,
           )
           return matchesText && matchesDate
         })
@@ -151,56 +151,56 @@ export default function PollSubmissionHistory(
     (e: SelectChangeEvent) => {
       onParamChange("sort", e.target.value, { sort: "date-desc" })
     },
-    [onParamChange]
+    [onParamChange],
   )
 
   const onDateFilterChange = useCallback(
     (e: SelectChangeEvent) => {
       onParamChange("date", e.target.value, { date: "7d" })
     },
-    [onParamChange]
+    [onParamChange],
   )
 
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
-          placeholder='Filter your submissions by poll title...'
+          placeholder="Filter your submissions by poll title..."
           fullWidth
           value={query}
           onChange={onChange}
         />
-        <Box display='flex' alignItems='center' gap={1} flexWrap='wrap'>
+        <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
           <Select
-            size='small'
+            size="small"
             value={sortBy}
             onChange={onSortChange}
             sx={{ minWidth: 160 }}>
-            <MenuItem value='date-desc'>Newest first</MenuItem>
-            <MenuItem value='date-asc'>Oldest first</MenuItem>
-            <MenuItem value='score-desc'>Highest score</MenuItem>
-            <MenuItem value='score-asc'>Lowest score</MenuItem>
-            <MenuItem value='alpha'>Alphabetical</MenuItem>
+            <MenuItem value="date-desc">Newest first</MenuItem>
+            <MenuItem value="date-asc">Oldest first</MenuItem>
+            <MenuItem value="score-desc">Highest score</MenuItem>
+            <MenuItem value="score-asc">Lowest score</MenuItem>
+            <MenuItem value="alpha">Alphabetical</MenuItem>
           </Select>
           <Select
-            size='small'
+            size="small"
             value={dateFilter}
             onChange={onDateFilterChange}
             sx={{ minWidth: 130 }}>
-            <MenuItem value='all'>All time</MenuItem>
-            <MenuItem value='7d'>Last 7 days</MenuItem>
-            <MenuItem value='30d'>Last 30 days</MenuItem>
-            <MenuItem value='90d'>Last 90 days</MenuItem>
+            <MenuItem value="all">All time</MenuItem>
+            <MenuItem value="7d">Last 7 days</MenuItem>
+            <MenuItem value="30d">Last 30 days</MenuItem>
+            <MenuItem value="90d">Last 90 days</MenuItem>
           </Select>
-          <Typography variant='body2' color='text.secondary' flex={1}>
+          <Typography variant="body2" color="text.secondary" flex={1}>
             Showing {filteredSubmissions.length} of {submissions.length}
           </Typography>
           {filteredSubmissions.length > 0 && (
-            <Tooltip title='Export CSV'>
+            <Tooltip title="Export CSV">
               <IconButton
-                size='small'
+                size="small"
                 onClick={() => exportSubmissionsCSV(filteredSubmissions)}>
-                <Download fontSize='small' />
+                <Download fontSize="small" />
               </IconButton>
             </Tooltip>
           )}
@@ -209,7 +209,7 @@ export default function PollSubmissionHistory(
           {fetching &&
             [0, 1, 2].map((i) => (
               <Grid2 key={i} size={{ xs: 12, sm: 6, md: 4 }}>
-                <Skeleton variant='rounded' height={120} />
+                <Skeleton variant="rounded" height={120} />
               </Grid2>
             ))}
           {!fetching &&
@@ -225,9 +225,9 @@ export default function PollSubmissionHistory(
           filteredSubmissions.length === 0 &&
           submissions.length > 0 && (
             <Typography
-              variant='body2'
-              color='text.secondary'
-              textAlign='center'
+              variant="body2"
+              color="text.secondary"
+              textAlign="center"
               mt={2}>
               No submissions match your filters.
             </Typography>

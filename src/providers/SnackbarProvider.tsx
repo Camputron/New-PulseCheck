@@ -31,7 +31,7 @@ export const SnackbarProvider = (props: { children: ReactNode }) => {
         setOpen(false)
       }
     },
-    [open, processQueue]
+    [open, processQueue],
   )
 
   const handleClose = (_?: unknown, reason?: string) => {

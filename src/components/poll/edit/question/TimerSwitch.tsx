@@ -91,8 +91,8 @@ export default function TimerSwitch(props: Props) {
   return (
     <React.Fragment>
       <FormControlLabel
-        labelPlacement='end'
-        label='Timed'
+        labelPlacement="end"
+        label="Timed"
         checked={time !== null}
         onChange={(_, checked) => {
           if (checked) {
@@ -109,8 +109,8 @@ export default function TimerSwitch(props: Props) {
       <Tooltip title={formatTimeHelper()}>
         <TextField
           // style={{ opacity: timed ? 1 : 0 }}
-          size='small'
-          placeholder='MM:SS'
+          size="small"
+          placeholder="MM:SS"
           value={timeFormatted}
           onChange={handleChange}
           error={time === 0}

@@ -56,8 +56,8 @@ function SettingsRow({
         alignItems: "center",
       }}>
       <Typography
-        variant='body2'
-        color='text.secondary'
+        variant="body2"
+        color="text.secondary"
         sx={{ width: 140, flexShrink: 0 }}>
         {label}
       </Typography>
@@ -242,7 +242,7 @@ export default function Settings() {
     try {
       const credential = EmailAuthProvider.credential(
         user.email,
-        currentPassword
+        currentPassword,
       )
       await reauthenticateWithCredential(user, credential)
       await updatePassword(user, newPassword)
@@ -276,10 +276,10 @@ export default function Settings() {
   }
 
   return (
-    <Container maxWidth='sm' sx={{ py: { xs: 3, md: 5 }, textAlign: "left" }}>
+    <Container maxWidth="sm" sx={{ py: { xs: 3, md: 5 }, textAlign: "left" }}>
       <RA.Fade triggerOnce duration={600}>
         <Typography
-          variant='overline'
+          variant="overline"
           sx={{
             letterSpacing: 2,
             color: "primary.main",
@@ -287,7 +287,7 @@ export default function Settings() {
           }}>
           Account
         </Typography>
-        <Typography variant='h4' fontWeight={700} sx={{ mb: 4 }}>
+        <Typography variant="h4" fontWeight={700} sx={{ mb: 4 }}>
           Settings
         </Typography>
       </RA.Fade>
@@ -312,27 +312,27 @@ export default function Settings() {
             {stoni(displayName)}
           </Avatar>
           <Box>
-            <Typography variant='h6' fontWeight={600}>
+            <Typography variant="h6" fontWeight={600}>
               {displayName || <Skeleton width={120} />}
             </Typography>
             {createdAt ? (
-              <Typography variant='body2' color='text.secondary'>
+              <Typography variant="body2" color="text.secondary">
                 Member since {createdAt.toDate().toLocaleDateString()}
               </Typography>
             ) : (
-              <Skeleton variant='text' width={160} />
+              <Skeleton variant="text" width={160} />
             )}
           </Box>
         </Box>
       </RA.Fade>
 
       <RA.Fade triggerOnce duration={600} delay={200}>
-        <Paper variant='outlined' sx={{ borderRadius: 2, overflow: "hidden" }}>
-          <SettingsRow label='Display Name'>
+        <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
+          <SettingsRow label="Display Name">
             <Box flex={1}>
               {editUser === "displayName" ? (
                 <TextField
-                  placeholder='Enter display name'
+                  placeholder="Enter display name"
                   value={tempVal}
                   onChange={(e) => {
                     setTempVal(e.target.value)
@@ -341,7 +341,7 @@ export default function Settings() {
                   error={!!error.displayName}
                   helperText={error.displayName}
                   fullWidth
-                  size='small'
+                  size="small"
                 />
               ) : (
                 <Typography>{displayName}</Typography>
@@ -350,55 +350,55 @@ export default function Settings() {
             {editUser === "displayName" ? (
               <Box sx={{ display: "flex", gap: 0.5, ml: 1 }}>
                 <IconButton
-                  color='primary'
+                  color="primary"
                   onClick={handleSaveDisplayName}
                   disabled={save}
-                  size='small'>
-                  <Check fontSize='small' />
+                  size="small">
+                  <Check fontSize="small" />
                 </IconButton>
-                <IconButton color='error' onClick={cancelEdit} size='small'>
-                  <Close fontSize='small' />
+                <IconButton color="error" onClick={cancelEdit} size="small">
+                  <Close fontSize="small" />
                 </IconButton>
               </Box>
             ) : (
               <IconButton
                 onClick={() => handleEdit("displayName", displayName)}
-                size='small'
+                size="small"
                 sx={{ ml: 1 }}>
-                <Edit fontSize='small' />
+                <Edit fontSize="small" />
               </IconButton>
             )}
           </SettingsRow>
 
           <Divider />
 
-          <SettingsRow label='Email'>
+          <SettingsRow label="Email">
             <Typography flex={1}>{email}</Typography>
           </SettingsRow>
 
           <Divider />
 
-          <SettingsRow label='Appearance'>
+          <SettingsRow label="Appearance">
             <Box flex={1}>
-              <ThemeSelect size='small' sx={{ minWidth: 160 }} />
+              <ThemeSelect size="small" sx={{ minWidth: 160 }} />
             </Box>
           </SettingsRow>
 
           <Divider />
 
-          <SettingsRow label='Provider'>
+          <SettingsRow label="Provider">
             <Chip
               icon={providerId === "google.com" ? <Google /> : <Email />}
               label={providerId === "google.com" ? "Google" : "Email"}
-              size='small'
-              variant='outlined'
+              size="small"
+              variant="outlined"
             />
           </SettingsRow>
 
           {isPasswordProvider && (
             <>
               <Divider />
-              <SettingsRow label='Password'>
+              <SettingsRow label="Password">
                 <Box flex={1}>
                   {changingPassword ? (
                     <Box
@@ -408,25 +408,25 @@ export default function Settings() {
                         gap: 1.5,
                       }}>
                       <TextField
-                        placeholder='Current password'
-                        type='password'
-                        size='small'
+                        placeholder="Current password"
+                        type="password"
+                        size="small"
                         fullWidth
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                       />
                       <TextField
-                        placeholder='New password'
-                        type='password'
-                        size='small'
+                        placeholder="New password"
+                        type="password"
+                        size="small"
                         fullWidth
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                       />
                       <TextField
-                        placeholder='Confirm new password'
-                        type='password'
-                        size='small'
+                        placeholder="Confirm new password"
+                        type="password"
+                        size="small"
                         fullWidth
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -435,15 +435,15 @@ export default function Settings() {
                       />
                       <Box sx={{ display: "flex", gap: 1 }}>
                         <Button
-                          variant='contained'
-                          size='small'
+                          variant="contained"
+                          size="small"
                           disabled={save}
                           onClick={() => void handleChangePassword()}>
                           Save
                         </Button>
                         <Button
-                          variant='outlined'
-                          size='small'
+                          variant="outlined"
+                          size="small"
                           onClick={() => {
                             setChangingPassword(false)
                             setCurrentPassword("")
@@ -457,8 +457,8 @@ export default function Settings() {
                     </Box>
                   ) : (
                     <Button
-                      variant='outlined'
-                      size='small'
+                      variant="outlined"
+                      size="small"
                       onClick={() => setChangingPassword(true)}>
                       Change Password
                     </Button>
@@ -472,8 +472,8 @@ export default function Settings() {
 
       <RA.Fade triggerOnce duration={600} delay={300}>
         <Button
-          variant='outlined'
-          color='error'
+          variant="outlined"
+          color="error"
           fullWidth
           startIcon={<Logout />}
           onClick={handleSignOut}

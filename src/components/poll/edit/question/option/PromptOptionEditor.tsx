@@ -62,7 +62,7 @@ export default function PromptOptionEditor(props: Props) {
   if (loading) {
     return (
       <Box display={"flex"} alignItems={"center"}>
-        <Skeleton variant='rounded' animation='wave' />
+        <Skeleton variant="rounded" animation="wave" />
       </Box>
     )
   }

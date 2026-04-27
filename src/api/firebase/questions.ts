@@ -35,7 +35,7 @@ export default class QuestionStore extends BaseStore {
       clx.polls,
       pid,
       clx.questions,
-      qid
+      qid,
     ) as DocumentReference<Question>
   }
 
@@ -44,7 +44,7 @@ export default class QuestionStore extends BaseStore {
       this.db,
       clx.polls,
       pid,
-      clx.questions
+      clx.questions,
     ) as CollectionReference<Question>
   }
 
@@ -71,7 +71,7 @@ export default class QuestionStore extends BaseStore {
 
   public async update(
     qref: DocumentReference<Question>,
-    payload: Partial<Question>
+    payload: Partial<Question>,
   ): Promise<DocumentReference<Question>> {
     await updateDoc(qref, {
       ...payload,

@@ -29,7 +29,7 @@ export default function LeaderboardAccordion(props: LeaderboardAccordionProps) {
   }
 
   const sorted = [...leaderboard.entries].sort(
-    (a, b) => b.cumulativeScore - a.cumulativeScore
+    (a, b) => b.cumulativeScore - a.cumulativeScore,
   )
   const entries = sorted.slice(0, MAX_ENTRIES)
 
@@ -44,7 +44,7 @@ export default function LeaderboardAccordion(props: LeaderboardAccordionProps) {
         "&::before": { display: "none" },
       }}>
       <AccordionSummary expandIcon={<ExpandMore />} sx={{ px: 3, py: 0.5 }}>
-        <Stack direction='row' alignItems='center' spacing={1}>
+        <Stack direction="row" alignItems="center" spacing={1}>
           <EmojiEvents sx={{ color: "secondary.main" }} />
           <Typography fontWeight={600}>Leaderboard</Typography>
         </Stack>
@@ -89,7 +89,7 @@ export default function LeaderboardAccordion(props: LeaderboardAccordionProps) {
                     noWrap: true,
                   }}
                 />
-                <Typography fontWeight={700} fontSize='0.9rem'>
+                <Typography fontWeight={700} fontSize="0.9rem">
                   {entry.cumulativeScore}
                 </Typography>
               </ListItem>

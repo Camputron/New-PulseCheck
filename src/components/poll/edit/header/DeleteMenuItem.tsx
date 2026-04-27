@@ -12,6 +12,7 @@ import {
 import React, { useState } from "react"
 import { createPortal } from "react-dom"
 import { useNavigate } from "react-router-dom"
+import CancelButton from "@/components/CancelButton"
 
 interface DeleteMenuItemProps {
   pid: string
@@ -61,8 +62,8 @@ export default function DeleteMenuItem(props: DeleteMenuItemProps) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete} color='error'>
+          <CancelButton onClick={handleClose} />
+          <Button onClick={handleDelete} color="error">
             Delete
           </Button>
         </DialogActions>

@@ -32,7 +32,7 @@ import AppTitle from "../appbar/AppTitle"
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <Typography
-      variant='overline'
+      variant="overline"
       sx={{
         fontWeight: 700,
         letterSpacing: 1,
@@ -56,7 +56,7 @@ function ShowcaseCard({
 }) {
   return (
     <Paper
-      variant='outlined'
+      variant="outlined"
       sx={{
         p: 2.5,
         borderRadius: 2,
@@ -64,7 +64,7 @@ function ShowcaseCard({
         flexDirection: "column",
         gap: 2,
       }}>
-      <Typography variant='subtitle2' fontWeight={600}>
+      <Typography variant="subtitle2" fontWeight={600}>
         {title}
       </Typography>
       {children}
@@ -79,7 +79,7 @@ const mockScores = [
 ]
 
 const mockSubmissions = mockScores.map(
-  (score) => ({ score_100: score }) as Submission
+  (score) => ({ score_100: score }) as Submission,
 )
 
 const mockSummary: SessionSummary = {
@@ -108,19 +108,19 @@ export default function PulseCheckShowcaseTab() {
     <Box>
       {/* Header */}
       <Stack
-        direction='row'
-        justifyContent='space-between'
-        alignItems='center'
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
         sx={{ mb: 1 }}>
         <Box>
-          <Typography variant='h4' fontWeight={700}>
+          <Typography variant="h4" fontWeight={700}>
             PulseCheck Components
           </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          <Typography variant="body2" color="text.secondary">
             Custom app components rendered with dummy data
           </Typography>
         </Box>
-        <IconButton onClick={toggleTheme} size='large'>
+        <IconButton onClick={toggleTheme} size="large">
           {isDark ? <LightMode /> : <DarkMode />}
         </IconButton>
       </Stack>
@@ -129,23 +129,23 @@ export default function PulseCheckShowcaseTab() {
 
       {/* ASYNC BUTTON */}
       <SectionTitle>AsyncButton</SectionTitle>
-      <ShowcaseCard title='Async buttons with loading state (click to trigger)'>
-        <Stack direction='row' spacing={1.5} flexWrap='wrap' useFlexGap>
+      <ShowcaseCard title="Async buttons with loading state (click to trigger)">
+        <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
           <AsyncButton
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             callback={() => new Promise((r) => setTimeout(r, 1500))}>
             Submit Response
           </AsyncButton>
           <AsyncButton
-            variant='contained'
-            color='secondary'
+            variant="contained"
+            color="secondary"
             startIcon={<Add />}
             callback={() => new Promise((r) => setTimeout(r, 1500))}>
             Add Question
           </AsyncButton>
           <AsyncButton
-            variant='outlined'
+            variant="outlined"
             callback={() => new Promise((r) => setTimeout(r, 1500))}>
             Save Draft
           </AsyncButton>
@@ -154,12 +154,12 @@ export default function PulseCheckShowcaseTab() {
 
       {/* NEW BADGE + APP TITLE */}
       <SectionTitle>NewBadge / AppTitle</SectionTitle>
-      <ShowcaseCard title='Badge variants (click badge to toggle style)'>
-        <Stack direction='column' alignItems={"center"}>
+      <ShowcaseCard title="Badge variants (click badge to toggle style)">
+        <Stack direction="column" alignItems={"center"}>
           <Box sx={{ textAlign: "center" }}>
             <Typography
-              variant='caption'
-              color='text.secondary'
+              variant="caption"
+              color="text.secondary"
               sx={{ mb: 1, display: "block" }}>
               Default
             </Typography>
@@ -167,8 +167,8 @@ export default function PulseCheckShowcaseTab() {
           </Box>
           <Box sx={{ textAlign: "center" }}>
             <Typography
-              variant='caption'
-              color='text.secondary'
+              variant="caption"
+              color="text.secondary"
               sx={{ mb: 1, display: "block" }}>
               Minecraft
             </Typography>
@@ -179,25 +179,25 @@ export default function PulseCheckShowcaseTab() {
 
       {/* AUTH BRANDING */}
       <SectionTitle>AuthBranding</SectionTitle>
-      <Paper variant='outlined' sx={{ borderRadius: 2, overflow: "hidden" }}>
+      <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
         <AuthBranding
-          heading='Welcome Back'
-          subtext='Sign in to create polls, host live sessions, and track student engagement in real time.'
+          heading="Welcome Back"
+          subtext="Sign in to create polls, host live sessions, and track student engagement in real time."
         />
       </Paper>
 
       {/* LEAVE BUTTON */}
       <SectionTitle>LeaveButton</SectionTitle>
-      <ShowcaseCard title='Back button with confirmation dialog'>
-        <Stack direction='row' spacing={2} alignItems='center'>
+      <ShowcaseCard title="Back button with confirmation dialog">
+        <Stack direction="row" spacing={2} alignItems="center">
           <LeaveButton
             callback={() => {
               /* noop demo */
             }}
-            dialogTitle='Leave Session?'
-            dialogContent='Are you sure you want to leave? Your responses will still be saved.'
+            dialogTitle="Leave Session?"
+            dialogContent="Are you sure you want to leave? Your responses will still be saved."
           />
-          <Typography variant='body2' color='text.secondary'>
+          <Typography variant="body2" color="text.secondary">
             Click the arrow to see the confirmation dialog
           </Typography>
         </Stack>
@@ -205,13 +205,13 @@ export default function PulseCheckShowcaseTab() {
 
       {/* SNACKBAR */}
       <SectionTitle>Snackbar (Global)</SectionTitle>
-      <ShowcaseCard title='Snackbar variants — click to trigger each severity'>
-        <Stack direction='row' spacing={1.5} flexWrap='wrap' useFlexGap>
+      <ShowcaseCard title="Snackbar variants — click to trigger each severity">
+        <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
           {(["success", "info", "warning", "error"] as SeverityType[]).map(
             (severity) => (
               <Button
                 key={severity}
-                variant='outlined'
+                variant="outlined"
                 color={severity === "info" ? "primary" : severity}
                 onClick={() =>
                   snackbar.show({
@@ -221,13 +221,13 @@ export default function PulseCheckShowcaseTab() {
                 }>
                 {severity}
               </Button>
-            )
+            ),
           )}
         </Stack>
-        <Stack direction='row' spacing={1.5} flexWrap='wrap' useFlexGap>
+        <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
           <Button
-            variant='text'
-            size='small'
+            variant="text"
+            size="small"
             onClick={() =>
               snackbar.show({
                 message: "Bottom-left snackbar",
@@ -238,8 +238,8 @@ export default function PulseCheckShowcaseTab() {
             Bottom Left
           </Button>
           <Button
-            variant='text'
-            size='small'
+            variant="text"
+            size="small"
             onClick={() =>
               snackbar.show({
                 message: "Bottom-center snackbar",
@@ -250,8 +250,8 @@ export default function PulseCheckShowcaseTab() {
             Bottom Center
           </Button>
           <Button
-            variant='text'
-            size='small'
+            variant="text"
+            size="small"
             onClick={() =>
               snackbar.show({
                 message: "Custom duration (5s)",
@@ -273,16 +273,16 @@ export default function PulseCheckShowcaseTab() {
           gap: 3,
         }}>
         <RecentPollCard
-          pollTitle='CS 300 — Midterm Review'
-          result='Average: 78% | 32 students'
+          pollTitle="CS 300 — Midterm Review"
+          result="Average: 78% | 32 students"
         />
         <RecentPollCard
-          pollTitle='Algorithms Quiz #9'
-          result='Average: 82% | 28 students'
+          pollTitle="Algorithms Quiz #9"
+          result="Average: 82% | 28 students"
         />
         <RecentPollCard
-          pollTitle='Data Structures Exit Ticket'
-          result='Average: 65% | 45 students'
+          pollTitle="Data Structures Exit Ticket"
+          result="Average: 65% | 45 students"
         />
       </Box>
 
@@ -330,12 +330,12 @@ export default function PulseCheckShowcaseTab() {
 
       {/* USER AVATAR */}
       <SectionTitle>UserAvatar</SectionTitle>
-      <ShowcaseCard title='User avatars with initials'>
-        <Stack direction='row' spacing={2}>
-          <UserAvatar uid='1' displayName='Miguel Campos' />
-          <UserAvatar uid='2' displayName='John Doe' />
-          <UserAvatar uid='3' displayName='Alice Bob Charlie' />
-          <UserAvatar uid='4' displayName='X' />
+      <ShowcaseCard title="User avatars with initials">
+        <Stack direction="row" spacing={2}>
+          <UserAvatar uid="1" displayName="Miguel Campos" />
+          <UserAvatar uid="2" displayName="John Doe" />
+          <UserAvatar uid="3" displayName="Alice Bob Charlie" />
+          <UserAvatar uid="4" displayName="X" />
         </Stack>
       </ShowcaseCard>
 
@@ -347,13 +347,13 @@ export default function PulseCheckShowcaseTab() {
           gridTemplateColumns: { xs: "1fr", md: "1fr 1fr 1fr" },
           gap: 3,
         }}>
-        <ShowcaseCard title='PulseGauge — High Score'>
+        <ShowcaseCard title="PulseGauge — High Score">
           <PulseGauge score={92} size={180} />
         </ShowcaseCard>
-        <ShowcaseCard title='PulseGauge — Medium Score'>
+        <ShowcaseCard title="PulseGauge — Medium Score">
           <PulseGauge score={58} size={180} />
         </ShowcaseCard>
-        <ShowcaseCard title='PulseGauge — Low Score'>
+        <ShowcaseCard title="PulseGauge — Low Score">
           <PulseGauge score={23} size={180} />
         </ShowcaseCard>
       </Box>
@@ -367,39 +367,39 @@ export default function PulseCheckShowcaseTab() {
         }}>
         <SessionGaugeCard
           score={72}
-          title='CS 300 — Midterm Review'
+          title="CS 300 — Midterm Review"
           timestamp={Timestamp.now()}
         />
         <SessionGaugeCard
           score={85}
-          title='Algorithms Quiz #9'
+          title="Algorithms Quiz #9"
           timestamp={Timestamp.now()}
         />
       </Box>
 
       {/* SPLASH COMPONENTS */}
       <SectionTitle>Splash — Features</SectionTitle>
-      <Paper variant='outlined' sx={{ p: 3, borderRadius: 2 }}>
+      <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
         <Features />
       </Paper>
 
       <SectionTitle>Splash — About</SectionTitle>
-      <Paper variant='outlined' sx={{ p: 3, borderRadius: 2 }}>
+      <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
         <About />
       </Paper>
 
       <SectionTitle>Splash — FAQs</SectionTitle>
-      <Paper variant='outlined' sx={{ p: 3, borderRadius: 2 }}>
+      <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
         <FAQs />
       </Paper>
 
       <Divider sx={{ my: 4 }} />
 
       {/* COMPONENTS NOT RENDERED */}
-      <Typography variant='h6' fontWeight={600} sx={{ mb: 1 }}>
+      <Typography variant="h6" fontWeight={600} sx={{ mb: 1 }}>
         Components Not Shown
       </Typography>
-      <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
         The following components require Firebase, API connections, or complex
         context providers and cannot be rendered standalone with dummy data:
       </Typography>
@@ -475,17 +475,17 @@ export default function PulseCheckShowcaseTab() {
         ].map((group) => (
           <Paper
             key={group.category}
-            variant='outlined'
+            variant="outlined"
             sx={{ p: 2, borderRadius: 2 }}>
-            <Typography variant='subtitle2' fontWeight={600} gutterBottom>
+            <Typography variant="subtitle2" fontWeight={600} gutterBottom>
               {group.category}
             </Typography>
             {group.items.map((item) => (
               <Typography
                 key={item}
-                variant='caption'
-                display='block'
-                color='text.secondary'>
+                variant="caption"
+                display="block"
+                color="text.secondary">
                 {item}
               </Typography>
             ))}
@@ -493,18 +493,18 @@ export default function PulseCheckShowcaseTab() {
         ))}
       </Box>
       <Typography
-        variant='caption'
-        color='text.secondary'
-        display='block'
+        variant="caption"
+        color="text.secondary"
+        display="block"
         sx={{ mt: 1 }}>
         * Requires Firestore DocumentReference in props
       </Typography>
 
       <Divider sx={{ my: 3 }} />
       <Typography
-        variant='body2'
-        color='text.secondary'
-        textAlign='center'
+        variant="body2"
+        color="text.secondary"
+        textAlign="center"
         sx={{ mb: 4 }}>
         Toggle dark mode (top-right) to preview both themes
       </Typography>

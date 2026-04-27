@@ -33,7 +33,7 @@ export default function PreSessionConfig(props: PreSessionConfigProps) {
   const saved = auth.user ? getHostSettings(auth.user.uid) : null
   const [isAnonymous, setIsAnonymous] = useState(saved?.isAnonymous ?? false)
   const [hasLeaderboard, setHasLeaderboard] = useState(
-    saved?.hasLeaderboard ?? false
+    saved?.hasLeaderboard ?? false,
   )
 
   const handleStartSession = async () => {
@@ -49,7 +49,7 @@ export default function PreSessionConfig(props: PreSessionConfigProps) {
     <>
       <AppBar
         elevation={0}
-        position='relative'
+        position="relative"
         sx={{
           bgcolor: (t) =>
             t.palette.mode === "dark"
@@ -70,15 +70,15 @@ export default function PreSessionConfig(props: PreSessionConfigProps) {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth='sm' sx={{ mt: 4 }}>
+      <Container maxWidth="sm" sx={{ mt: 4 }}>
         <Stack spacing={3}>
-          <Typography variant='h6' fontWeight={600}>
+          <Typography variant="h6" fontWeight={600}>
             Session Settings
           </Typography>
 
           <Box>
             <FormControlLabel
-              label='Anonymous Mode'
+              label="Anonymous Mode"
               control={
                 <Switch
                   checked={isAnonymous}
@@ -86,7 +86,7 @@ export default function PreSessionConfig(props: PreSessionConfigProps) {
                 />
               }
             />
-            <Typography variant='body2' color='text.secondary' sx={{ ml: 7 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ ml: 7 }}>
               Hides participant identities during the session. Individual
               questions can still override this setting.
             </Typography>
@@ -94,7 +94,7 @@ export default function PreSessionConfig(props: PreSessionConfigProps) {
 
           <Box>
             <FormControlLabel
-              label='Leaderboard'
+              label="Leaderboard"
               control={
                 <Switch
                   checked={hasLeaderboard}
@@ -102,15 +102,15 @@ export default function PreSessionConfig(props: PreSessionConfigProps) {
                 />
               }
             />
-            <Typography variant='body2' color='text.secondary' sx={{ ml: 7 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ ml: 7 }}>
               Show a ranked leaderboard of participant scores during the
               session.
             </Typography>
           </Box>
 
           <AsyncButton
-            variant='contained'
-            size='large'
+            variant="contained"
+            size="large"
             startIcon={<ScreenShare />}
             callback={handleStartSession}
             onError={() =>

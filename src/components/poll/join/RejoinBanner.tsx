@@ -74,18 +74,18 @@ export default function RejoinBanner() {
 
   return (
     <Alert
-      severity='info'
+      severity="info"
       sx={{ mb: 3, borderRadius: 2 }}
       action={
-        <Stack direction='row' spacing={1}>
+        <Stack direction="row" spacing={1}>
           <Button
-            size='small'
-            color='inherit'
+            size="small"
+            color="inherit"
             disabled={leaving}
             onClick={() => void handleLeave()}>
             Leave Session
           </Button>
-          <Button size='small' variant='contained' onClick={handleRejoin}>
+          <Button size="small" variant="contained" onClick={handleRejoin}>
             Rejoin
           </Button>
         </Stack>

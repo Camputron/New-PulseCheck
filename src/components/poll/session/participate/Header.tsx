@@ -50,7 +50,7 @@ export default function Header(props: HeaderProps) {
   return (
     <AppBar
       elevation={0}
-      position='relative'
+      position="relative"
       sx={{
         bgcolor: (t) =>
           t.palette.mode === "dark"
@@ -64,12 +64,12 @@ export default function Header(props: HeaderProps) {
       <Toolbar>
         <LeaveButton
           callback={leaveSession}
-          dialogTitle='Leave this session?'
-          dialogContent='Your submitted answers are saved, but you will receive a 0 for any remaining questions.'
+          dialogTitle="Leave this session?"
+          dialogContent="Your submitted answers are saved, but you will receive a 0 for any remaining questions."
         />
-        <Box textAlign='initial'>
+        <Box textAlign="initial">
           <Typography fontWeight={600}>{session?.title}</Typography>
-          <Typography variant='caption' component='div' color='text.secondary'>
+          <Typography variant="caption" component="div" color="text.secondary">
             {ntops(users?.docs.length ?? 0)}
           </Typography>
         </Box>

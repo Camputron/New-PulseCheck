@@ -79,7 +79,7 @@ export default function AnswerCard(props: Props) {
       </Typography>
       {question?.prompt_img && (
         <CardMedia
-          component='img'
+          component="img"
           sx={{ objectFit: "contain", mb: 1, borderRadius: 1 }}
           image={question?.prompt_img ?? ""}
         />
@@ -87,12 +87,12 @@ export default function AnswerCard(props: Props) {
       {res?.choices.length === 0 ? (
         /* if the user chose nothing, display blank response */
         <React.Fragment>
-          <Typography color='error'>Response left blank</Typography>
+          <Typography color="error">Response left blank</Typography>
           {!res?.correct &&
             options.map((x) => {
               if (!x.data().correct) return <></>
               return (
-                <Typography key={x.id} color='success'>
+                <Typography key={x.id} color="success">
                   {"•"} {x.data().text}
                 </Typography>
               )
@@ -112,15 +112,15 @@ export default function AnswerCard(props: Props) {
             options.map((x) => {
               if (!x.data().correct) return <></>
               return (
-                <Typography key={x.id} color='success'>
+                <Typography key={x.id} color="success">
                   {"•"} {x.data().text}
                 </Typography>
               )
             })}
         </React.Fragment>
       )}
-      <Box display='flex' justifyContent='end'>
-        <Typography variant='caption' color='text.secondary'>
+      <Box display="flex" justifyContent="end">
+        <Typography variant="caption" color="text.secondary">
           {question?.points} point(s)
         </Typography>
       </Box>

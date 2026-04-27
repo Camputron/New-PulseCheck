@@ -7,7 +7,7 @@ const ThemeToggleButton = () => {
 
   return (
     <div>
-      <IconButton onClick={theme.toggleTheme} color='inherit'>
+      <IconButton onClick={theme.toggleTheme} color="inherit">
         {theme.mode === "dark" ? <Brightness7 /> : <Brightness4 />}
       </IconButton>
     </div>

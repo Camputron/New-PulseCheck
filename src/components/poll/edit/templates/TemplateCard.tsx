@@ -68,8 +68,8 @@ export default function TemplateCard(props: Props) {
             },
       }}>
       {isApplying ? (
-        <Stack spacing={2} justifyContent='center' sx={{ height: "100%" }}>
-          <Typography variant='body2' color='text.secondary' textAlign='center'>
+        <Stack spacing={2} justifyContent="center" sx={{ height: "100%" }}>
+          <Typography variant="body2" color="text.secondary" textAlign="center">
             Creating questions...
           </Typography>
           <LinearProgress />
@@ -77,31 +77,31 @@ export default function TemplateCard(props: Props) {
       ) : (
         <>
           <Stack
-            direction='row'
-            justifyContent='space-between'
-            alignItems='flex-start'>
+            direction="row"
+            justifyContent="space-between"
+            alignItems="flex-start">
             <Box sx={{ color: "primary.main", mb: 1.5 }}>
               {TEMPLATE_ICONS[template.icon]}
             </Box>
-            <Tooltip title='Preview'>
-              <IconButton size='small' onClick={handlePreview}>
-                <VisibilityOutlined fontSize='small' />
+            <Tooltip title="Preview">
+              <IconButton size="small" onClick={handlePreview}>
+                <VisibilityOutlined fontSize="small" />
               </IconButton>
             </Tooltip>
           </Stack>
-          <Typography variant='subtitle1' fontWeight={700} gutterBottom>
+          <Typography variant="subtitle1" fontWeight={700} gutterBottom>
             {template.name}
           </Typography>
-          <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             {template.description}
           </Typography>
-          <Stack direction='row' spacing={1}>
+          <Stack direction="row" spacing={1}>
             <Chip
               label={`${template.questions.length} questions`}
-              size='small'
-              variant='outlined'
+              size="small"
+              variant="outlined"
             />
-            <Chip label={template.category} size='small' variant='outlined' />
+            <Chip label={template.category} size="small" variant="outlined" />
           </Stack>
         </>
       )}

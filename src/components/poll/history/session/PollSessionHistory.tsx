@@ -41,7 +41,7 @@ function matchesDateFilter(millis: number, dateFilter: DateFilter): boolean {
 function sortSessions(
   a: QueryDocumentSnapshot<Session>,
   b: QueryDocumentSnapshot<Session>,
-  sortBy: SortOption
+  sortBy: SortOption,
 ): number {
   const ad = a.data()
   const bd = b.data()
@@ -92,7 +92,7 @@ interface PollSessionHistoryProps {
   onParamChange: (
     key: string,
     value: string,
-    defaults?: Record<string, string>
+    defaults?: Record<string, string>,
   ) => void
 }
 
@@ -118,7 +118,7 @@ export default function PollSessionHistory(props: PollSessionHistoryProps) {
             .includes(query.toLowerCase())
           const matchesDate = matchesDateFilter(
             d.created_at.toMillis(),
-            dateFilter
+            dateFilter,
           )
           return matchesText && matchesDate
         })
@@ -151,56 +151,56 @@ export default function PollSessionHistory(props: PollSessionHistoryProps) {
     (e: SelectChangeEvent) => {
       onParamChange("sort", e.target.value, { sort: "date-desc" })
     },
-    [onParamChange]
+    [onParamChange],
   )
 
   const onDateFilterChange = useCallback(
     (e: SelectChangeEvent) => {
       onParamChange("date", e.target.value, { date: "7d" })
     },
-    [onParamChange]
+    [onParamChange],
   )
 
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
-          placeholder='Search your poll sessions by name...'
+          placeholder="Search your poll sessions by name..."
           fullWidth
           value={query}
           onChange={onChange}
         />
-        <Box display='flex' alignItems='center' gap={1} flexWrap='wrap'>
+        <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
           <Select
-            size='small'
+            size="small"
             value={sortBy}
             onChange={onSortChange}
             sx={{ minWidth: 160 }}>
-            <MenuItem value='date-desc'>Newest first</MenuItem>
-            <MenuItem value='date-asc'>Oldest first</MenuItem>
-            <MenuItem value='score-desc'>Highest avg score</MenuItem>
-            <MenuItem value='score-asc'>Lowest avg score</MenuItem>
-            <MenuItem value='participants'>Most participants</MenuItem>
+            <MenuItem value="date-desc">Newest first</MenuItem>
+            <MenuItem value="date-asc">Oldest first</MenuItem>
+            <MenuItem value="score-desc">Highest avg score</MenuItem>
+            <MenuItem value="score-asc">Lowest avg score</MenuItem>
+            <MenuItem value="participants">Most participants</MenuItem>
           </Select>
           <Select
-            size='small'
+            size="small"
             value={dateFilter}
             onChange={onDateFilterChange}
             sx={{ minWidth: 130 }}>
-            <MenuItem value='all'>All time</MenuItem>
-            <MenuItem value='7d'>Last 7 days</MenuItem>
-            <MenuItem value='30d'>Last 30 days</MenuItem>
-            <MenuItem value='90d'>Last 90 days</MenuItem>
+            <MenuItem value="all">All time</MenuItem>
+            <MenuItem value="7d">Last 7 days</MenuItem>
+            <MenuItem value="30d">Last 30 days</MenuItem>
+            <MenuItem value="90d">Last 90 days</MenuItem>
           </Select>
-          <Typography variant='body2' color='text.secondary' flex={1}>
+          <Typography variant="body2" color="text.secondary" flex={1}>
             Showing {filteredSessions.length} of {sessions.length}
           </Typography>
           {filteredSessions.length > 0 && (
-            <Tooltip title='Export CSV'>
+            <Tooltip title="Export CSV">
               <IconButton
-                size='small'
+                size="small"
                 onClick={() => exportSessionsCSV(filteredSessions)}>
-                <Download fontSize='small' />
+                <Download fontSize="small" />
               </IconButton>
             </Tooltip>
           )}
@@ -209,7 +209,7 @@ export default function PollSessionHistory(props: PollSessionHistoryProps) {
           {fetching &&
             [0, 1, 2].map((i) => (
               <Grid2 key={i} size={{ xs: 12, sm: 6, md: 4 }}>
-                <Skeleton variant='rounded' height={120} />
+                <Skeleton variant="rounded" height={120} />
               </Grid2>
             ))}
           {!fetching &&
@@ -223,9 +223,9 @@ export default function PollSessionHistory(props: PollSessionHistoryProps) {
         </Grid2>
         {!fetching && filteredSessions.length === 0 && sessions.length > 0 && (
           <Typography
-            variant='body2'
-            color='text.secondary'
-            textAlign='center'
+            variant="body2"
+            color="text.secondary"
+            textAlign="center"
             mt={2}>
             No sessions match your filters.
           </Typography>

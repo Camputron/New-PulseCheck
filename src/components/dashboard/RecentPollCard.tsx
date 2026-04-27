@@ -19,10 +19,10 @@ export default function RecentPollCard({
           border: 1,
           borderColor: "divider",
         }}>
-        <Typography variant='h6' fontWeight={600} gutterBottom>
+        <Typography variant="h6" fontWeight={600} gutterBottom>
           {pollTitle}
         </Typography>
-        <Typography variant='body2' color='text.secondary'>
+        <Typography variant="body2" color="text.secondary">
           {result}
         </Typography>
       </Box>

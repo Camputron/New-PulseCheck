@@ -19,11 +19,11 @@ export default function GuestNavItems() {
   }
 
   return (
-    <Box display='flex' alignItems='center' gap={1}>
+    <Box display="flex" alignItems="center" gap={1}>
       {navLinks.map((item) => (
         <Button
           key={item.label}
-          color='inherit'
+          color="inherit"
           onClick={() => void navigate(item.to)}
           sx={{
             textTransform: "none",

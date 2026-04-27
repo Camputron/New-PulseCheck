@@ -31,7 +31,7 @@ export function saveHostSettings(uid: string, settings: HostSettings): void {
   try {
     localStorage.setItem(
       `${HOST_SETTINGS_PREFIX}:${uid}`,
-      JSON.stringify(settings)
+      JSON.stringify(settings),
     )
   } catch (err) {
     console.warn("Failed to save host settings to localStorage", err)
@@ -174,7 +174,7 @@ export function tstos(timestamp: Timestamp) {
 
   // Calculate time difference in seconds
   const diffInSeconds = Math.floor(
-    (now.getTime() - lastUpdated.getTime()) / 1000
+    (now.getTime() - lastUpdated.getTime()) / 1000,
   )
 
   let timeAgo = ""

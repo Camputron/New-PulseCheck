@@ -137,7 +137,7 @@ export default class SessionStore extends BaseStore {
   public async enqueue(
     sid: string,
     uid: string,
-    payload: { photo_url: string | null; display_name: string }
+    payload: { photo_url: string | null; display_name: string },
   ) {
     const sref = this.doc(sid)
     const wref = doc(sref, clx.waiting_users, uid)
@@ -174,7 +174,7 @@ export default class SessionStore extends BaseStore {
   public async host(
     pid: string,
     uid: string,
-    settings: HostSettings
+    settings: HostSettings,
   ): Promise<string> {
     const uref = api.users.doc(uid)
     const pref = api.polls.doc(pid)
@@ -225,7 +225,7 @@ export default class SessionStore extends BaseStore {
 
   public async updateByRef(
     ref: DocumentReference<Session>,
-    payload: Partial<Session>
+    payload: Partial<Session>,
   ) {
     await updateDoc(ref, payload)
   }
@@ -345,7 +345,7 @@ export default class SessionStore extends BaseStore {
       await setDoc(
         nextQuestion,
         { displayed_at: serverTimestamp() },
-        { merge: true }
+        { merge: true },
       )
       await setDoc(
         ref,
@@ -355,7 +355,7 @@ export default class SessionStore extends BaseStore {
           leaderboard_scores: null,
           questions_left: arrayRemove(nextQuestion),
         },
-        { merge: true }
+        { merge: true },
       )
     } else {
       /* otherwise, switch session to DONE state. */
@@ -366,7 +366,7 @@ export default class SessionStore extends BaseStore {
           results: null,
           state: SessionState.DONE,
         },
-        { merge: true }
+        { merge: true },
       )
     }
   }
@@ -377,7 +377,7 @@ export default class SessionStore extends BaseStore {
       {
         question: null,
       },
-      { merge: true }
+      { merge: true },
     )
   }
 
@@ -387,7 +387,7 @@ export default class SessionStore extends BaseStore {
 
   public async computeLeaderboard(
     sref: DocumentReference<Session>,
-    questionId: string
+    questionId: string,
   ) {
     const callable = httpsCallable<
       { sessionId: string; questionId: string },
@@ -398,12 +398,12 @@ export default class SessionStore extends BaseStore {
 
   public async displayUserResponses(
     sref: DocumentReference<Session>,
-    question: CurrentQuestion
+    question: CurrentQuestion,
   ) {
     /* fetch all user responses as a Map<string(uid), SessionResponse>  */
     const responses = await this.questions.responses.getAllAsMap(
       sref.id,
-      question.ref.id
+      question.ref.id,
     )
     /* init frequency table */
     const table: Record<string, { text: string; count: number }> = {}
@@ -447,14 +447,14 @@ export default class SessionStore extends BaseStore {
           responses: responses,
         },
       },
-      { merge: true }
+      { merge: true },
     )
   }
 
   /** @brief Grades the responses for the given question */
   public async gradeQuestion(
     sref: DocumentReference<Session>,
-    question: CurrentQuestion
+    question: CurrentQuestion,
   ) {
     const opts = await this.questions.options.getAll(sref.id, question.ref.id)
     const docs = opts.docs
@@ -463,7 +463,7 @@ export default class SessionStore extends BaseStore {
       sref.id,
       question.ref.id,
       question.prompt_type,
-      correct_opts
+      correct_opts,
     )
   }
 
@@ -484,7 +484,7 @@ export default class SessionStore extends BaseStore {
   public async finish(sref: DocumentReference<Session>) {
     const callable = httpsCallable<{ sessionId: string }, { success: boolean }>(
       this._functions,
-      "finishSession"
+      "finishSession",
     )
     await callable({ sessionId: sref.id })
   }
@@ -492,7 +492,7 @@ export default class SessionStore extends BaseStore {
   public async deleteAllByPREF(pref: DocumentReference<Poll>) {
     const q = query(
       collection(this.db, clx.sessions),
-      where("poll", "==", pref)
+      where("poll", "==", pref),
     )
     const batchSize = 500
     let batch = writeBatch(this.db)
@@ -514,14 +514,14 @@ export default class SessionStore extends BaseStore {
 
   /** @brief Finds all sessions the user hosted (FINISHED + CLOSED) */
   public async findUserSessions(
-    uid: string
+    uid: string,
   ): Promise<QueryDocumentSnapshot<Session>[]> {
     const uref = doc(this.db, clx.users, uid)
     const subsRef = collection(this.db, clx.sessions)
     const q = query(
       subsRef,
       where("host", "==", uref),
-      where("state", "in", [SessionState.FINISHED, SessionState.CLOSED])
+      where("state", "in", [SessionState.FINISHED, SessionState.CLOSED]),
     )
     const ss = await getDocs(q)
     return (ss.docs as QueryDocumentSnapshot<Session>[]) ?? []

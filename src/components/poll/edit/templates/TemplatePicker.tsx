@@ -28,7 +28,7 @@ export default function TemplatePicker(props: Props) {
     TemplateCategory | "all"
   >("all")
   const [previewTemplate, setPreviewTemplate] = useState<PollTemplate | null>(
-    null
+    null,
   )
 
   const filteredTemplates =
@@ -58,11 +58,11 @@ export default function TemplatePicker(props: Props) {
 
   return (
     <>
-      <Stack spacing={3} alignItems='center' sx={{ py: 4, px: 2 }}>
+      <Stack spacing={3} alignItems="center" sx={{ py: 4, px: 2 }}>
         <RA.Fade triggerOnce duration={600}>
-          <Stack spacing={1} alignItems='center' textAlign='center'>
+          <Stack spacing={1} alignItems="center" textAlign="center">
             <Typography
-              variant='overline'
+              variant="overline"
               sx={{
                 letterSpacing: 2,
                 color: "primary.main",
@@ -70,10 +70,10 @@ export default function TemplatePicker(props: Props) {
               }}>
               Templates
             </Typography>
-            <Typography variant='h5' fontWeight={700}>
+            <Typography variant="h5" fontWeight={700}>
               Start with a template
             </Typography>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               Pick a template to scaffold your poll instantly, then customize as
               needed.
             </Typography>
@@ -81,10 +81,10 @@ export default function TemplatePicker(props: Props) {
         </RA.Fade>
 
         <Stack
-          direction='row'
+          direction="row"
           spacing={1}
-          flexWrap='wrap'
-          justifyContent='center'>
+          flexWrap="wrap"
+          justifyContent="center">
           {CATEGORIES.map((cat) => (
             <Chip
               key={cat.value}
@@ -125,7 +125,7 @@ export default function TemplatePicker(props: Props) {
           ))}
         </Box>
 
-        <Typography variant='body2' color='text.secondary'>
+        <Typography variant="body2" color="text.secondary">
           or add questions manually with the + button below
         </Typography>
       </Stack>

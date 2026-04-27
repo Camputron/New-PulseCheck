@@ -38,7 +38,7 @@ export default function SubmissionCard(props: SubmissionCardProps) {
             boxShadow: (t) => `0 0 0 1px ${t.palette.primary.main}`,
           },
         }}>
-        <Box display='flex' alignItems='center' mb={1}>
+        <Box display="flex" alignItems="center" mb={1}>
           {/* <Avatar
             sx={{
               mr: 1.5,
@@ -61,12 +61,12 @@ export default function SubmissionCard(props: SubmissionCardProps) {
             }}>
             {x.title}
           </Typography>
-          <Chip size='small' label={scoreLabel} variant='outlined' />
+          <Chip size="small" label={scoreLabel} variant="outlined" />
         </Box>
-        <Typography variant='body2' color='text.secondary'>
+        <Typography variant="body2" color="text.secondary">
           {x.display_name}
         </Typography>
-        <Typography variant='body2' color='text.secondary'>
+        <Typography variant="body2" color="text.secondary">
           Submitted {tstos(x.submitted_at)}
         </Typography>
       </CardActionArea>

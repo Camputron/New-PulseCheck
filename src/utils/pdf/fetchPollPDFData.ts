@@ -2,7 +2,7 @@ import { getDoc } from "firebase/firestore"
 import { Poll, PollPDFData, PollPDFQuestion } from "@/types"
 
 export default async function fetchPollPDFData(
-  poll: Poll
+  poll: Poll,
 ): Promise<PollPDFData> {
   const questions: PollPDFQuestion[] = await Promise.all(
     poll.questions.map(async (qRef) => {
@@ -20,7 +20,7 @@ export default async function fetchPollPDFData(
             throw new Error(`Failed to fetch option ${oRef.path}`)
           }
           return { text: option.text }
-        })
+        }),
       )
 
       return {
@@ -28,7 +28,7 @@ export default async function fetchPollPDFData(
         promptType: question.prompt_type,
         options,
       }
-    })
+    }),
   )
 
   return {

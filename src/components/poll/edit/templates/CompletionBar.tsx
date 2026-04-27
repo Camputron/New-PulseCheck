@@ -59,7 +59,7 @@ export default function CompletionBar(props: Props) {
   const progress = totalQuestions > 0 ? (readyCount / totalQuestions) * 100 : 0
 
   return (
-    <Box sx={{ width: "90vw", mx: "auto", mb: 1 }}>
+    <Box sx={{ mb: 1 }}>
       {questions.map((qref) => (
         <QuestionReadyTracker
           key={qref.id}
@@ -68,9 +68,9 @@ export default function CompletionBar(props: Props) {
         />
       ))}
       <Stack
-        direction='row'
+        direction="row"
         spacing={2}
-        alignItems='center'
+        alignItems="center"
         sx={{
           py: 1.5,
           px: 2,
@@ -80,25 +80,24 @@ export default function CompletionBar(props: Props) {
         }}>
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Stack
-            direction='row'
-            justifyContent='space-between'
+            direction="row"
+            justifyContent="space-between"
             sx={{ mb: 0.5 }}>
-            <Typography variant='caption' color='text.secondary'>
+            <Typography variant="caption" color="text.secondary">
               {readyCount}/{totalQuestions} questions ready
             </Typography>
-            <Typography variant='caption' color='text.secondary'>
+            <Typography variant="caption" color="text.secondary">
               {Math.round(progress)}%
             </Typography>
           </Stack>
           <LinearProgress
-            variant='determinate'
+            variant="determinate"
             value={progress}
             sx={{ borderRadius: 1, height: 6 }}
           />
         </Box>
         <Button
-          variant='contained'
-          size='small'
+          size="small"
           startIcon={<ScreenShare />}
           onClick={onHost}
           disabled={readyCount < totalQuestions}>

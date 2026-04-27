@@ -14,8 +14,8 @@ export default function Login() {
         flexDirection: { xs: "column", md: "row" },
       }}>
       <AuthBranding
-        heading='Welcome back.'
-        subtext='Sign in to manage your sessions, review results, and keep your classroom engaged.'
+        heading="Welcome back."
+        subtext="Sign in to manage your sessions, review results, and keep your classroom engaged."
       />
       <Box
         sx={{

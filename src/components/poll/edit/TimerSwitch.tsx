@@ -76,8 +76,8 @@ export default function TimerSwitch(props: Props) {
   return (
     <Box>
       <FormControlLabel
-        labelPlacement='end'
-        label='Timed'
+        labelPlacement="end"
+        label="Timed"
         checked={time !== null}
         onChange={(_, checked) => {
           if (checked) {
@@ -94,8 +94,8 @@ export default function TimerSwitch(props: Props) {
       <Tooltip title={formatTimeHelper()}>
         <TextField
           // style={{ opacity: time ? 1 : 0 }}
-          size='small'
-          placeholder='MM:SS'
+          size="small"
+          placeholder="MM:SS"
           value={timeFormatted}
           // disabled={Boolean(!time)}
           onChange={handleChange}

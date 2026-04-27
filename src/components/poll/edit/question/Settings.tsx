@@ -112,7 +112,7 @@ export default function Settings(props: Props) {
       <Grid2 container spacing={2}>
         <Grid2 size={{ xl: 3, lg: 3, md: 4, sm: 6, xs: 12 }}>
           <FormControlLabel
-            label='Anonymous'
+            label="Anonymous"
             checked={anonymous}
             control={
               <Switch onChange={(e) => setAnonymous(e.target.checked)} />
@@ -124,16 +124,16 @@ export default function Settings(props: Props) {
         </Grid2>
         <Grid2 size={{ xl: 3, lg: 3, md: 4, sm: 6, xs: 12 }}>
           <FormControlLabel
-            label='Points'
+            label="Points"
             checked={graded}
             control={<Switch onChange={handleGraded} />}
           />
           {/* {graded && ( */}
           <TextField
             style={{ opacity: graded ? 1 : 0 }}
-            type='number'
-            size='small'
-            placeholder='1'
+            type="number"
+            size="small"
+            placeholder="1"
             hiddenLabel
             defaultValue={props.points}
             onChange={(e) => setPoints(parseInt(e.target.value))}

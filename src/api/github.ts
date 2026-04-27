@@ -24,7 +24,7 @@ export default class GitHubStore {
           } as GitHubUser
         }
         return (await res.json()) as GitHubUser
-      })
+      }),
     )
   }
 }

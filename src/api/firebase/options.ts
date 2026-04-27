@@ -23,7 +23,7 @@ export default class PromptOptionStore
   implements CRUDStore<PromptOption>
 {
   public doc(
-    params: DocumentParams<PromptOption>
+    params: DocumentParams<PromptOption>,
   ): DocumentReference<PromptOption> {
     return doc(
       this.db,
@@ -32,12 +32,12 @@ export default class PromptOptionStore
       clx.questions,
       params.qid,
       clx.options,
-      params.oid
+      params.oid,
     ) as DocumentReference<PromptOption>
   }
 
   public collect(
-    params: CollectionParams<PromptOption>
+    params: CollectionParams<PromptOption>,
   ): CollectionReference<PromptOption> {
     return collection(
       this.db,
@@ -45,7 +45,7 @@ export default class PromptOptionStore
       params.pid,
       clx.questions,
       params.qid,
-      clx.options
+      clx.options,
     ) as CollectionReference<PromptOption>
   }
 
@@ -53,7 +53,7 @@ export default class PromptOptionStore
     const qref = ref.parent as DocumentReference<Question> | null
     if (!qref) {
       throw new Error(
-        "PromptOptions collection needs a parent document (questions)."
+        "PromptOptions collection needs a parent document (questions).",
       )
     }
     const oref = await addDoc(ref, {
@@ -73,26 +73,26 @@ export default class PromptOptionStore
 
   public async updateByRef(
     ref: DocumentReference<PromptOption, DocumentData>,
-    payload: Partial<PromptOption>
+    payload: Partial<PromptOption>,
   ): Promise<void> {
     await updateDoc(ref, payload)
   }
 
   public async updateById(
     params: DocumentParams<PromptOption>,
-    payload: Partial<PromptOption>
+    payload: Partial<PromptOption>,
   ): Promise<void> {
     const ref = this.doc(params)
     await this.updateByRef(ref, payload)
   }
 
   public async deleteByRef(
-    ref: DocumentReference<PromptOption, DocumentData>
+    ref: DocumentReference<PromptOption, DocumentData>,
   ): Promise<void> {
     const qref = ref.parent.parent as DocumentReference<Question> | null
     if (!qref) {
       throw new Error(
-        "PromptOptions collection needs a parent document (question)."
+        "PromptOptions collection needs a parent document (question).",
       )
     }
     await deleteDoc(ref)

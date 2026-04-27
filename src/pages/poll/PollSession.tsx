@@ -97,12 +97,12 @@ export default function PollSession() {
       alignItems={"center"}
       height={"80vh"}>
       <Box>
-        <Typography variant='h6'>{status}</Typography>
+        <Typography variant="h6">{status}</Typography>
         {/* <Typography variant='h6'>Waiting for host approval...</Typography> */}
         <LinearProgress />
       </Box>
       <Box position={"absolute"} bottom={8} display={"flex"} flex={1}>
-        <Button variant='contained' onClick={handleLeave}>
+        <Button variant="contained" onClick={handleLeave}>
           Leave
         </Button>
       </Box>

@@ -33,10 +33,10 @@ export default function Dashboard() {
   }
 
   return (
-    <Container maxWidth='md' sx={{ py: { xs: 3, md: 5 } }}>
+    <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
       <RA.Fade triggerOnce duration={600}>
         <Typography
-          variant='overline'
+          variant="overline"
           sx={{
             letterSpacing: 2,
             color: "primary.main",
@@ -44,7 +44,7 @@ export default function Dashboard() {
           }}>
           Home
         </Typography>
-        <Typography variant='h4' fontWeight={700} sx={{ mb: 4 }}>
+        <Typography variant="h4" fontWeight={700} sx={{ mb: 4 }}>
           Dashboard
         </Typography>
       </RA.Fade>
@@ -61,7 +61,7 @@ export default function Dashboard() {
         }}>
         <Button
           startIcon={<HowToVote />}
-          variant='contained'
+          variant="contained"
           onClick={handleUserJoin}
           fullWidth
           sx={{
@@ -75,7 +75,7 @@ export default function Dashboard() {
         </Button>
         <Button
           startIcon={<Add />}
-          variant='outlined'
+          variant="outlined"
           fullWidth
           onClick={handleCreatePoll}
           sx={{
@@ -90,7 +90,7 @@ export default function Dashboard() {
       </Box>
 
       {polls && polls.docs.length > 0 && (
-        <Typography variant='h6' fontWeight={600} sx={{ mt: 5, mb: 2 }}>
+        <Typography variant="h6" fontWeight={600} sx={{ mt: 5, mb: 2 }}>
           Your Polls
         </Typography>
       )}

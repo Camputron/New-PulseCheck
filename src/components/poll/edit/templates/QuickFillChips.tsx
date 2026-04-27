@@ -37,13 +37,13 @@ export default function QuickFillChips(props: Props) {
 
   return (
     <Stack
-      direction='row'
+      direction="row"
       spacing={1}
       sx={{ overflowX: "auto", py: 1 }}
-      alignItems='center'>
+      alignItems="center">
       <Typography
-        variant='caption'
-        color='text.secondary'
+        variant="caption"
+        color="text.secondary"
         sx={{ whiteSpace: "nowrap" }}>
         Quick fill:
       </Typography>
@@ -51,8 +51,8 @@ export default function QuickFillChips(props: Props) {
         <Chip
           key={preset.id}
           label={preset.label}
-          variant='outlined'
-          size='small'
+          variant="outlined"
+          size="small"
           disabled={applying}
           onClick={() => void handleApply(preset)}
           sx={{

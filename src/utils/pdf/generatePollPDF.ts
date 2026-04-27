@@ -39,7 +39,7 @@ function drawOptionBullet(
   doc: jsPDF,
   promptType: string,
   x: number,
-  y: number
+  y: number,
 ): void {
   if (promptType === "multiple-choice") {
     doc.circle(x + 1.5, y - 1.2, 1.5)
@@ -58,7 +58,7 @@ function answerBlank(question: PollPDFQuestion): string {
 function estimateQuestionHeight(
   doc: jsPDF,
   question: PollPDFQuestion,
-  index: number
+  index: number,
 ): number {
   let height = 0
 
@@ -66,7 +66,7 @@ function estimateQuestionHeight(
   const promptText = `${index + 1}. ${question.prompt}`
   const promptLines = doc.splitTextToSize(
     promptText,
-    CONTENT_WIDTH - 5
+    CONTENT_WIDTH - 5,
   ) as string[]
   height += promptLines.length * LINE_HEIGHT
 
@@ -77,7 +77,7 @@ function estimateQuestionHeight(
   for (const opt of question.options) {
     const optLines = doc.splitTextToSize(
       opt.text,
-      CONTENT_WIDTH - 20
+      CONTENT_WIDTH - 20,
     ) as string[]
     height += optLines.length * LINE_HEIGHT
   }
@@ -134,7 +134,7 @@ export default function generatePollPDF(data: PollPDFData): void {
     const promptText = `${i + 1}. ${question.prompt}`
     const promptLines = doc.splitTextToSize(
       promptText,
-      CONTENT_WIDTH - 5
+      CONTENT_WIDTH - 5,
     ) as string[]
     doc.text(promptLines, MARGIN, y)
     y += promptLines.length * LINE_HEIGHT
@@ -153,7 +153,7 @@ export default function generatePollPDF(data: PollPDFData): void {
       const optText = `${letter}) ${question.options[j].text}`
       const optLines = doc.splitTextToSize(
         optText,
-        CONTENT_WIDTH - 20
+        CONTENT_WIDTH - 20,
       ) as string[]
 
       checkPageBreak(optLines.length * LINE_HEIGHT)
@@ -177,12 +177,9 @@ export default function generatePollPDF(data: PollPDFData): void {
     doc.setFont("helvetica", "normal")
     doc.setFontSize(9)
     doc.setTextColor(140)
-    doc.text(
-      `Page ${p} of ${pageCount}`,
-      PAGE_WIDTH / 2,
-      PAGE_HEIGHT - 10,
-      { align: "center" }
-    )
+    doc.text(`Page ${p} of ${pageCount}`, PAGE_WIDTH / 2, PAGE_HEIGHT - 10, {
+      align: "center",
+    })
     doc.setTextColor(0)
   }
 

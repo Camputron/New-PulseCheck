@@ -41,9 +41,9 @@ export default function LeaderboardCard(props: LeaderboardCardProps) {
         borderRadius: 2,
         my: 2,
       }}>
-      <Stack direction='row' alignItems='center' spacing={1}>
+      <Stack direction="row" alignItems="center" spacing={1}>
         <EmojiEvents sx={{ color: "secondary.main" }} />
-        <Typography variant='h6' fontWeight={600}>
+        <Typography variant="h6" fontWeight={600}>
           Leaderboard
         </Typography>
       </Stack>
@@ -100,14 +100,14 @@ export default function LeaderboardCard(props: LeaderboardCardProps) {
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Chip
                   label={`+${entry.questionScore}`}
-                  size='small'
+                  size="small"
                   color={entry.questionScore > 0 ? "success" : "default"}
-                  variant='outlined'
+                  variant="outlined"
                   sx={{ minWidth: 52 }}
                 />
                 <Typography
                   fontWeight={700}
-                  fontSize='0.9rem'
+                  fontSize="0.9rem"
                   sx={{ minWidth: 48, textAlign: "right" }}>
                   {entry.cumulativeScore}
                 </Typography>

@@ -96,7 +96,7 @@ export default function UserPollCard(props: UserPolLCardProps) {
             transform: "translateY(-2px)",
           },
         }}>
-        <Box display='flex' alignItems='center' gap={1.5} width='100%' pr={4}>
+        <Box display="flex" alignItems="center" gap={1.5} width="100%" pr={4}>
           <Avatar
             sx={{
               width: 40,
@@ -107,42 +107,42 @@ export default function UserPollCard(props: UserPolLCardProps) {
             <Description sx={{ fontSize: 20 }} />
           </Avatar>
           <Typography
-            variant='subtitle1'
+            variant="subtitle1"
             fontWeight={700}
             flex={1}
-            textAlign='left'>
+            textAlign="left">
             {poll.title}
           </Typography>
         </Box>
         <Box
-          display='flex'
-          alignItems='center'
+          display="flex"
+          alignItems="center"
           gap={1}
-          mt='auto'
+          mt="auto"
           pt={1.5}
-          width='100%'>
+          width="100%">
           <Chip
             label={ntoq(poll.questions.length)}
-            size='small'
-            icon={<QuestionAnswer fontSize='small' />}
-            variant='outlined'
+            size="small"
+            icon={<QuestionAnswer fontSize="small" />}
+            variant="outlined"
             sx={{ pl: 0.5, fontSize: "0.7rem", height: 22 }}
           />
-          <Typography variant='caption' color='text.secondary' ml='auto'>
+          <Typography variant="caption" color="text.secondary" ml="auto">
             {tstos(poll.updated_at)}
           </Typography>
         </Box>
       </CardActionArea>
       <IconButton
-        size='small'
+        size="small"
         onClick={handleMenuOpen}
         sx={{
           position: "absolute",
           top: 6,
           right: 6,
         }}
-        aria-label='Poll actions'>
-        <MoreVert fontSize='small' />
+        aria-label="Poll actions">
+        <MoreVert fontSize="small" />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -163,7 +163,7 @@ export default function UserPollCard(props: UserPolLCardProps) {
           onClick={(e) => void handleClone(e)}
           disabled={isCloning || !user}>
           <ListItemIcon>
-            <ContentCopy fontSize='small' />
+            <ContentCopy fontSize="small" />
           </ListItemIcon>
           <ListItemText>{isCloning ? "Cloning..." : "Clone"}</ListItemText>
         </MenuItem>

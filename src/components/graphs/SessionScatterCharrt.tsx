@@ -14,7 +14,7 @@ export default function SessionScatterCard(props: Props) {
   const { submissions } = props
   return (
     <React.Fragment>
-      <Card variant='outlined'>
+      <Card variant="outlined">
         <CardContent>
           <ScatterChart
             grid={{ vertical: true, horizontal: true }}

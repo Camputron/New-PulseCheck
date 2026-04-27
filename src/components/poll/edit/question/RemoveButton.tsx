@@ -26,7 +26,7 @@ export default function RemoveButton(props: RemoveButtonProps) {
   }
 
   return (
-    <AsyncButton color='error' callback={remove} endIcon={<Clear />}>
+    <AsyncButton color="error" callback={remove} endIcon={<Clear />}>
       Remove
     </AsyncButton>
   )

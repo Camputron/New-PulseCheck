@@ -23,7 +23,7 @@ export default function AuthBranding({ heading, subtext }: Props) {
       }}>
       <RA.Fade triggerOnce duration={800}>
         <Typography
-          variant='overline'
+          variant="overline"
           sx={{
             letterSpacing: 3,
             color: "primary.main",
@@ -35,7 +35,7 @@ export default function AuthBranding({ heading, subtext }: Props) {
       </RA.Fade>
       <RA.Fade triggerOnce duration={800} delay={150}>
         <Typography
-          variant='h3'
+          variant="h3"
           fontWeight={800}
           sx={{
             mt: 1,
@@ -48,7 +48,7 @@ export default function AuthBranding({ heading, subtext }: Props) {
       </RA.Fade>
       <RA.Fade triggerOnce duration={800} delay={300}>
         <Typography
-          variant='body2'
+          variant="body2"
           sx={{
             color: "text.secondary",
             lineHeight: 1.6,

@@ -29,7 +29,7 @@ export default function ResultsChart(props: Props) {
       <Typography>{results.question.prompt}</Typography>
       {results.question.prompt_type !== "ranking-poll" &&
         results.opts_correct.map((x) => (
-          <Typography key={x.id} variant='body2' color='textSecondary'>
+          <Typography key={x.id} variant="body2" color="textSecondary">
             {x.text}
           </Typography>
         ))}

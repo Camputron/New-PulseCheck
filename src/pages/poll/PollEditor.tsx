@@ -97,7 +97,7 @@ export default function PollEditor() {
           onStartConfig={() => setIsConfiguring(true)}
         />
       )}
-      <Container sx={{ mt: 1, mb: 4 }} maxWidth='xl'>
+      <Container sx={{ mt: 1, mb: 4 }} maxWidth="xl">
         {questionCount > 0 && poll && (
           <CompletionBar
             questions={poll.questions}
@@ -112,9 +112,9 @@ export default function PollEditor() {
             expandAll={expandAll}
           />
           <RA.Roll triggerOnce>
-            <Tooltip title='New Question'>
+            <Tooltip title="New Question">
               <Fab
-                color='secondary'
+                color="secondary"
                 disabled={!poll}
                 onClick={handleAddQuestion}>
                 <Add />

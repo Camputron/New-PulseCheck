@@ -71,10 +71,10 @@ export default function GuestJoin() {
         justifyContent: "center",
         py: { xs: 4, md: 8 },
       }}>
-      <Container maxWidth='xs'>
+      <Container maxWidth="xs">
         <RA.Fade triggerOnce duration={600}>
           <Typography
-            variant='overline'
+            variant="overline"
             sx={{
               letterSpacing: 2,
               color: "primary.main",
@@ -82,37 +82,37 @@ export default function GuestJoin() {
             }}>
             Quick Join
           </Typography>
-          <Typography variant='h4' fontWeight={700} sx={{ mb: 1 }}>
+          <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
             Join Poll
           </Typography>
-          <Typography variant='body2' color='text.secondary' sx={{ mb: 4 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
             Enter the room code to join as a guest.
           </Typography>
           <Stack
-            component='form'
+            component="form"
             onSubmit={handleJoinClick}
             spacing={2.5}
             noValidate
-            autoComplete='off'>
+            autoComplete="off">
             <TextField
-              id='room-code'
-              placeholder='Room Code'
-              variant='outlined'
+              id="room-code"
+              placeholder="Room Code"
+              variant="outlined"
               fullWidth
               value={roomCode}
               onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
             />
             <TextField
-              id='guest-name'
-              placeholder='Display Name'
-              variant='outlined'
+              id="guest-name"
+              placeholder="Display Name"
+              variant="outlined"
               fullWidth
               onChange={(e) => setDisplayName(e.target.value)}
             />
             <Button
-              type='submit'
-              variant='contained'
-              color='primary'
+              type="submit"
+              variant="contained"
+              color="primary"
               onClick={handleJoinClick}
               fullWidth
               sx={{
@@ -125,13 +125,13 @@ export default function GuestJoin() {
               Join Session
             </Button>
             <Divider>
-              <Typography variant='body2' color='text.secondary'>
+              <Typography variant="body2" color="text.secondary">
                 or
               </Typography>
             </Divider>
             <Button
-              variant='outlined'
-              color='primary'
+              variant="outlined"
+              color="primary"
               onClick={handleCreateAccount}
               fullWidth
               sx={{

@@ -10,7 +10,7 @@ export default class WaitingUserStore extends BaseStore {
       this.db,
       clx.sessions,
       sid,
-      clx.waiting_users
+      clx.waiting_users,
     ) as CollectionReference<WaitingUser>
   }
 }
