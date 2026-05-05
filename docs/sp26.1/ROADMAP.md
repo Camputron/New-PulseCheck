@@ -57,7 +57,6 @@ Scheduled for upcoming sprints. Ready to be picked up.
 | F19 | **Testing & CI/CD** — business logic tests, Cloud Functions tests (emulator), Firestore rules tests, GitHub Actions CI/CD | S5 | IO-4, IO-5 | 5–8 days | F16 |
 | F15 | **Sharing Polls** — share with view/edit permissions via email | S4 | PM-9 | 3–5 days | None |
 | F25 | **Personalized Study Guides** — wrong-answer compilation, self-quiz mode with timed input, attempt history for improvement tracking, tag-filtered study guides | S4 | AI-9 | 5–8 days | F3, F8, F9 |
-| F35 | **Guest Account Upgrade** — anonymous → registered account linking | S5 | SL-11 | 3–5 days | F11 |
 | F39 | **Cloud Poll Session Settings** — move session defaults from localStorage to Firestore user profile; editable in Settings page | S5 | PM-15 | 1–2 days | None |
 | F40 | **Question Bank** — named reusable question collections; bulk add; import into polls; works with F13a templates | S4 | PM-16 | 4–6 days | F13a |
 | — | **Bug fixes, testing, polish** | S5 | — | — | — |
@@ -131,6 +130,7 @@ Completed and verified.
 | BUG-3 | **Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx` | S3 | — |
 | F38 | **Download Poll to PDF** — export poll as printable PDF with numbered questions, options, and answer blanks | S3 | PM-14 |
 | F37 | **Clone Polls** — deep-copy entire poll (questions + options) into new poll; "Clone Poll" in editor menu + 3-dot menu on dashboard cards | S4 | PM-13 |
+| F35 | **Guest Account Upgrade** — anonymous → registered account linking via `linkWithCredential` (email/password + Google); auto-open dialog on session finish; banner on submission results page | S5 | SL-11 |
 
 ---
 
