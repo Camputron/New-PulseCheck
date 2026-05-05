@@ -18,7 +18,15 @@ export default function RejoinBanner() {
     const stored = getActiveSession()
     if (!stored || !user) return
 
-    async function validate(session: ActiveSession) {
+    /* default missing role to participant for back-compat with older
+       localStorage entries written before the role field existed */
+    const session: ActiveSession = {
+      sid: stored.sid,
+      roomCode: stored.roomCode,
+      role: stored.role === "host" ? "host" : "participant",
+    }
+
+    async function validate() {
       try {
         const sref = api.sessions.doc(session.sid)
         const snap = await getDoc(sref)
@@ -34,10 +42,18 @@ export default function RejoinBanner() {
           clearActiveSession()
           return
         }
-        const hasJoined = await api.sessions.hasJoined(session.sid, user!.uid)
-        if (!hasJoined) {
-          clearActiveSession()
-          return
+        if (session.role === "host") {
+          const isHost = await api.sessions.isHost(session.sid, user!.uid)
+          if (!isHost) {
+            clearActiveSession()
+            return
+          }
+        } else {
+          const hasJoined = await api.sessions.hasJoined(session.sid, user!.uid)
+          if (!hasJoined) {
+            clearActiveSession()
+            return
+          }
         }
         setActiveSession(session)
       } catch {
@@ -45,28 +61,44 @@ export default function RejoinBanner() {
       }
     }
 
-    void validate(stored)
+    void validate()
   }, [user])
 
   if (!activeSession) return null
 
+  const isHost = activeSession.role === "host"
+
   const handleRejoin = () => {
-    void navigate(`/poll/session/${activeSession.sid}/participate`)
+    const path = isHost
+      ? `/poll/session/${activeSession.sid}/host`
+      : `/poll/session/${activeSession.sid}/participate`
+    void navigate(path)
   }
 
   const handleLeave = async () => {
     if (!user) return
     setLeaving(true)
     try {
-      await api.sessions.leaveSession(activeSession.sid, user.uid)
+      if (isHost) {
+        await api.sessions.close(api.sessions.doc(activeSession.sid))
+        snackbar.show({
+          message: "Session ended",
+          type: "info",
+        })
+      } else {
+        await api.sessions.leaveSession(activeSession.sid, user.uid)
+        snackbar.show({
+          message: "You left the session",
+          type: "info",
+        })
+      }
       clearActiveSession()
       setActiveSession(null)
-      snackbar.show({
-        message: "You left the session",
-        type: "info",
-      })
     } catch (err) {
-      console.error("Failed to leave session", err)
+      console.error(
+        isHost ? "Failed to end session" : "Failed to leave session",
+        err,
+      )
     } finally {
       setLeaving(false)
     }
@@ -83,14 +115,16 @@ export default function RejoinBanner() {
             color="inherit"
             disabled={leaving}
             onClick={() => void handleLeave()}>
-            Leave Session
+            {isHost ? "End Session" : "Leave Session"}
           </Button>
           <Button size="small" variant="contained" onClick={handleRejoin}>
             Rejoin
           </Button>
         </Stack>
       }>
-      You have an active session ({activeSession.roomCode})
+      {isHost
+        ? `You are hosting a session (${activeSession.roomCode})`
+        : `You have an active session (${activeSession.roomCode})`}
     </Alert>
   )
 }

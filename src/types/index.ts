@@ -241,6 +241,7 @@ export type AIQuestions = {
 export interface ActiveSession {
   sid: string
   roomCode: string
+  role: "host" | "participant"
 }
 
 export interface HostSettings {

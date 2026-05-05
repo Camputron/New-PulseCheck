@@ -52,7 +52,7 @@ export default function PollParticipate() {
   useEffect(() => {
     if (allowNavigation) return undefined
 
-    // Push a sentinel entry so the first "back" stays on this page
+    /* push setinel entry so the first "back" stays on this page */
     window.history.pushState({ sentinel: true }, "")
 
     const handlePopState = () => {
@@ -123,7 +123,11 @@ export default function PollParticipate() {
 
   useEffect(() => {
     if (session && !sessionLoading) {
-      saveActiveSession({ sid, roomCode: session.room_code })
+      saveActiveSession({
+        sid,
+        roomCode: session.room_code,
+        role: "participant",
+      })
     }
   }, [session, sessionLoading, sid])
 
