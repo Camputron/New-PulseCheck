@@ -9,8 +9,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material"
-import React, { useState } from "react"
-import { createPortal } from "react-dom"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import CancelButton from "@/components/CancelButton"
 
