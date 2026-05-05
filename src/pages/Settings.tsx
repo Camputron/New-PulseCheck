@@ -124,10 +124,6 @@ export default function Settings() {
           }
         } catch (err) {
           console.error("Error fetching user data:", err)
-          snackbar.show({
-            message: "Failed to load profile data",
-            type: "error",
-          })
         }
       }
     }
