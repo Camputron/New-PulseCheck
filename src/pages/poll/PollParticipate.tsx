@@ -105,12 +105,14 @@ export default function PollParticipate() {
         })
         /* navigate to submission */
         if (!user) return
+        const fromGuestSession = user.isAnonymous
         api.sessions.submissions
           .get(sref.id, user.uid)
           .then((x) => {
             void navigate(`/poll/submission/${x.ref.id}/results`, {
               state: {
                 finished: true,
+                fromGuestSession,
               },
             })
           })
