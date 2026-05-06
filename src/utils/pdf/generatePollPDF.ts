@@ -48,12 +48,12 @@ function drawOptionBullet(
   }
 }
 
-function answerBlank(question: PollPDFQuestion): string {
-  if (question.promptType === "multi-select") {
-    return "Answer(s): ________________"
-  }
-  return "Answer: ________________"
-}
+// function answerBlank(question: PollPDFQuestion): string {
+//   if (question.promptType === "multi-select") {
+//     return "Answer(s): ________________"
+//   }
+//   return "Answer: ________________"
+// }
 
 function estimateQuestionHeight(
   doc: jsPDF,
@@ -157,16 +157,16 @@ export default function generatePollPDF(data: PollPDFData): void {
       ) as string[]
 
       checkPageBreak(optLines.length * LINE_HEIGHT)
-      drawOptionBullet(doc, question.promptType, MARGIN + 10, y)
-      doc.text(optLines, MARGIN + 16, y)
+      // drawOptionBullet(doc, question.promptType, MARGIN + 10, y)
+      doc.text(optLines, MARGIN + 8, y)
       y += optLines.length * LINE_HEIGHT
     }
 
-    y += 2
+    // y += 2
 
-    // Answer blank
-    doc.setFontSize(FONT_SMALL)
-    doc.text(answerBlank(question), MARGIN + 5, y)
+    // // Answer blank
+    // doc.setFontSize(FONT_SMALL)
+    // doc.text(answerBlank(question), MARGIN + 5, y)
     y += LINE_HEIGHT * 2
   }
 
