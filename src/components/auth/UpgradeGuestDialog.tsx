@@ -10,10 +10,12 @@ import {
   SvgIcon,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import { FirebaseError } from "firebase/app"
-import { useEffect, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getDoc } from "firebase/firestore"
 import api from "@/api"
@@ -57,6 +59,8 @@ export default function UpgradeGuestDialog(props: Props) {
   const { open, onClose, sid, uid } = props
   const navigate = useNavigate()
   const snackbar = useSnackbar()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const [displayName, setDisplayName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -200,8 +204,18 @@ export default function UpgradeGuestDialog(props: Props) {
     void navigate("/login")
   }
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    void handleEmailUpgrade()
+  }
+
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="xs"
+      fullScreen={isMobile}>
       <DialogTitle sx={{ pr: 6 }}>
         Save your results
         <IconButton
@@ -211,7 +225,7 @@ export default function UpgradeGuestDialog(props: Props) {
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ px: { xs: 2, sm: 3 } }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
           Create an account to keep <strong>this session&apos;s</strong>{" "}
           results. Earlier guest sessions on this device won&apos;t be included.
@@ -239,7 +253,12 @@ export default function UpgradeGuestDialog(props: Props) {
           </Box>
         )}
 
-        <Stack spacing={2} component="form" noValidate autoComplete="off">
+        <Stack
+          spacing={2}
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit}>
           <TextField
             placeholder="Display Name"
             fullWidth
@@ -281,11 +300,7 @@ export default function UpgradeGuestDialog(props: Props) {
             color="primary"
             disabled={submitting}
             fullWidth
-            sx={{ borderRadius: 2, py: 1.25 }}
-            onClick={(e) => {
-              e.preventDefault()
-              void handleEmailUpgrade()
-            }}>
+            sx={{ borderRadius: 2, py: 1.25 }}>
             Create Account
           </Button>
 
