@@ -114,10 +114,11 @@ export default function RejoinBanner() {
             size="small"
             color="inherit"
             disabled={leaving}
+            variant="text"
             onClick={() => void handleLeave()}>
             {isHost ? "End Session" : "Leave Session"}
           </Button>
-          <Button size="small" variant="contained" onClick={handleRejoin}>
+          <Button size="small" variant="text" onClick={handleRejoin}>
             Rejoin
           </Button>
         </Stack>
