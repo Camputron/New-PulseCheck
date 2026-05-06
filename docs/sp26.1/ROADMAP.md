@@ -49,8 +49,7 @@ Scheduled for upcoming sprints. Ready to be picked up.
 | ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
 |----|------|--------|---------|----------|-------------|
 | F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
-| F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
-| F19 | **Testing & CI/CD** — business logic tests, Cloud Functions tests (emulator), Firestore rules tests, GitHub Actions CI/CD | S5 | IO-4, IO-5 | 5–8 days | F16 |
+
 | — | **Bug fixes, testing, polish** | S5 | — | — | — |
 
 ---
@@ -70,6 +69,7 @@ Completed and verified.
 
 | ID | Item | Sprint | SRS Ref |
 |----|------|--------|---------|
+| F19 | **Testing & CI/CD** — business logic tests, Cloud Functions tests (emulator), Firestore rules tests, GitHub Actions CI/CD | S5 | IO-4, IO-5 | 5–8 days | F16 |
 | F12 | **Auto-Fill Prompts** — quick-fill option presets (T/F, Agree Scale, Rating 1-5, Confidence, Frequency, Blank), question-level chips in editor | S4 | PM-6, PM-7, AI-6 |
 | F13a | **Poll Templates** — 8 pre-built templates (Quick Quiz, T/F, Vocab, Exit Ticket, Survey, Icebreaker, Muddiest Point, Discussion Prep), template picker empty state, preview dialog, post-apply acceleration (auto-expand, auto-focus, tab-through, completion bar) | S4 | PM-8 |
 | F11 | **Fat Finger** — rejoin after accidental back-out via `localStorage` persistence + "Rejoin" banner on Dashboard/Join | S1 | SL-7 |
@@ -135,6 +135,7 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 
 | ID | Item | Priority | SRS Ref | Estimate | Dependencies |
 |----|------|----------|---------|----------|-------------|
+| F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
 | F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
 | F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | P1 | RG-6 | 3–5 days | None |
 | F3 | **AI Summaries** — post-session AI analysis (accuracy, misconceptions, review topics) | P2 | AI-5 | 3–4 days | F16 |
