@@ -11,8 +11,7 @@ import { styled } from "@mui/material/styles"
 import { useState, useEffect } from "react"
 import React from "react"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { doc, getDoc, updateDoc } from "firebase/firestore"
-import { firestore, storage } from "@/api"
+import api, { storage } from "@/api"
 import { CloudUpload, Delete } from "@mui/icons-material"
 interface Props {
   pid: string
@@ -78,13 +77,7 @@ export default function UploadImageBox(props: Props) {
    *   like a giga-chad.
    */
 
-  const questionDocRef = doc(
-    firestore,
-    "polls",
-    props.pid,
-    "questions",
-    props.qid,
-  )
+  const questionDocRef = api.polls.questions.doc(props.pid, props.qid)
 
   const [imageURL, setImageURL] = useState<string | null>("") // Sets image url once image is uploaded to cloud firestore
   const [loading, setLoading] = useState<boolean>(false) // Sets loading state to prompt loading icon
@@ -103,17 +96,10 @@ export default function UploadImageBox(props: Props) {
     try {
       const snapshot = await uploadBytes(fileRef, fileToUpload) // Uploads image
       const downloadURL = await getDownloadURL(snapshot.ref) // Gets download URL from firestore
-      await updateDoc(questionDocRef, {
-        // Updates prompt_img field in question doc
+      await api.polls.questions.update(questionDocRef, {
         prompt_img: downloadURL,
       })
-      const docSnapshot = await getDoc(questionDocRef)
-      if (docSnapshot.exists()) {
-        const data = docSnapshot.data()
-        const promptImgURL =
-          data && typeof data.prompt_img === "string" ? data.prompt_img : ""
-        setImageURL(promptImgURL)
-      }
+      setImageURL(downloadURL)
     } catch (error) {
       console.debug("An error has occurred: ", error)
     }
@@ -148,7 +134,7 @@ export default function UploadImageBox(props: Props) {
   const handleDelete = () => {
     const deleteFile = async () => {
       setImageURL(null)
-      await updateDoc(questionDocRef, {
+      await api.polls.questions.update(questionDocRef, {
         prompt_img: null,
       })
     }

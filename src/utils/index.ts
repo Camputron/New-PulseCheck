@@ -85,7 +85,7 @@ export function stoc(str?: string): string {
 }
 
 /**
- * Generated initials from a given name string based on the following rules:
+ * Generates initials from a given name string based on the following rules:
  *  - If there is only one word, return the first character.
  *  - If there are two words, return the first character of each word.
  *  - If there are three or more words, take the first characters of the first and last word.
@@ -171,11 +171,17 @@ export function ntoq(n: number) {
   return `${n} Question${n !== 1 ? "s" : ""}`
 }
 
-export function tstos(timestamp: Timestamp) {
+export function tstos(timestamp: Timestamp | null | undefined) {
+  /* serverTimestamp() writes flash through as null on the immediate local
+   * snapshot before the server stamp arrives — that window only ever shows
+   * up on a record the current user just touched, so "Just Now" is accurate. */
+  if (!timestamp) {
+    return "Just Now"
+  }
   const lastUpdated = timestamp.toDate()
   const now = new Date()
 
-  // Calculate time difference in seconds
+  /* calculate time diff in seconds */
   const diffInSeconds = Math.floor(
     (now.getTime() - lastUpdated.getTime()) / 1000,
   )

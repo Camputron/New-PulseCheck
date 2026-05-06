@@ -87,6 +87,15 @@ export default class PollStore extends BaseStore {
     })
   }
 
+  /**
+   * Bumps `updated_at` on a poll without modifying any other field.
+   * Called by question/option mutations so edits to subcollections still
+   * surface as a poll update on the dashboard / history views.
+   */
+  public async touch(ref: DocumentReference<Poll, DocumentData>) {
+    await updateDoc(ref, { updated_at: serverTimestamp() })
+  }
+
   public async delete(pref: DocumentReference<Poll>) {
     await deleteDoc(pref)
     // await api.sessions.deleteAllByPREF(pref)

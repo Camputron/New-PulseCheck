@@ -10,13 +10,32 @@ import {
   DocumentReference,
   getDocs,
   query,
+  serverTimestamp,
   setDoc,
   updateDoc,
   where,
 } from "firebase/firestore"
 import BaseStore, { CollectionParams, DocumentParams, CRUDStore } from "./store"
-import { PromptOption, Question } from "../../types"
+import { Poll, PromptOption, Question } from "../../types"
 import { clx } from "@/api"
+
+/**
+ * Resolves the parent poll DocumentReference from any descendant ref
+ * (question ref or option ref). Returns null if the ref is rooted outside
+ * the polls collection.
+ */
+function pollRefFromQuestionRef(
+  qref: DocumentReference<Question>,
+): DocumentReference<Poll> | null {
+  return (qref.parent.parent as DocumentReference<Poll> | null) ?? null
+}
+
+function pollRefFromOptionRef(
+  oref: DocumentReference<PromptOption, DocumentData>,
+): DocumentReference<Poll> | null {
+  const qref = oref.parent.parent as DocumentReference<Question> | null
+  return qref ? pollRefFromQuestionRef(qref) : null
+}
 
 export default class PromptOptionStore
   extends BaseStore
@@ -60,8 +79,17 @@ export default class PromptOptionStore
       text: "",
       correct: false,
     })
-    /* update question doc to include refernece to {oref}  */
-    await setDoc(qref, { options: arrayUnion(oref) }, { merge: true })
+    /* update question doc to include reference to {oref} and bump updated_at */
+    await setDoc(
+      qref,
+      { options: arrayUnion(oref), updated_at: serverTimestamp() },
+      { merge: true },
+    )
+    /* bump parent poll's updated_at so edits surface in dashboards */
+    const pref = pollRefFromQuestionRef(qref)
+    if (pref) {
+      await updateDoc(pref, { updated_at: serverTimestamp() })
+    }
     return oref
   }
 
@@ -76,6 +104,15 @@ export default class PromptOptionStore
     payload: Partial<PromptOption>,
   ): Promise<void> {
     await updateDoc(ref, payload)
+    /* bump parent question + poll updated_at — option has no own timestamp */
+    const qref = ref.parent.parent as DocumentReference<Question> | null
+    if (qref) {
+      await updateDoc(qref, { updated_at: serverTimestamp() })
+      const pref = pollRefFromQuestionRef(qref)
+      if (pref) {
+        await updateDoc(pref, { updated_at: serverTimestamp() })
+      }
+    }
   }
 
   public async updateById(
@@ -96,8 +133,17 @@ export default class PromptOptionStore
       )
     }
     await deleteDoc(ref)
-    /* update question doc to remove reference to {oref} */
-    await setDoc(qref, { options: arrayRemove(ref) }, { merge: true })
+    /* update question doc to remove reference to {oref} and bump updated_at */
+    await setDoc(
+      qref,
+      { options: arrayRemove(ref), updated_at: serverTimestamp() },
+      { merge: true },
+    )
+    /* bump parent poll's updated_at so edits surface in dashboards */
+    const pref = pollRefFromOptionRef(ref)
+    if (pref) {
+      await updateDoc(pref, { updated_at: serverTimestamp() })
+    }
   }
 
   public async deleteById(params: DocumentParams<PromptOption>): Promise<void> {

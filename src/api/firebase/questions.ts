@@ -64,8 +64,12 @@ export default class QuestionStore extends BaseStore {
       created_at: serverTimestamp(),
       updated_at: serverTimestamp(),
     })
-    /* update poll doc to include reference to {qref} */
-    await setDoc(pref, { questions: arrayUnion(qref) }, { merge: true })
+    /* update poll doc to include reference to {qref} and bump updated_at */
+    await setDoc(
+      pref,
+      { questions: arrayUnion(qref), updated_at: serverTimestamp() },
+      { merge: true },
+    )
     return qref
   }
 
@@ -77,6 +81,11 @@ export default class QuestionStore extends BaseStore {
       ...payload,
       updated_at: serverTimestamp(),
     })
+    /* bump parent poll's updated_at so edits surface in dashboards */
+    const pref = qref.parent.parent as DocumentReference<Poll> | null
+    if (pref) {
+      await updateDoc(pref, { updated_at: serverTimestamp() })
+    }
     return qref
   }
 
@@ -85,8 +94,12 @@ export default class QuestionStore extends BaseStore {
     if (!pref) {
       throw new Error("Questions collect needs a parent document (poll)")
     }
-    /* update poll doc to remove reference to {qref} */
-    await setDoc(pref, { questions: arrayRemove(qref) }, { merge: true })
+    /* update poll doc to remove reference to {qref} and bump updated_at */
+    await setDoc(
+      pref,
+      { questions: arrayRemove(qref), updated_at: serverTimestamp() },
+      { merge: true },
+    )
     /* delete question doc */
     await deleteDoc(qref)
   }
