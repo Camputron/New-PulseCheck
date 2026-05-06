@@ -321,21 +321,20 @@ export default function UpgradeGuestDialog(props: Props) {
               borderRadius: 2,
               textTransform: "none",
               fontWeight: 500,
-              borderColor: (theme) =>
-                theme.palette.mode === "dark"
+              borderColor: (t) =>
+                t.palette.mode === "dark"
                   ? "rgba(255,255,255,0.23)"
                   : "#dadce0",
-              color: (theme) =>
-                theme.palette.mode === "dark" ? "#e8eaed" : "#3c4043",
-              backgroundColor: (theme) =>
-                theme.palette.mode === "dark" ? "transparent" : "#fff",
+              color: (t) => (t.palette.mode === "dark" ? "#e8eaed" : "#3c4043"),
+              backgroundColor: (t) =>
+                t.palette.mode === "dark" ? "transparent" : "#fff",
               "&:hover": {
-                borderColor: (theme) =>
-                  theme.palette.mode === "dark"
+                borderColor: (t) =>
+                  t.palette.mode === "dark"
                     ? "rgba(255,255,255,0.4)"
                     : "#c6c6c6",
-                backgroundColor: (theme) =>
-                  theme.palette.mode === "dark"
+                backgroundColor: (t) =>
+                  t.palette.mode === "dark"
                     ? "rgba(255,255,255,0.04)"
                     : "#f7f8f8",
               },
