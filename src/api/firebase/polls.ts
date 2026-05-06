@@ -107,7 +107,7 @@ export default class PollStore extends BaseStore {
     const pcref = collection(this.db, clx.polls) as CollectionReference<Poll>
     const newPollRef = await addDoc(pcref, {
       owner: owner,
-      title: `${source.title} (Copy)`,
+      title: `Copy of ${source.title}`,
       async: source.async,
       anonymous: source.anonymous,
       time: source.time,
