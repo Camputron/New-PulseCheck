@@ -267,7 +267,7 @@ export default function AddFromPollDialog(props: AddFromPollDialogProps) {
         {selectedPid && (
           <Button
             onClick={() => void handleSave()}
-            variant="contained"
+            variant="text"
             disabled={submitting || checked.size === 0}>
             {submitting
               ? "Adding..."

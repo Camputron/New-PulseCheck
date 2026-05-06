@@ -1,24 +1,24 @@
 import api from "@/api"
+import ViewToggle from "@/components/ViewToggle"
 import { useAuthContext } from "@/hooks"
 import { useSnackbar } from "@/hooks"
+import useViewMode from "@/hooks/useViewMode"
 import { Submission } from "@/types"
 import { RA } from "@/styles"
-import { Download } from "@mui/icons-material"
 import {
   Box,
   Grid2,
-  IconButton,
   MenuItem,
   Select,
   Skeleton,
   TextField,
-  Tooltip,
   Typography,
 } from "@mui/material"
 import { SelectChangeEvent } from "@mui/material/Select"
 import { QueryDocumentSnapshot } from "firebase/firestore/lite"
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react"
 import SubmissionCard from "./SubmissionCard"
+import SubmissionTable from "./SubmissionTable"
 
 type SortOption =
   | "date-desc"
@@ -69,25 +69,25 @@ function sortSubmissions(
   }
 }
 
-function exportSubmissionsCSV(
-  submissions: QueryDocumentSnapshot<Submission>[],
-) {
-  const header = "Title,Date,Score,Max Score,Score %\n"
-  const rows = submissions.map((x) => {
-    const d = x.data()
-    const date = d.submitted_at.toDate().toISOString().split("T")[0]
-    const title = d.title.replace(/,/g, ";")
-    const pct = isFinite(d.score_100) ? d.score_100.toFixed(1) : "N/A"
-    return `${title},${date},${d.score},${d.max_score},${pct}`
-  })
-  const blob = new Blob([header + rows.join("\n")], { type: "text/csv" })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement("a")
-  a.href = url
-  a.download = "submissions.csv"
-  a.click()
-  URL.revokeObjectURL(url)
-}
+// function exportSubmissionsCSV(
+//   submissions: QueryDocumentSnapshot<Submission>[],
+// ) {
+//   const header = "Title,Date,Score,Max Score,Score %\n"
+//   const rows = submissions.map((x) => {
+//     const d = x.data()
+//     const date = d.submitted_at.toDate().toISOString().split("T")[0]
+//     const title = d.title.replace(/,/g, ";")
+//     const pct = isFinite(d.score_100) ? d.score_100.toFixed(1) : "N/A"
+//     return `${title},${date},${d.score},${d.max_score},${pct}`
+//   })
+//   const blob = new Blob([header + rows.join("\n")], { type: "text/csv" })
+//   const url = URL.createObjectURL(blob)
+//   const a = document.createElement("a")
+//   a.href = url
+//   a.download = "submissions.csv"
+//   a.click()
+//   URL.revokeObjectURL(url)
+// }
 
 export default function PollSubmissionHistory(
   props: PollSubmissionHistoryProps,
@@ -104,6 +104,9 @@ export default function PollSubmissionHistory(
   const sortBy = (sort || "date-desc") as SortOption
   const dateFilter = (dateFilterParam || "7d") as DateFilter
   const [fetching, setFetching] = useState(true)
+  const { view, effectiveView, isMobile, setView } = useViewMode(
+    "history:submissions:view",
+  )
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -195,7 +198,7 @@ export default function PollSubmissionHistory(
           <Typography variant="body2" color="text.secondary" flex={1}>
             Showing {filteredSubmissions.length} of {submissions.length}
           </Typography>
-          {filteredSubmissions.length > 0 && (
+          {/* {filteredSubmissions.length > 0 && (
             <Tooltip title="Export CSV">
               <IconButton
                 size="small"
@@ -203,24 +206,34 @@ export default function PollSubmissionHistory(
                 <Download fontSize="small" />
               </IconButton>
             </Tooltip>
-          )}
+          )} */}
+          {!isMobile && <ViewToggle value={view} onChange={setView} />}
         </Box>
-        <Grid2 container spacing={2}>
-          {fetching &&
-            [0, 1, 2].map((i) => (
+        {fetching && (
+          <Grid2 container spacing={2}>
+            {[0, 1, 2].map((i) => (
               <Grid2 key={i} size={{ xs: 12, sm: 6, md: 4 }}>
                 <Skeleton variant="rounded" height={120} />
               </Grid2>
             ))}
-          {!fetching &&
-            filteredSubmissions.map((x) => (
+          </Grid2>
+        )}
+        {!fetching && effectiveView === "cards" && (
+          <Grid2 container spacing={2}>
+            {filteredSubmissions.map((x) => (
               <Grid2 key={x.id} size={{ xs: 12, sm: 6, md: 4 }}>
                 <RA.Fade triggerOnce cascade>
                   <SubmissionCard sid={x.id} submission={x.data()} />
                 </RA.Fade>
               </Grid2>
             ))}
-        </Grid2>
+          </Grid2>
+        )}
+        {!fetching &&
+          effectiveView === "table" &&
+          filteredSubmissions.length > 0 && (
+            <SubmissionTable submissions={filteredSubmissions} />
+          )}
         {!fetching &&
           filteredSubmissions.length === 0 &&
           submissions.length > 0 && (

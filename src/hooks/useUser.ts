@@ -9,7 +9,8 @@ import {
 } from "firebase/auth"
 import { useAuthState } from "react-firebase-hooks/auth"
 import api, { auth } from "@/api"
-import { User } from "@/types"
+import { HostSettings, User } from "@/types"
+import { clearHostSettings, getHostSettings } from "@/utils"
 
 interface UseUser {
   user: User | null
@@ -23,6 +24,7 @@ interface UseUser {
     currentPassword: string,
     newPassword: string,
   ) => Promise<void>
+  updateSessionDefaults: (next: HostSettings) => Promise<void>
   refresh: () => Promise<void>
 }
 
@@ -42,6 +44,17 @@ export default function useUser(): UseUser {
       const profile = await api.users.get(uid)
       setUser(profile)
       setError(null)
+
+      if (!profile.session_defaults) {
+        const local = getHostSettings(uid)
+        if (local) {
+          await api.users.update(uid, { session_defaults: local })
+          setUser((prev) =>
+            prev ? { ...prev, session_defaults: local } : prev,
+          )
+          clearHostSettings(uid)
+        }
+      }
     } catch (err) {
       console.error(`Failed to fetch user profile ${uid}`, err)
       setError(err instanceof Error ? err : new Error(String(err)))
@@ -109,6 +122,23 @@ export default function useUser(): UseUser {
     [authUser],
   )
 
+  const updateSessionDefaults = useCallback(
+    async (next: HostSettings) => {
+      if (!authUser) throw new Error("No authenticated user")
+      try {
+        await api.users.update(authUser.uid, { session_defaults: next })
+        setUser((prev) => (prev ? { ...prev, session_defaults: next } : prev))
+      } catch (err) {
+        console.error(
+          `Failed to update session defaults for ${authUser.uid}`,
+          err,
+        )
+        throw err
+      }
+    },
+    [authUser],
+  )
+
   const updatePassword = useCallback(
     async (currentPassword: string, newPassword: string) => {
       if (!authUser?.email) throw new Error("No authenticated user with email")
@@ -136,6 +166,7 @@ export default function useUser(): UseUser {
     updateEmail,
     updatePhotoUrl,
     updatePassword,
+    updateSessionDefaults,
     refresh,
   }
 }

@@ -343,7 +343,7 @@ export default function SavePollToBankDialog(props: SavePollToBankDialogProps) {
         {step === "bank" && (
           <Button
             onClick={() => setStep("questions")}
-            variant="contained"
+            variant="text"
             disabled={!canAdvance}>
             Next
           </Button>
@@ -351,7 +351,7 @@ export default function SavePollToBankDialog(props: SavePollToBankDialogProps) {
         {step === "questions" && (
           <Button
             onClick={() => void handleSubmit()}
-            // variant='contained'
+            variant="text"
             disabled={submitting || checked.size === 0}>
             {submitting
               ? "Saving..."

@@ -46,6 +46,10 @@ export default function BankDetail() {
   const [nameDraft, setNameDraft] = useState("")
   const [savingName, setSavingName] = useState(false)
 
+  const [isEditingDescription, setIsEditingDescription] = useState(false)
+  const [descriptionDraft, setDescriptionDraft] = useState("")
+  const [savingDescription, setSavingDescription] = useState(false)
+
   const uid = user?.uid ?? ""
   const safeBid = bid ?? ""
   const bankRef = api.banks.doc(uid, safeBid)
@@ -62,6 +66,12 @@ export default function BankDetail() {
       setNameDraft(bank.name)
     }
   }, [bank, isEditingName])
+
+  useEffect(() => {
+    if (!isEditingDescription && bank) {
+      setDescriptionDraft(bank.description ?? "")
+    }
+  }, [bank, isEditingDescription])
 
   if (!bid) {
     return null
@@ -118,6 +128,47 @@ export default function BankDetail() {
       void commitName()
     } else if (e.key === "Escape") {
       cancelEditingName()
+    }
+  }
+
+  const startEditingDescription = () => {
+    if (!bank) return
+    setDescriptionDraft(bank.description ?? "")
+    setIsEditingDescription(true)
+  }
+
+  const cancelEditingDescription = () => {
+    if (savingDescription) return
+    setIsEditingDescription(false)
+    if (bank) setDescriptionDraft(bank.description ?? "")
+  }
+
+  const commitDescription = async () => {
+    if (!bank) return
+    const trimmed = descriptionDraft.trim()
+    const next = trimmed.length === 0 ? null : trimmed
+    if (next === (bank.description ?? null)) {
+      setIsEditingDescription(false)
+      return
+    }
+    setSavingDescription(true)
+    try {
+      await api.banks.update(bankRef, { description: next })
+      setIsEditingDescription(false)
+    } catch (err) {
+      console.error("Failed to update bank description", err)
+      snackbar.show({ type: "error", message: "Failed to update description" })
+    } finally {
+      setSavingDescription(false)
+    }
+  }
+
+  const handleDescriptionKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      void commitDescription()
+    } else if (e.key === "Escape") {
+      cancelEditingDescription()
     }
   }
 
@@ -182,10 +233,55 @@ export default function BankDetail() {
         </Box>
       </Stack>
 
-      {bank?.description && (
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          {bank.description}
-        </Typography>
+      {bank && (
+        <Box sx={{ mb: 1 }}>
+          {isEditingDescription ? (
+            <TextField
+              size="small"
+              fullWidth
+              autoFocus
+              placeholder="Description"
+              value={descriptionDraft}
+              onChange={(e) => setDescriptionDraft(e.target.value)}
+              onKeyDown={handleDescriptionKeyDown}
+              onBlur={() => void commitDescription()}
+              disabled={savingDescription}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <IconButton
+                      color="primary"
+                      onClick={() => void commitDescription()}
+                      disabled={savingDescription}>
+                      <Done />
+                    </IconButton>
+                  ),
+                },
+              }}
+            />
+          ) : (
+            <Stack direction="row" alignItems="flex-start" spacing={0.5}>
+              <Typography
+                variant="body2"
+                color={bank.description ? "text.secondary" : "text.disabled"}
+                onDoubleClick={startEditingDescription}
+                sx={{
+                  cursor: "text",
+                  flex: 1,
+                  fontStyle: bank.description ? "normal" : "italic",
+                }}>
+                {bank.description ?? "Add a description"}
+              </Typography>
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={startEditingDescription}
+                aria-label="Edit description">
+                <Edit fontSize="small" />
+              </IconButton>
+            </Stack>
+          )}
+        </Box>
       )}
       <Typography variant="caption" color="text.secondary">
         {bank?.question_count ?? 0} question

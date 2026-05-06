@@ -185,7 +185,7 @@ export default function SaveQuestionToBankDialog(
         <Button
           onClick={() => void handleSubmit()}
           disabled={submitDisabled}
-          variant="contained">
+          variant="text">
           {submitting ? "Saving..." : isNewBank ? "Create & Save" : "Save"}
         </Button>
       </DialogActions>

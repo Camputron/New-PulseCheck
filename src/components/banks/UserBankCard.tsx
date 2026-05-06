@@ -14,15 +14,16 @@ import {
   CardActionArea,
   Chip,
   IconButton,
-  // ListItemIcon,
-  // ListItemText,
-  // Menu,
-  // MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
   Typography,
 } from "@mui/material"
+import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-// import RenameBankDialog from "./RenameBankDialog"
-// import DeleteBankDialog from "./DeleteBankDialog"
+import RenameBankDialog from "./RenameBankDialog"
+import DeleteBankDialog from "./DeleteBankDialog"
 
 interface UserBankCardProps {
   bid: string
@@ -32,34 +33,34 @@ interface UserBankCardProps {
 export default function UserBankCard(props: UserBankCardProps) {
   const { bid, bank } = props
   const navigate = useNavigate()
-  // const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  // const [renameOpen, setRenameOpen] = useState(false)
-  // const [deleteOpen, setDeleteOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const [renameOpen, setRenameOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
 
-  // const bankRef = api.banks.doc(bank.owner.id, bid)
+  const bankRef = api.banks.doc(bank.owner.id, bid)
 
   const handleClick = () => {
     void navigate(`/banks/${bid}`)
   }
 
-  // const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-  //   event.stopPropagation()
-  //   setAnchorEl(event.currentTarget)
-  // }
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation()
+    setAnchorEl(event.currentTarget)
+  }
 
-  // const handleMenuClose = () => setAnchorEl(null)
+  const handleMenuClose = () => setAnchorEl(null)
 
-  // const openRename = (event: React.MouseEvent<HTMLElement>) => {
-  //   event.stopPropagation()
-  //   handleMenuClose()
-  //   setRenameOpen(true)
-  // }
+  const openRename = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation()
+    handleMenuClose()
+    setRenameOpen(true)
+  }
 
-  // const openDelete = (event: React.MouseEvent<HTMLElement>) => {
-  //   event.stopPropagation()
-  //   handleMenuClose()
-  //   setDeleteOpen(true)
-  // }
+  const openDelete = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation()
+    handleMenuClose()
+    setDeleteOpen(true)
+  }
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -120,7 +121,7 @@ export default function UserBankCard(props: UserBankCardProps) {
           </Typography>
         </Box>
       </CardActionArea>
-      {/* <IconButton
+      <IconButton
         size="small"
         onClick={handleMenuOpen}
         sx={{
@@ -130,8 +131,8 @@ export default function UserBankCard(props: UserBankCardProps) {
         }}
         aria-label="Bank actions">
         <MoreVert fontSize="small" />
-      </IconButton> */}
-      {/* <Menu
+      </IconButton>
+      <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
@@ -158,8 +159,8 @@ export default function UserBankCard(props: UserBankCardProps) {
           </ListItemIcon>
           <ListItemText>Delete</ListItemText>
         </MenuItem>
-      </Menu> */}
-      {/* <RenameBankDialog
+      </Menu>
+      <RenameBankDialog
         open={renameOpen}
         onClose={() => setRenameOpen(false)}
         bankRef={bankRef}
@@ -170,7 +171,7 @@ export default function UserBankCard(props: UserBankCardProps) {
         onClose={() => setDeleteOpen(false)}
         bankRef={bankRef}
         bankName={bank.name}
-      /> */}
+      />
     </Box>
   )
 }

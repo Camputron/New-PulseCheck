@@ -257,7 +257,7 @@ export default function ImportFromBankDialog(props: ImportFromBankDialogProps) {
         {selectedBid && (
           <Button
             onClick={() => void handleImport()}
-            variant="contained"
+            variant="text"
             disabled={submitting || checked.size === 0}>
             {submitting
               ? "Importing..."

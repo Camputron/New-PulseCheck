@@ -1,11 +1,14 @@
 import api from "@/api"
 import UserBankCard from "@/components/banks/UserBankCard"
+import UserBankTable from "@/components/banks/UserBankTable"
 import CreateBankDialog from "@/components/banks/CreateBankDialog"
+import ViewToggle from "@/components/ViewToggle"
 import { useAuthContext } from "@/hooks"
 import useRequireAuth from "@/hooks/useRequireAuth"
+import useViewMode from "@/hooks/useViewMode"
 import { RA } from "@/styles"
 import { Add } from "@mui/icons-material"
-import { Box, Button, Container, Typography } from "@mui/material"
+import { Box, Button, Container, Stack, Typography } from "@mui/material"
 import { useState } from "react"
 import { useCollectionOnce } from "react-firebase-hooks/firestore"
 
@@ -14,6 +17,11 @@ export default function BankManager() {
   const { user } = useAuthContext()
   const [banks] = useCollectionOnce(api.banks.queryUserBanks(user?.uid ?? "1"))
   const [createOpen, setCreateOpen] = useState(false)
+
+  const { view, effectiveView, isMobile, setView } = useViewMode("banks:view")
+
+  const rows =
+    banks?.docs.map((doc) => ({ id: doc.id, data: doc.data() })) ?? []
 
   return (
     <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
@@ -48,25 +56,38 @@ export default function BankManager() {
       </Button>
 
       {banks && banks.docs.length > 0 && (
-        <Typography variant="h6" fontWeight={600} sx={{ mt: 5, mb: 2 }}>
-          Your Banks
-        </Typography>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ mt: 5, mb: 2 }}>
+          <Typography variant="h6" fontWeight={600}>
+            Your Banks
+          </Typography>
+          {!isMobile && <ViewToggle value={view} onChange={setView} />}
+        </Stack>
       )}
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "1fr 1fr",
-            md: "1fr 1fr 1fr",
-          },
-          gap: 2,
-        }}>
-        {banks?.docs.map((x) => (
-          <UserBankCard key={x.id} bid={x.id} bank={x.data()} />
-        ))}
-      </Box>
+      {rows.length > 0 && effectiveView === "cards" && (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "1fr 1fr",
+              md: "1fr 1fr 1fr",
+            },
+            gap: 2,
+          }}>
+          {rows.map(({ id, data }) => (
+            <UserBankCard key={id} bid={id} bank={data} />
+          ))}
+        </Box>
+      )}
+
+      {rows.length > 0 && effectiveView === "table" && (
+        <UserBankTable banks={rows} />
+      )}
 
       {banks && banks.docs.length === 0 && (
         <Box
