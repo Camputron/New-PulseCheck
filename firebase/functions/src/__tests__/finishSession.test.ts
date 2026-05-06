@@ -32,7 +32,7 @@ const P2_UID = "p2"
 const P3_UID = "p3"
 
 beforeAll(async () => {
-  ;({ finishSession } = await import("../index.js"))
+  ({ finishSession } = await import("../index.js"))
 })
 
 afterAll(() => {
