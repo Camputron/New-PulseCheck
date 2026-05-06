@@ -21,7 +21,7 @@ interface UseViewModeResult {
  * "cards" on mobile-sized viewports regardless of the stored preference.
  */
 export default function useViewMode(
-  storageKey: ViewModeStorageKey
+  storageKey: ViewModeStorageKey,
 ): UseViewModeResult {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))

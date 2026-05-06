@@ -35,18 +35,18 @@ function promptTypeLabel(question: PollPDFQuestion): string {
   }
 }
 
-function drawOptionBullet(
-  doc: jsPDF,
-  promptType: string,
-  x: number,
-  y: number,
-): void {
-  if (promptType === "multiple-choice") {
-    doc.circle(x + 1.5, y - 1.2, 1.5)
-  } else if (promptType === "multi-select") {
-    doc.rect(x, y - 2.7, 3, 3)
-  }
-}
+// function drawOptionBullet(
+//   doc: jsPDF,
+//   promptType: string,
+//   x: number,
+//   y: number,
+// ): void {
+//   if (promptType === "multiple-choice") {
+//     doc.circle(x + 1.5, y - 1.2, 1.5)
+//   } else if (promptType === "multi-select") {
+//     doc.rect(x, y - 2.7, 3, 3)
+//   }
+// }
 
 // function answerBlank(question: PollPDFQuestion): string {
 //   if (question.promptType === "multi-select") {
