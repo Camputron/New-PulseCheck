@@ -1,12 +1,21 @@
 import { useNavigate } from "react-router-dom"
-import { Box, Button, Container, Stack, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  Container,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material"
+import { useState } from "react"
 import api from "@/api"
 import { useAuthContext } from "@/hooks"
 import { useCollectionOnce } from "react-firebase-hooks/firestore"
 import UserPollCard from "@/components/dashboard/UserPollCard"
 import UserPollTable from "@/components/dashboard/UserPollTable"
 import ViewToggle from "@/components/ViewToggle"
-import { Add, HowToVote } from "@mui/icons-material"
+import { Add, HowToVote, Search } from "@mui/icons-material"
 import MostRecentGaugeCard from "@/components/graphs/MostRecentGaugeCard"
 import useRequireAuth from "@/hooks/useRequireAuth"
 import useViewMode from "@/hooks/useViewMode"
@@ -20,6 +29,7 @@ export default function Dashboard() {
   const [polls] = useCollectionOnce(api.polls.queryUserPolls(user?.uid ?? "1"))
 
   const { view, effectiveView, isMobile, setView } = useViewMode("polls:view")
+  const [query, setQuery] = useState("")
 
   const handleCreatePoll = () => {
     if (user) {
@@ -39,6 +49,13 @@ export default function Dashboard() {
 
   const rows =
     polls?.docs.map((doc) => ({ id: doc.id, data: doc.data() })) ?? []
+  /* filter polls by includes key word */
+  const normalizedQuery = query.trim().toLowerCase()
+  const filteredRows = normalizedQuery
+    ? rows.filter(({ data }) =>
+        data.title.toLowerCase().includes(normalizedQuery),
+      )
+    : rows
 
   return (
     <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
@@ -110,7 +127,28 @@ export default function Dashboard() {
         </Stack>
       )}
 
-      {rows.length > 0 && effectiveView === "cards" && (
+      {/* render filter by text input */}
+      {rows.length > 0 && (
+        <TextField
+          fullWidth
+          size="small"
+          placeholder="Search polls by name"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search fontSize="small" />
+                </InputAdornment>
+              ),
+            },
+          }}
+          sx={{ mb: 2 }}
+        />
+      )}
+
+      {filteredRows.length > 0 && effectiveView === "cards" && (
         <Box
           sx={{
             display: "grid",
@@ -121,14 +159,22 @@ export default function Dashboard() {
             },
             gap: 2,
           }}>
-          {rows.map(({ id, data }) => (
+          {filteredRows.map(({ id, data }) => (
             <UserPollCard key={id} pid={id} poll={data} />
           ))}
         </Box>
       )}
 
-      {rows.length > 0 && effectiveView === "table" && (
-        <UserPollTable polls={rows} />
+      {filteredRows.length > 0 && effectiveView === "table" && (
+        <UserPollTable polls={filteredRows} />
+      )}
+
+      {rows.length > 0 && filteredRows.length === 0 && (
+        <Box sx={{ mt: 3, textAlign: "center", color: "text.secondary" }}>
+          <Typography variant="body2">
+            No polls match &ldquo;{query}&rdquo;.
+          </Typography>
+        </Box>
       )}
     </Container>
   )

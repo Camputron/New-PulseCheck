@@ -7,8 +7,16 @@ import { useAuthContext } from "@/hooks"
 import useRequireAuth from "@/hooks/useRequireAuth"
 import useViewMode from "@/hooks/useViewMode"
 import { RA } from "@/styles"
-import { Add } from "@mui/icons-material"
-import { Box, Button, Container, Stack, Typography } from "@mui/material"
+import { Add, Search } from "@mui/icons-material"
+import {
+  Box,
+  Button,
+  Container,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material"
 import { useState } from "react"
 import { useCollectionOnce } from "react-firebase-hooks/firestore"
 
@@ -17,11 +25,20 @@ export default function BankManager() {
   const { user } = useAuthContext()
   const [banks] = useCollectionOnce(api.banks.queryUserBanks(user?.uid ?? "1"))
   const [createOpen, setCreateOpen] = useState(false)
+  const [query, setQuery] = useState("")
 
   const { view, effectiveView, isMobile, setView } = useViewMode("banks:view")
 
   const rows =
     banks?.docs.map((doc) => ({ id: doc.id, data: doc.data() })) ?? []
+
+  /* fitler banks by include key words */
+  const normalizedQuery = query.trim().toLowerCase()
+  const filteredRows = normalizedQuery
+    ? rows.filter(({ data }) =>
+        data.name.toLowerCase().includes(normalizedQuery),
+      )
+    : rows
 
   return (
     <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
@@ -68,7 +85,28 @@ export default function BankManager() {
         </Stack>
       )}
 
-      {rows.length > 0 && effectiveView === "cards" && (
+      {/* render filter by text input */}
+      {rows.length > 0 && (
+        <TextField
+          fullWidth
+          size="small"
+          placeholder="Search banks by name"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search fontSize="small" />
+                </InputAdornment>
+              ),
+            },
+          }}
+          sx={{ mb: 2 }}
+        />
+      )}
+
+      {filteredRows.length > 0 && effectiveView === "cards" && (
         <Box
           sx={{
             display: "grid",
@@ -79,14 +117,21 @@ export default function BankManager() {
             },
             gap: 2,
           }}>
-          {rows.map(({ id, data }) => (
+          {filteredRows.map(({ id, data }) => (
             <UserBankCard key={id} bid={id} bank={data} />
           ))}
         </Box>
       )}
 
-      {rows.length > 0 && effectiveView === "table" && (
-        <UserBankTable banks={rows} />
+      {filteredRows.length > 0 && effectiveView === "table" && (
+        <UserBankTable banks={filteredRows} />
+      )}
+      {rows.length > 0 && filteredRows.length === 0 && (
+        <Box sx={{ mt: 3, textAlign: "center", color: "text.secondary" }}>
+          <Typography variant="body2">
+            No banks match &ldquo;{query}&rdquo;.
+          </Typography>
+        </Box>
       )}
 
       {banks && banks.docs.length === 0 && (
