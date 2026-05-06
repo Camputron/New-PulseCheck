@@ -49,6 +49,31 @@ export default function PollParticipate() {
      then shows a confirmation dialog instead of navigating away. */
   const [showLeaveDialog, setShowLeaveDialog] = useState(false)
 
+  const leaveSession = () => {
+    async function leaveAsync() {
+      if (!user) return
+      try {
+        const uid = user.uid
+        await api.sessions.leaveSession(sid, uid)
+        clearActiveSession()
+        setAllowNavigation(true)
+        snackbar.show({
+          message: "You left the session",
+          type: "info",
+        })
+        if (user.isAnonymous) {
+          await user.delete()
+          void navigate("/get-started", { replace: true })
+        } else {
+          void navigate("/poll/join", { replace: true })
+        }
+      } catch (err: unknown) {
+        console.error(err)
+      }
+    }
+    void leaveAsync()
+  }
+
   useEffect(() => {
     if (allowNavigation) return undefined
 
@@ -180,12 +205,7 @@ export default function PollParticipate() {
     <React.Fragment>
       {/* {completedGame && <Confetti tweenDuration={5000} recycle={false} />} */}
       <ResponseDialog session={session} sref={sref} />
-      <Header
-        sid={sid}
-        session={session}
-        users={users}
-        onAllowNavigation={() => setAllowNavigation(true)}
-      />
+      <Header session={session} users={users} onLeaveSession={leaveSession} />
       {!gettingstated && <LinearProgress />}
       <Container sx={{ mt: 2 }}>
         {!gettingstated && (
@@ -234,8 +254,9 @@ export default function PollParticipate() {
         <DialogTitle>Leave session?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You are still in an active session. If you leave now, you can rejoin
-            from the banner on the dashboard.
+            {user?.isAnonymous
+              ? "Your submitted answers are saved and any remaining questions will be marked 0. As a guest, leaving will permanently delete your account — you won't be able to rejoin this session."
+              : "Your submitted answers are saved, but you will receive a 0 for any remaining questions."}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -244,8 +265,7 @@ export default function PollParticipate() {
             color="error"
             onClick={() => {
               setShowLeaveDialog(false)
-              setAllowNavigation(true)
-              void navigate(-1)
+              leaveSession()
             }}>
             Leave
           </Button>

@@ -315,8 +315,8 @@ export default function Settings() {
                     clearFieldError("displayName")
                   }}
                   onKeyUp={(e) => {
-                    if (e.code === 'Enter') {
-                      saveChanges()
+                    if (e.code === "Enter") {
+                      void saveChanges("displayName")
                     }
                   }}
                   error={!!error.displayName}

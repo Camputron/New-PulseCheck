@@ -11,6 +11,9 @@ interface Props {
   anonymous: boolean
 }
 
+/**
+ * Component for rendering users currently in poll session
+ */
 export default function UserSessionCard(props: Props) {
   const { u_ss, res, anonymous } = props
   const user = u_ss.data()
