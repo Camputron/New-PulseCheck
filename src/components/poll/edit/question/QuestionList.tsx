@@ -18,7 +18,7 @@ export default function QuestionList(props: Props) {
   }
 
   return (
-    <Stack textAlign={"initial"} spacing={1}>
+    <Stack textAlign={"initial"} spacing={1} width="100%">
       {questions.map((x, i) => (
         <QuestionEditor
           key={x.id}

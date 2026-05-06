@@ -97,7 +97,7 @@ export default function PollEditor() {
           onStartConfig={() => setIsConfiguring(true)}
         />
       )}
-      <Container sx={{ mt: 1, mb: 4 }} maxWidth="xl">
+      <Container sx={{ mt: 1, mb: 4 }} maxWidth="lg">
         {questionCount > 0 && poll && (
           <CompletionBar
             questions={poll.questions}
@@ -105,22 +105,24 @@ export default function PollEditor() {
             onAllReadyChange={setCanHost}
           />
         )}
-        <Stack spacing={2} alignItems={"center"}>
+        <Stack spacing={1} alignItems="stretch">
           <QuestionList
             pid={id}
             questions={poll?.questions ?? []}
             expandAll={expandAll}
           />
-          <RA.Roll triggerOnce>
-            <Tooltip title="New Question">
-              <Fab
-                color="secondary"
-                disabled={!poll}
-                onClick={handleAddQuestion}>
-                <Add />
-              </Fab>
-            </Tooltip>
-          </RA.Roll>
+          <Stack alignItems="center" sx={{ pt: 1 }}>
+            <RA.Roll triggerOnce>
+              <Tooltip title="New Question">
+                <Fab
+                  color="secondary"
+                  disabled={!poll}
+                  onClick={handleAddQuestion}>
+                  <Add />
+                </Fab>
+              </Tooltip>
+            </RA.Roll>
+          </Stack>
         </Stack>
       </Container>
     </React.Fragment>

@@ -1,9 +1,7 @@
 import { PromptOption, PromptType } from "@/types"
-import { Box, Divider, Typography } from "@mui/material"
+import { Stack } from "@mui/material"
 import { DocumentReference } from "firebase/firestore"
-import React from "react"
 import PromptOptionEditor from "./PromptOptionEditor"
-// import { DragIndicator } from "@mui/icons-material"
 
 interface Props {
   options: DocumentReference<PromptOption>[]
@@ -13,25 +11,20 @@ interface Props {
 export default function PromptOptionList(props: Props) {
   const { options, promptType } = props
 
+  if (options.length === 0) {
+    return null
+  }
+
   return (
-    <React.Fragment>
-      <Divider>
-        <Typography>Answer Options</Typography>
-      </Divider>
+    <Stack spacing={0.75}>
       {options.map((x, i) => (
-        <Box
+        <PromptOptionEditor
           key={x.id}
-          // draggable
-          style={{ display: "flex", alignItems: "center" }}>
-          {/* <DragIndicator color='action' /> */}
-          <PromptOptionEditor
-            key={x.id}
-            ref={x}
-            index={i}
-            promptType={promptType}
-          />
-        </Box>
+          ref={x}
+          index={i}
+          promptType={promptType}
+        />
       ))}
-    </React.Fragment>
+    </Stack>
   )
 }

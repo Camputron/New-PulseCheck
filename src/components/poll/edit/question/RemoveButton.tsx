@@ -1,7 +1,7 @@
 import AsyncButton from "@/components/AsyncButton"
 import api from "@/api"
 import { useSnackbar } from "@/hooks"
-import { Clear } from "@mui/icons-material"
+import { Delete } from "@mui/icons-material"
 
 interface RemoveButtonProps {
   pid: string
@@ -13,7 +13,6 @@ export default function RemoveButton(props: RemoveButtonProps) {
   const snackbar = useSnackbar()
 
   const remove = async () => {
-    /* delete question in poll(id) */
     try {
       const ref = api.polls.questions.doc(pid, qid)
       await api.polls.questions.delete(ref)
@@ -26,7 +25,11 @@ export default function RemoveButton(props: RemoveButtonProps) {
   }
 
   return (
-    <AsyncButton color="error" callback={remove} endIcon={<Clear />}>
+    <AsyncButton
+      size="small"
+      color="error"
+      callback={remove}
+      startIcon={<Delete />}>
       Remove
     </AsyncButton>
   )
