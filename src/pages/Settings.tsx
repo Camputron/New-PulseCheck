@@ -10,6 +10,9 @@ import {
   Avatar,
   Skeleton,
   IconButton,
+  Stack,
+  Switch,
+  FormControlLabel,
 } from "@mui/material"
 import { Edit, Check, Close, Google, Email, Logout } from "@mui/icons-material"
 import { RA } from "@/styles"
@@ -66,6 +69,7 @@ export default function Settings() {
     updateDisplayName,
     updateEmail: updateUserEmail,
     updatePassword: updateUserPassword,
+    updateSessionDefaults,
   } = useUser()
 
   const [save, setSave] = useState(false)
@@ -106,7 +110,7 @@ export default function Settings() {
     setTempVal("")
   }
 
-  const saveChanges = async (field: string): Promise<void> => {
+  const saveChanges = async (field: "displayName" | "email"): Promise<void> => {
     if (!authUser) {
       return
     }
@@ -130,11 +134,11 @@ export default function Settings() {
         await updateUserEmail(tempVal)
         setOriginalEmail(tempVal)
       }
-
-      snackbar.show({
-        message: "Profile updated successfully",
-        type: "success",
-      })
+      /* verbose */
+      // snackbar.show({
+      //   message: "Profile updated successfully",
+      //   type: "success",
+      // })
     } catch (err: unknown) {
       console.error("Error updating", err)
       if (err instanceof FirebaseError) {
@@ -154,7 +158,7 @@ export default function Settings() {
         }
       } else {
         snackbar.show({
-          message: "Profile update unsuccessful",
+          message: "Failed to update profile",
           type: "error",
         })
       }
@@ -211,6 +215,33 @@ export default function Settings() {
       }
     } finally {
       setSave(false)
+    }
+  }
+
+  const sessionDefaults = profile?.session_defaults
+  const isAnonymousDefault = sessionDefaults?.isAnonymous ?? false
+  const hasLeaderboardDefault = sessionDefaults?.hasLeaderboard ?? false
+
+  const handleToggleSessionDefault = async (
+    field: "isAnonymous" | "hasLeaderboard",
+    next: boolean,
+  ) => {
+    try {
+      await updateSessionDefaults({
+        isAnonymous: field === "isAnonymous" ? next : isAnonymousDefault,
+        hasLeaderboard:
+          field === "hasLeaderboard" ? next : hasLeaderboardDefault,
+      })
+      // snackbar.show({
+      //   message: "Session defaults updated",
+      //   type: "success",
+      // })
+    } catch (err) {
+      console.error("Failed to update settings (session defaults)", err)
+      snackbar.show({
+        message: "Failed to update settings",
+        type: "error",
+      })
     }
   }
 
@@ -283,6 +314,11 @@ export default function Settings() {
                     setTempVal(e.target.value)
                     clearFieldError("displayName")
                   }}
+                  onKeyUp={(e) => {
+                    if (e.code === 'Enter') {
+                      saveChanges()
+                    }
+                  }}
                   error={!!error.displayName}
                   helperText={error.displayName}
                   fullWidth
@@ -327,6 +363,43 @@ export default function Settings() {
             <Box flex={1}>
               <ThemeSelect size="small" sx={{ minWidth: 160 }} />
             </Box>
+          </SettingsRow>
+
+          <Divider />
+
+          <SettingsRow label="Session Defaults">
+            <Stack flex={1} spacing={0.5}>
+              <FormControlLabel
+                label="Anonymous Mode"
+                control={
+                  <Switch
+                    size="small"
+                    checked={isAnonymousDefault}
+                    onChange={(e) =>
+                      void handleToggleSessionDefault(
+                        "isAnonymous",
+                        e.target.checked,
+                      )
+                    }
+                  />
+                }
+              />
+              <FormControlLabel
+                label="Leaderboard"
+                control={
+                  <Switch
+                    size="small"
+                    checked={hasLeaderboardDefault}
+                    onChange={(e) =>
+                      void handleToggleSessionDefault(
+                        "hasLeaderboard",
+                        e.target.checked,
+                      )
+                    }
+                  />
+                }
+              />
+            </Stack>
           </SettingsRow>
 
           <Divider />

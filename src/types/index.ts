@@ -15,6 +15,7 @@ export interface User {
   email: string
   photo_url: string | null
   created_at: Timestamp
+  session_defaults?: HostSettings
 }
 
 /**

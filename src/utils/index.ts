@@ -27,6 +27,7 @@ export function clearActiveSession(): void {
 
 const HOST_SETTINGS_PREFIX = "host-settings"
 
+/** @deprecated F39 migration only. Use useUser().updateSessionDefaults instead. */
 export function saveHostSettings(uid: string, settings: HostSettings): void {
   try {
     localStorage.setItem(
@@ -38,6 +39,7 @@ export function saveHostSettings(uid: string, settings: HostSettings): void {
   }
 }
 
+/** @deprecated F39 migration only. Use useUser().user?.session_defaults instead. */
 export function getHostSettings(uid: string): HostSettings | null {
   try {
     const raw = localStorage.getItem(`${HOST_SETTINGS_PREFIX}:${uid}`)
@@ -48,6 +50,7 @@ export function getHostSettings(uid: string): HostSettings | null {
   }
 }
 
+/** @deprecated F39 migration only. */
 export function clearHostSettings(uid: string): void {
   localStorage.removeItem(`${HOST_SETTINGS_PREFIX}:${uid}`)
 }

@@ -10,12 +10,11 @@ import {
   Typography,
 } from "@mui/material"
 import { ArrowBack, ScreenShare } from "@mui/icons-material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAuthContext, useSnackbar } from "@/hooks"
+import { useSnackbar, useUser } from "@/hooks"
 import { Poll } from "@/types"
 import api from "@/api"
-import { getHostSettings, saveHostSettings } from "@/utils"
 import AsyncButton from "@/components/AsyncButton"
 
 interface PreSessionConfigProps {
@@ -26,22 +25,29 @@ interface PreSessionConfigProps {
 
 export default function PreSessionConfig(props: PreSessionConfigProps) {
   const { pid, poll, onBack } = props
-  const auth = useAuthContext()
+  const { authUser, user, updateSessionDefaults } = useUser()
   const navigate = useNavigate()
   const snackbar = useSnackbar()
 
-  const saved = auth.user ? getHostSettings(auth.user.uid) : null
-  const [isAnonymous, setIsAnonymous] = useState(saved?.isAnonymous ?? false)
-  const [hasLeaderboard, setHasLeaderboard] = useState(
-    saved?.hasLeaderboard ?? false,
-  )
+  const [isAnonymous, setIsAnonymous] = useState(false)
+  const [hasLeaderboard, setHasLeaderboard] = useState(false)
+
+  useEffect(() => {
+    if (user?.session_defaults) {
+      setIsAnonymous(user.session_defaults.isAnonymous)
+      setHasLeaderboard(user.session_defaults.hasLeaderboard)
+    }
+  }, [user?.session_defaults])
 
   const handleStartSession = async () => {
-    if (!auth.user) return
-    const uid = auth.user.uid
+    if (!authUser) return
     const settings = { isAnonymous, hasLeaderboard }
-    const sessionId = await api.sessions.host(pid, uid, settings)
-    saveHostSettings(uid, settings)
+    const sessionId = await api.sessions.host(pid, authUser.uid, settings)
+    try {
+      await updateSessionDefaults(settings)
+    } catch (err) {
+      console.warn("Failed to save session defaults", err)
+    }
     void navigate(`/poll/session/${sessionId}/host`)
   }
 
@@ -108,19 +114,21 @@ export default function PreSessionConfig(props: PreSessionConfigProps) {
             </Typography>
           </Box>
 
-          <AsyncButton
-            variant="contained"
-            size="large"
-            startIcon={<ScreenShare />}
-            callback={handleStartSession}
-            onError={() =>
-              snackbar.show({
-                type: "error",
-                message: "Failed to start session",
-              })
-            }>
-            Start Session
-          </AsyncButton>
+          <Box alignSelf={"flex-end"}>
+            <AsyncButton
+              startIcon={<ScreenShare />}
+              variant="text"
+              size="large"
+              callback={handleStartSession}
+              onError={() =>
+                snackbar.show({
+                  type: "error",
+                  message: "Failed to start session",
+                })
+              }>
+              Start Session
+            </AsyncButton>
+          </Box>
         </Stack>
       </Container>
     </>
