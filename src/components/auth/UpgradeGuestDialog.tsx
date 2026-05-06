@@ -237,8 +237,8 @@ export default function UpgradeGuestDialog(props: Props) {
               p: 1.5,
               mb: 2,
               borderRadius: 1,
-              backgroundColor: (theme) => theme.palette.error.main + "14",
-              border: (theme) => `1px solid ${theme.palette.error.main}`,
+              backgroundColor: (t) => t.palette.error.main + "14",
+              border: (t) => `1px solid ${t.palette.error.main}`,
             }}>
             <Typography variant="body2" color="error.main" sx={{ mb: 1 }}>
               {collisionError}
