@@ -95,19 +95,19 @@ export default function LoginForm() {
   return (
     <Box sx={{ width: "100%", maxWidth: 400 }}>
       <RA.Fade triggerOnce duration={600}>
-        <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+        <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
           Sign In
         </Typography>
-        <Typography variant='body2' color='text.secondary' sx={{ mb: 4 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
           Enter your credentials to continue.
         </Typography>
 
-        <Stack component={"form"} spacing={2.5} noValidate autoComplete='off'>
+        <Stack component={"form"} spacing={2.5} noValidate autoComplete="off">
           <TextField
-            placeholder='Email'
-            type='email'
+            placeholder="Email"
+            type="email"
             fullWidth
-            size='medium'
+            size="medium"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value)
@@ -117,11 +117,11 @@ export default function LoginForm() {
             helperText={errors.email}
           />
           <TextField
-            placeholder='Password'
+            placeholder="Password"
             fullWidth
-            size='medium'
+            size="medium"
             value={password}
-            type='password'
+            type="password"
             onChange={(e) => {
               setPassword(e.target.value)
               clearFieldError("password")
@@ -131,10 +131,10 @@ export default function LoginForm() {
           />
 
           <Button
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             fullWidth
-            type='submit'
+            type="submit"
             sx={{ borderRadius: 2 }}
             onClick={(e) => {
               e.preventDefault()
@@ -144,7 +144,7 @@ export default function LoginForm() {
           </Button>
 
           <Divider sx={{ my: 3 }}>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               or sign in with
             </Typography>
           </Divider>
@@ -153,9 +153,9 @@ export default function LoginForm() {
 
           <Box display={"flex"} justifyContent={"center"}>
             <Link
-              color='text.primary'
+              color="text.primary"
               onClick={handleLink}
-              variant='body2'
+              variant="body2"
               sx={{
                 cursor: "pointer",
                 transition: "color 0.2s",

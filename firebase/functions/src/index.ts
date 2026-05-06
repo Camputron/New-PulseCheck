@@ -6,11 +6,11 @@ import {
   HarmCategory,
   HarmBlockThreshold,
 } from "@google-cloud/vertexai"
-import { initializeApp } from "firebase-admin/app"
+import { getApps, initializeApp } from "firebase-admin/app"
 import { getFirestore, FieldValue } from "firebase-admin/firestore"
 import { getStorage } from "firebase-admin/storage"
 
-const admin = initializeApp()
+const admin = getApps().length ? getApps()[0] : initializeApp()
 
 setGlobalOptions({ maxInstances: 10 })
 
@@ -29,6 +29,11 @@ interface GenerateQuestionsRequest {
 
 interface FinishSessionRequest {
   sessionId: string
+}
+
+interface ComputeLeaderboardRequest {
+  sessionId: string
+  questionId: string
 }
 
 // ── Vertex AI Setup ──────────────────────────────────────────────────────────
@@ -108,7 +113,7 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
     const MIN_QUESTIONS = 1
     const MAX_QUESTIONS = 20
 
-    // Input validation
+    /* ensure input is valid */
     if (!n || typeof n !== "number" || n < MIN_QUESTIONS || n > MAX_QUESTIONS) {
       throw new HttpsError(
         "invalid-argument",
@@ -127,8 +132,7 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
     "question" (string), "options" (array of exactly 4 strings), and 
     "correct_answer" (string matching one of the options).`
 
-    // In emulator: download file and send inline (Gemini can't access local storage)
-    // In production: pass gs:// URI directly (Gemini fetches from GCS)
+    /* download file via cloud storage service */
     const isEmulator = process.env.FUNCTIONS_EMULATOR === "true"
     let filePart:
       | { inlineData: { mimeType: string; data: string } }
@@ -206,7 +210,7 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
       }
     }
 
-    // Should never reach here, but TypeScript needs it
+    /* prog should never reach here, but eslint requires it  */
     throw new HttpsError("internal", "Unexpected error")
   }
 )
@@ -406,6 +410,184 @@ export const finishSession = onCall<FinishSessionRequest>(
       participants: users.length,
       maxScore,
     })
+
+    return { success: true }
+  }
+)
+
+// ── Compute Leaderboard ─────────────────────────────────────────────────────
+
+export const computeLeaderboard = onCall<ComputeLeaderboardRequest>(
+  { timeoutSeconds: 30, memory: "256MiB" },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError("unauthenticated", "Must be signed in")
+    }
+    const uid = request.auth.uid
+    const { sessionId, questionId } = request.data
+
+    if (!sessionId || !questionId) {
+      throw new HttpsError(
+        "invalid-argument",
+        "sessionId and questionId are required"
+      )
+    }
+
+    const db = getFirestore()
+    const sessionRef = db.doc(`sessions/${sessionId}`)
+    const sessionSnap = await sessionRef.get()
+
+    if (!sessionSnap.exists) {
+      throw new HttpsError("not-found", `Session ${sessionId} not found`)
+    }
+
+    const session = sessionSnap.data()!
+
+    // Verify caller is the session host
+    if (session.host.path !== `users/${uid}`) {
+      throw new HttpsError(
+        "permission-denied",
+        "Only the host can compute leaderboard"
+      )
+    }
+
+    // Bail if leaderboard is not enabled
+    if (!session.leaderboard) {
+      return { success: true }
+    }
+
+    // Read the SessionQuestion doc for timestamps
+    const questionRef = db.doc(
+      `sessions/${sessionId}/questions/${questionId}`
+    )
+    const questionSnap = await questionRef.get()
+    if (!questionSnap.exists) {
+      throw new HttpsError("not-found", `Question ${questionId} not found`)
+    }
+    const question = questionSnap.data()!
+    const displayedAt = question.displayed_at?.toMillis()
+    const closedAt = question.closed_at?.toMillis()
+
+    if (!displayedAt) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Question missing displayed_at timestamp"
+      )
+    }
+
+    // Compute question duration
+    let questionDuration: number
+    if (question.time && question.time > 0) {
+      // Timer exists — time is stored in milliseconds
+      questionDuration = question.time
+    } else if (closedAt) {
+      // No timer — use time between display and close
+      questionDuration = closedAt - displayedAt
+    } else {
+      // Fallback — should not happen, but default to 30s
+      questionDuration = 30000
+    }
+
+    // Ensure duration is positive
+    questionDuration = Math.max(questionDuration, 1000)
+
+    // Read all responses for this question
+    const responsesSnap = await db
+      .collection(`sessions/${sessionId}/questions/${questionId}/responses`)
+      .get()
+
+    // Read all session users for display info
+    const usersSnap = await db
+      .collection(`sessions/${sessionId}/users`)
+      .get()
+
+    const userMap = new Map<
+      string,
+      { display_name: string; photo_url: string | null }
+    >()
+    for (const userDoc of usersSnap.docs) {
+      const data = userDoc.data()
+      userMap.set(userDoc.id, {
+        display_name: data.display_name ?? "Unknown",
+        photo_url: data.photo_url ?? null,
+      })
+    }
+
+    // Read previous cumulative scores
+    const cumulative: Record<string, number> =
+      session.leaderboard_cumulative ?? {}
+
+    // Compute speed scores for each user
+    const entries: {
+      uid: string
+      displayName: string
+      photoUrl: string | null
+      questionScore: number
+      cumulativeScore: number
+    }[] = []
+
+    for (const userDoc of usersSnap.docs) {
+      const participantUid = userDoc.id
+      const userInfo = userMap.get(participantUid)
+      const responseDoc = responsesSnap.docs.find(
+        (d) => d.id === participantUid
+      )
+
+      let questionScore = 0
+
+      if (responseDoc) {
+        const response = responseDoc.data()
+        if (response.correct === true) {
+          const responseTimestamp =
+            response.updated_at?.toMillis() ??
+            response.created_at?.toMillis()
+
+          if (responseTimestamp) {
+            const responseTime = responseTimestamp - displayedAt
+            const raw = Math.round(
+              1000 * (1 - responseTime / questionDuration)
+            )
+            questionScore = Math.max(0, Math.min(1000, raw))
+          }
+        }
+      }
+
+      const previousScore = cumulative[participantUid] ?? 0
+      const cumulativeScore = previousScore + questionScore
+      cumulative[participantUid] = cumulativeScore
+
+      entries.push({
+        uid: participantUid,
+        displayName: userInfo?.display_name ?? "Unknown",
+        photoUrl: userInfo?.photo_url ?? null,
+        questionScore,
+        cumulativeScore,
+      })
+    }
+
+    // Sort by cumulative score descending, then by question score descending
+    entries.sort(
+      (a, b) =>
+        b.cumulativeScore - a.cumulativeScore ||
+        b.questionScore - a.questionScore
+    )
+
+    // Write leaderboard data to session
+    await sessionRef.set(
+      {
+        leaderboard_scores: {
+          questionId,
+          entries,
+        },
+        leaderboard_cumulative: cumulative,
+      },
+      { merge: true }
+    )
+
+    logger.info(
+      `Leaderboard computed for session ${sessionId}, question ${questionId}`,
+      { participants: entries.length }
+    )
 
     return { success: true }
   }

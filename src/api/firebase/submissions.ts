@@ -39,19 +39,19 @@ export default class SubmissionStore extends BaseStore {
   public collect(): CollectionReference<Submission> {
     return collection(
       this.db,
-      clx.submissions
+      clx.submissions,
     ) as CollectionReference<Submission>
   }
 
   public async updateByRef(
     ref: DocumentReference<Submission>,
-    payload: Partial<Submission>
+    payload: Partial<Submission>,
   ): Promise<void> {
     await updateDoc(ref, payload)
   }
 
   public async create(
-    payload: Partial<Submission>
+    payload: Partial<Submission>,
   ): Promise<DocumentReference<Submission>> {
     const ref = await addDoc(this.collect(), {
       ...payload,
@@ -61,7 +61,7 @@ export default class SubmissionStore extends BaseStore {
   }
 
   public async getUserResponses(
-    submission: Submission
+    submission: Submission,
   ): Promise<UserResponse[]> {
     const sref = submission.session
     const uid = submission.user.id
@@ -104,7 +104,7 @@ export default class SubmissionStore extends BaseStore {
 
   /** @brief Finds the most recent submission, otherwise null */
   public async findMostRecentSubmission(
-    uid: string
+    uid: string,
   ): Promise<QueryDocumentSnapshot<Submission> | null> {
     const userRef = doc(this.db, clx.users, uid)
     const subsRef = collection(this.db, clx.submissions)
@@ -112,7 +112,7 @@ export default class SubmissionStore extends BaseStore {
       subsRef,
       where("user", "==", userRef),
       orderBy("submitted_at", "desc"),
-      limit(1)
+      limit(1),
     )
     const ss = await getDocs(q)
     return ss.empty ? null : (ss.docs[0] as QueryDocumentSnapshot<Submission>)
@@ -126,7 +126,7 @@ export default class SubmissionStore extends BaseStore {
   }
 
   public async findUserSubmissions(
-    uid: string
+    uid: string,
   ): Promise<QueryDocumentSnapshot<Submission>[]> {
     const uref = doc(this.db, clx.users, uid)
     const subsRef = collection(this.db, clx.submissions)

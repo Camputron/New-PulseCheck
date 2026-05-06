@@ -10,7 +10,7 @@ export default class VertexStore {
 
   public async generatePollQuestions(
     n: number,
-    uri: string
+    uri: string,
   ): Promise<AIQuestions> {
     const callable = httpsCallable<
       { n: number; uri: string },

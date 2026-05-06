@@ -33,7 +33,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   /* state for theme mode, defaulting to system preference */
   const [mode, setMode] = useState<PaletteMode>(
-    prefersDarkMode ? ThemeType.DARK : ThemeType.LIGHT
+    prefersDarkMode ? ThemeType.DARK : ThemeType.LIGHT,
   )
 
   useEffect(() => {

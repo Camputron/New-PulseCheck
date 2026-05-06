@@ -115,12 +115,12 @@ function ColorScale({
   return (
     <Box>
       <Typography
-        variant='caption'
+        variant="caption"
         fontWeight={600}
         sx={{ mb: 0.5, display: "block" }}>
         {name}
       </Typography>
-      <Stack direction='row' spacing={0.5}>
+      <Stack direction="row" spacing={0.5}>
         {steps.map((step) => {
           const isDarkStep = Number(step) >= 400
           return (
@@ -140,7 +140,7 @@ function ColorScale({
                 border: "1px solid",
                 borderColor: "divider",
               }}>
-              <Typography variant='caption' fontSize='0.6rem' fontWeight={500}>
+              <Typography variant="caption" fontSize="0.6rem" fontWeight={500}>
                 {step}
               </Typography>
             </Box>
@@ -154,7 +154,7 @@ function ColorScale({
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <Typography
-      variant='overline'
+      variant="overline"
       sx={{
         fontWeight: 700,
         letterSpacing: 1,
@@ -177,26 +177,26 @@ export default function DesignSystemTab() {
     <Box>
       {/* Header */}
       <Stack
-        direction='row'
-        justifyContent='space-between'
-        alignItems='center'
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
         sx={{ mb: 1 }}>
         <Box>
           <Typography
-            variant='h4'
+            variant="h4"
             fontWeight={700}
-            fontFamily='Inter, sans-serif'>
+            fontFamily="Inter, sans-serif">
             PulseCheck Design System
           </Typography>
           <Typography
-            variant='body2'
-            color='text.secondary'
-            fontFamily='Inter, sans-serif'>
+            variant="body2"
+            color="text.secondary"
+            fontFamily="Inter, sans-serif">
             Teal Primary + Amber/Gold Secondary — Inter Font — MUI v7 Template
             Style
           </Typography>
         </Box>
-        <IconButton onClick={toggleTheme} size='large'>
+        <IconButton onClick={toggleTheme} size="large">
           {isDark ? <LightMode /> : <DarkMode />}
         </IconButton>
       </Stack>
@@ -206,12 +206,12 @@ export default function DesignSystemTab() {
       {/* COLOR PALETTE */}
       <SectionTitle>Color Palette</SectionTitle>
       <Stack spacing={2}>
-        <ColorScale name='Teal (Primary)' scale={teal} />
-        <ColorScale name='Amber (Secondary)' scale={amber} />
-        <ColorScale name='Gray (Neutral)' scale={gray} />
-        <ColorScale name='Green (Success)' scale={green} />
-        <ColorScale name='Orange (Warning)' scale={orange} />
-        <ColorScale name='Red (Error)' scale={red} />
+        <ColorScale name="Teal (Primary)" scale={teal} />
+        <ColorScale name="Amber (Secondary)" scale={amber} />
+        <ColorScale name="Gray (Neutral)" scale={gray} />
+        <ColorScale name="Green (Success)" scale={green} />
+        <ColorScale name="Orange (Warning)" scale={orange} />
+        <ColorScale name="Red (Error)" scale={red} />
       </Stack>
     </Box>
   )

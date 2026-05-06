@@ -54,7 +54,7 @@ export default function Splash() {
           observer.disconnect()
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     )
     observer.observe(destination)
 
@@ -76,10 +76,10 @@ export default function Splash() {
           px: 2,
           textAlign: "center",
         }}>
-        <Container maxWidth='md'>
+        <Container maxWidth="md">
           <RA.Fade triggerOnce duration={800}>
             <Typography
-              variant='overline'
+              variant="overline"
               sx={{
                 letterSpacing: 3,
                 color: "primary.main",
@@ -91,7 +91,7 @@ export default function Splash() {
           </RA.Fade>
           <RA.Fade triggerOnce duration={800} delay={200}>
             <Typography
-              variant='h3'
+              variant="h3"
               fontWeight={800}
               sx={{
                 mt: 2,
@@ -104,7 +104,7 @@ export default function Splash() {
           </RA.Fade>
           <RA.Fade triggerOnce duration={800} delay={400}>
             <Typography
-              variant='h6'
+              variant="h6"
               sx={{
                 maxWidth: 600,
                 mx: "auto",
@@ -120,9 +120,9 @@ export default function Splash() {
           </RA.Fade>
           <RA.Fade triggerOnce duration={800} delay={600}>
             <Button
-              variant='contained'
-              color='primary'
-              size='large'
+              variant="contained"
+              color="primary"
+              size="large"
               onClick={handleClick}
               sx={{
                 px: 4,
@@ -138,7 +138,7 @@ export default function Splash() {
       </Box>
 
       {/* Content Sections */}
-      <Container maxWidth='md'>
+      <Container maxWidth="md">
         <Stack spacing={10} sx={{ py: 8 }}>
           <About ref={aboutRef} />
           <Divider />

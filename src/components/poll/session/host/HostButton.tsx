@@ -11,6 +11,9 @@ interface HostButtonProps {
   timeLeft: number
 }
 
+/**
+ * @brief For Poll Session use only
+ */
 export default function HostButton(props: HostButtonProps) {
   const { sref, session, timeLeft } = props
   if (!session) return <CircularProgress />

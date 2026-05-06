@@ -10,35 +10,23 @@ import {
   Avatar,
   Skeleton,
   IconButton,
+  Stack,
+  Switch,
+  FormControlLabel,
 } from "@mui/material"
 import { Edit, Check, Close, Google, Email, Logout } from "@mui/icons-material"
 import { RA } from "@/styles"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import api, { auth } from "@/api"
-import { useAuthState } from "react-firebase-hooks/auth"
+import api from "@/api"
 import useSnackbar from "@/hooks/useSnackbar"
-import { firestore } from "@/api"
-import { doc, Timestamp, getDoc, updateDoc } from "firebase/firestore"
-import {
-  updateEmail,
-  updateProfile,
-  updatePassword,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-} from "firebase/auth"
 import { FirebaseError } from "firebase/app"
 import ThemeSelect from "@/components/ThemeSelect"
 import useRequireAuth from "@/hooks/useRequireAuth"
+import { useUser } from "@/hooks"
 import { stoc, stoni } from "@/utils"
 
 type ErrorField = "displayName" | "email"
-
-interface UserData {
-  display_name: string
-  created_at: Timestamp
-  email?: string
-}
 
 function SettingsRow({
   label,
@@ -56,8 +44,8 @@ function SettingsRow({
         alignItems: "center",
       }}>
       <Typography
-        variant='body2'
-        color='text.secondary'
+        variant="body2"
+        color="text.secondary"
         sx={{ width: 140, flexShrink: 0 }}>
         {label}
       </Typography>
@@ -75,15 +63,18 @@ export default function Settings() {
   const snackbar = useSnackbar()
   const navigate = useNavigate()
 
-  const [user] = useAuthState(auth)
+  const {
+    user: profile,
+    authUser,
+    updateDisplayName,
+    updateEmail: updateUserEmail,
+    updatePassword: updateUserPassword,
+    updateSessionDefaults,
+  } = useUser()
+
   const [save, setSave] = useState(false)
-  const [email, setEmail] = useState<string>("")
   const [originalEmail, setOriginalEmail] = useState<string>("")
-  const [name, setName] = useState("")
   const [originalName, setOriginalName] = useState("")
-  const [photoURL, setPhotoURL] = useState("")
-  const [displayName, setDisplayName] = useState("")
-  const [createdAt, setCreatedAt] = useState<Timestamp | null>(null)
   const [error, setError] = useState({
     displayName: "",
     username: "",
@@ -92,48 +83,18 @@ export default function Settings() {
   const [editUser, setEditUser] = useState<string | null>(null)
   const [tempVal, setTempVal] = useState("")
 
-  useEffect(() => {
-    console.debug("originalEmail", originalEmail)
-    console.debug("name", name)
-    console.debug("originalName", originalName)
-  }, [originalEmail, name, originalName])
+  const email = profile?.email ?? authUser?.email ?? ""
+  const displayName = profile?.display_name ?? authUser?.displayName ?? ""
+  const photoURL = profile?.photo_url ?? authUser?.photoURL ?? ""
+  const createdAt = profile?.created_at ?? null
 
   useEffect(() => {
-    const loadUserData = async () => {
-      if (user) {
-        setEmail(user.email ?? "")
-        setOriginalEmail(user.email ?? "")
-        setPhotoURL(user.photoURL ?? "")
+    setOriginalEmail(email)
+  }, [email])
 
-        try {
-          const userRef = doc(firestore, "users", user.uid)
-          const userDoc = await getDoc(userRef)
-          if (userDoc.exists()) {
-            const userData = userDoc.data() as UserData
-            const firestoreDisplayName = userData.display_name ?? ""
-            const createdTimestamp = userData.created_at ?? null
-
-            setCreatedAt(createdTimestamp)
-            setName(firestoreDisplayName)
-            setDisplayName(firestoreDisplayName)
-            setOriginalName(firestoreDisplayName)
-          } else {
-            setName(user.displayName ?? "")
-            setDisplayName(user.displayName ?? "")
-            setOriginalName(user.displayName ?? "")
-          }
-        } catch (err) {
-          console.error("Error fetching user data:", err)
-          snackbar.show({
-            message: "Failed to load profile data",
-            type: "error",
-          })
-        }
-      }
-    }
-
-    void loadUserData()
-  }, [user, navigate, snackbar])
+  useEffect(() => {
+    setOriginalName(displayName)
+  }, [displayName])
 
   const clearFieldError = (field: ErrorField) => {
     setError((prev) => ({ ...prev, [field]: "" }))
@@ -149,8 +110,8 @@ export default function Settings() {
     setTempVal("")
   }
 
-  const saveChanges = async (field: string): Promise<void> => {
-    if (!user) {
+  const saveChanges = async (field: "displayName" | "email"): Promise<void> => {
+    if (!authUser) {
       return
     }
     setSave(true)
@@ -166,25 +127,18 @@ export default function Settings() {
         return
       }
 
-      const userRef = doc(firestore, "users", user.uid)
-
       if (field === "displayName") {
-        await updateProfile(user, { displayName: tempVal })
-        await updateDoc(userRef, { display_name: tempVal })
-        setName(tempVal)
-        setDisplayName(tempVal)
+        await updateDisplayName(tempVal)
         setOriginalName(tempVal)
       } else if (field === "email") {
-        await updateEmail(user, tempVal)
-        await updateDoc(userRef, { email: tempVal })
-        setEmail(tempVal)
+        await updateUserEmail(tempVal)
         setOriginalEmail(tempVal)
       }
-
-      snackbar.show({
-        message: "Profile updated successfully",
-        type: "success",
-      })
+      /* verbose */
+      // snackbar.show({
+      //   message: "Profile updated successfully",
+      //   type: "success",
+      // })
     } catch (err: unknown) {
       console.error("Error updating", err)
       if (err instanceof FirebaseError) {
@@ -204,7 +158,7 @@ export default function Settings() {
         }
       } else {
         snackbar.show({
-          message: "Profile update unsuccessful",
+          message: "Failed to update profile",
           type: "error",
         })
       }
@@ -218,7 +172,7 @@ export default function Settings() {
     void saveChanges("displayName")
   }
 
-  const providerId = user?.providerData[0]?.providerId
+  const providerId = authUser?.providerData[0]?.providerId
   const isPasswordProvider = providerId === "password"
 
   const [changingPassword, setChangingPassword] = useState(false)
@@ -228,7 +182,7 @@ export default function Settings() {
   const [passwordError, setPasswordError] = useState("")
 
   const handleChangePassword = async () => {
-    if (!user?.email) return
+    if (!authUser?.email) return
     if (newPassword.length < 6) {
       setPasswordError("Password must be at least 6 characters")
       return
@@ -240,12 +194,7 @@ export default function Settings() {
     setSave(true)
     setPasswordError("")
     try {
-      const credential = EmailAuthProvider.credential(
-        user.email,
-        currentPassword
-      )
-      await reauthenticateWithCredential(user, credential)
-      await updatePassword(user, newPassword)
+      await updateUserPassword(currentPassword, newPassword)
       snackbar.show({
         message: "Password updated successfully",
         type: "success",
@@ -269,6 +218,33 @@ export default function Settings() {
     }
   }
 
+  const sessionDefaults = profile?.session_defaults
+  const isAnonymousDefault = sessionDefaults?.isAnonymous ?? false
+  const hasLeaderboardDefault = sessionDefaults?.hasLeaderboard ?? false
+
+  const handleToggleSessionDefault = async (
+    field: "isAnonymous" | "hasLeaderboard",
+    next: boolean,
+  ) => {
+    try {
+      await updateSessionDefaults({
+        isAnonymous: field === "isAnonymous" ? next : isAnonymousDefault,
+        hasLeaderboard:
+          field === "hasLeaderboard" ? next : hasLeaderboardDefault,
+      })
+      // snackbar.show({
+      //   message: "Session defaults updated",
+      //   type: "success",
+      // })
+    } catch (err) {
+      console.error("Failed to update settings (session defaults)", err)
+      snackbar.show({
+        message: "Failed to update settings",
+        type: "error",
+      })
+    }
+  }
+
   const handleSignOut = () => {
     void api.auth.logout().then(() => {
       void navigate("/")
@@ -276,10 +252,10 @@ export default function Settings() {
   }
 
   return (
-    <Container maxWidth='sm' sx={{ py: { xs: 3, md: 5 }, textAlign: "left" }}>
+    <Container maxWidth="sm" sx={{ py: { xs: 3, md: 5 }, textAlign: "left" }}>
       <RA.Fade triggerOnce duration={600}>
         <Typography
-          variant='overline'
+          variant="overline"
           sx={{
             letterSpacing: 2,
             color: "primary.main",
@@ -287,7 +263,7 @@ export default function Settings() {
           }}>
           Account
         </Typography>
-        <Typography variant='h4' fontWeight={700} sx={{ mb: 4 }}>
+        <Typography variant="h4" fontWeight={700} sx={{ mb: 4 }}>
           Settings
         </Typography>
       </RA.Fade>
@@ -312,36 +288,41 @@ export default function Settings() {
             {stoni(displayName)}
           </Avatar>
           <Box>
-            <Typography variant='h6' fontWeight={600}>
+            <Typography variant="h6" fontWeight={600}>
               {displayName || <Skeleton width={120} />}
             </Typography>
             {createdAt ? (
-              <Typography variant='body2' color='text.secondary'>
+              <Typography variant="body2" color="text.secondary">
                 Member since {createdAt.toDate().toLocaleDateString()}
               </Typography>
             ) : (
-              <Skeleton variant='text' width={160} />
+              <Skeleton variant="text" width={160} />
             )}
           </Box>
         </Box>
       </RA.Fade>
 
       <RA.Fade triggerOnce duration={600} delay={200}>
-        <Paper variant='outlined' sx={{ borderRadius: 2, overflow: "hidden" }}>
-          <SettingsRow label='Display Name'>
+        <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
+          <SettingsRow label="Display Name">
             <Box flex={1}>
               {editUser === "displayName" ? (
                 <TextField
-                  placeholder='Enter display name'
+                  placeholder="Enter display name"
                   value={tempVal}
                   onChange={(e) => {
                     setTempVal(e.target.value)
                     clearFieldError("displayName")
                   }}
+                  onKeyUp={(e) => {
+                    if (e.code === "Enter") {
+                      void saveChanges("displayName")
+                    }
+                  }}
                   error={!!error.displayName}
                   helperText={error.displayName}
                   fullWidth
-                  size='small'
+                  size="small"
                 />
               ) : (
                 <Typography>{displayName}</Typography>
@@ -350,55 +331,92 @@ export default function Settings() {
             {editUser === "displayName" ? (
               <Box sx={{ display: "flex", gap: 0.5, ml: 1 }}>
                 <IconButton
-                  color='primary'
+                  color="primary"
                   onClick={handleSaveDisplayName}
                   disabled={save}
-                  size='small'>
-                  <Check fontSize='small' />
+                  size="small">
+                  <Check fontSize="small" />
                 </IconButton>
-                <IconButton color='error' onClick={cancelEdit} size='small'>
-                  <Close fontSize='small' />
+                <IconButton color="error" onClick={cancelEdit} size="small">
+                  <Close fontSize="small" />
                 </IconButton>
               </Box>
             ) : (
               <IconButton
                 onClick={() => handleEdit("displayName", displayName)}
-                size='small'
+                size="small"
                 sx={{ ml: 1 }}>
-                <Edit fontSize='small' />
+                <Edit fontSize="small" />
               </IconButton>
             )}
           </SettingsRow>
 
           <Divider />
 
-          <SettingsRow label='Email'>
+          <SettingsRow label="Email">
             <Typography flex={1}>{email}</Typography>
           </SettingsRow>
 
           <Divider />
 
-          <SettingsRow label='Appearance'>
+          <SettingsRow label="Appearance">
             <Box flex={1}>
-              <ThemeSelect size='small' sx={{ minWidth: 160 }} />
+              <ThemeSelect size="small" sx={{ minWidth: 160 }} />
             </Box>
           </SettingsRow>
 
           <Divider />
 
-          <SettingsRow label='Provider'>
+          <SettingsRow label="Session Defaults">
+            <Stack flex={1} spacing={0.5}>
+              <FormControlLabel
+                label="Anonymous Mode"
+                control={
+                  <Switch
+                    size="small"
+                    checked={isAnonymousDefault}
+                    onChange={(e) =>
+                      void handleToggleSessionDefault(
+                        "isAnonymous",
+                        e.target.checked,
+                      )
+                    }
+                  />
+                }
+              />
+              <FormControlLabel
+                label="Leaderboard"
+                control={
+                  <Switch
+                    size="small"
+                    checked={hasLeaderboardDefault}
+                    onChange={(e) =>
+                      void handleToggleSessionDefault(
+                        "hasLeaderboard",
+                        e.target.checked,
+                      )
+                    }
+                  />
+                }
+              />
+            </Stack>
+          </SettingsRow>
+
+          <Divider />
+
+          <SettingsRow label="Provider">
             <Chip
               icon={providerId === "google.com" ? <Google /> : <Email />}
               label={providerId === "google.com" ? "Google" : "Email"}
-              size='small'
-              variant='outlined'
+              size="small"
+              variant="outlined"
             />
           </SettingsRow>
 
           {isPasswordProvider && (
             <>
               <Divider />
-              <SettingsRow label='Password'>
+              <SettingsRow label="Password">
                 <Box flex={1}>
                   {changingPassword ? (
                     <Box
@@ -408,25 +426,25 @@ export default function Settings() {
                         gap: 1.5,
                       }}>
                       <TextField
-                        placeholder='Current password'
-                        type='password'
-                        size='small'
+                        placeholder="Current password"
+                        type="password"
+                        size="small"
                         fullWidth
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                       />
                       <TextField
-                        placeholder='New password'
-                        type='password'
-                        size='small'
+                        placeholder="New password"
+                        type="password"
+                        size="small"
                         fullWidth
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                       />
                       <TextField
-                        placeholder='Confirm new password'
-                        type='password'
-                        size='small'
+                        placeholder="Confirm new password"
+                        type="password"
+                        size="small"
                         fullWidth
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -435,15 +453,15 @@ export default function Settings() {
                       />
                       <Box sx={{ display: "flex", gap: 1 }}>
                         <Button
-                          variant='contained'
-                          size='small'
+                          variant="contained"
+                          size="small"
                           disabled={save}
                           onClick={() => void handleChangePassword()}>
                           Save
                         </Button>
                         <Button
-                          variant='outlined'
-                          size='small'
+                          variant="outlined"
+                          size="small"
                           onClick={() => {
                             setChangingPassword(false)
                             setCurrentPassword("")
@@ -457,8 +475,8 @@ export default function Settings() {
                     </Box>
                   ) : (
                     <Button
-                      variant='outlined'
-                      size='small'
+                      variant="outlined"
+                      size="small"
                       onClick={() => setChangingPassword(true)}>
                       Change Password
                     </Button>
@@ -472,8 +490,8 @@ export default function Settings() {
 
       <RA.Fade triggerOnce duration={600} delay={300}>
         <Button
-          variant='outlined'
-          color='error'
+          variant="outlined"
+          color="error"
           fullWidth
           startIcon={<Logout />}
           onClick={handleSignOut}

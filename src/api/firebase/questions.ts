@@ -35,7 +35,7 @@ export default class QuestionStore extends BaseStore {
       clx.polls,
       pid,
       clx.questions,
-      qid
+      qid,
     ) as DocumentReference<Question>
   }
 
@@ -44,7 +44,7 @@ export default class QuestionStore extends BaseStore {
       this.db,
       clx.polls,
       pid,
-      clx.questions
+      clx.questions,
     ) as CollectionReference<Question>
   }
 
@@ -64,19 +64,28 @@ export default class QuestionStore extends BaseStore {
       created_at: serverTimestamp(),
       updated_at: serverTimestamp(),
     })
-    /* update poll doc to include reference to {qref} */
-    await setDoc(pref, { questions: arrayUnion(qref) }, { merge: true })
+    /* update poll doc to include reference to {qref} and bump updated_at */
+    await setDoc(
+      pref,
+      { questions: arrayUnion(qref), updated_at: serverTimestamp() },
+      { merge: true },
+    )
     return qref
   }
 
   public async update(
     qref: DocumentReference<Question>,
-    payload: Partial<Question>
+    payload: Partial<Question>,
   ): Promise<DocumentReference<Question>> {
     await updateDoc(qref, {
       ...payload,
       updated_at: serverTimestamp(),
     })
+    /* bump parent poll's updated_at so edits surface in dashboards */
+    const pref = qref.parent.parent as DocumentReference<Poll> | null
+    if (pref) {
+      await updateDoc(pref, { updated_at: serverTimestamp() })
+    }
     return qref
   }
 
@@ -85,8 +94,12 @@ export default class QuestionStore extends BaseStore {
     if (!pref) {
       throw new Error("Questions collect needs a parent document (poll)")
     }
-    /* update poll doc to remove reference to {qref} */
-    await setDoc(pref, { questions: arrayRemove(qref) }, { merge: true })
+    /* update poll doc to remove reference to {qref} and bump updated_at */
+    await setDoc(
+      pref,
+      { questions: arrayRemove(qref), updated_at: serverTimestamp() },
+      { merge: true },
+    )
     /* delete question doc */
     await deleteDoc(qref)
   }

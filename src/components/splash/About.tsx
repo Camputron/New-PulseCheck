@@ -29,7 +29,7 @@ function About(props: { ref?: React.Ref<unknown> }) {
     <Box ref={props.ref}>
       <RA.Fade triggerOnce duration={600}>
         <Typography
-          variant='overline'
+          variant="overline"
           sx={{
             letterSpacing: 2,
             color: "primary.main",
@@ -37,11 +37,11 @@ function About(props: { ref?: React.Ref<unknown> }) {
           }}>
           About
         </Typography>
-        <Typography variant='h4' fontWeight={700} sx={{ mb: 4 }}>
+        <Typography variant="h4" fontWeight={700} sx={{ mb: 4 }}>
           Why PulseCheck Exists
         </Typography>
         <Typography
-          variant='body1'
+          variant="body1"
           sx={{
             color: "text.secondary",
             lineHeight: 1.8,
@@ -74,10 +74,10 @@ function About(props: { ref?: React.Ref<unknown> }) {
                 textAlign: "center",
               }}>
               <Box sx={{ mb: 2 }}>{item.icon}</Box>
-              <Typography variant='subtitle1' fontWeight={700} gutterBottom>
+              <Typography variant="subtitle1" fontWeight={700} gutterBottom>
                 {item.title}
               </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              <Typography variant="body2" color="text.secondary">
                 {item.description}
               </Typography>
             </Box>

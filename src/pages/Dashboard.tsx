@@ -1,12 +1,24 @@
 import { useNavigate } from "react-router-dom"
-import { Button, Box, Container, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  Container,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material"
+import { useState } from "react"
 import api from "@/api"
 import { useAuthContext } from "@/hooks"
 import { useCollectionOnce } from "react-firebase-hooks/firestore"
 import UserPollCard from "@/components/dashboard/UserPollCard"
-import { Add, HowToVote } from "@mui/icons-material"
+import UserPollTable from "@/components/dashboard/UserPollTable"
+import ViewToggle from "@/components/ViewToggle"
+import { Add, HowToVote, Search } from "@mui/icons-material"
 import MostRecentGaugeCard from "@/components/graphs/MostRecentGaugeCard"
 import useRequireAuth from "@/hooks/useRequireAuth"
+import useViewMode from "@/hooks/useViewMode"
 import { RA } from "@/styles"
 import RejoinBanner from "@/components/poll/join/RejoinBanner"
 
@@ -15,6 +27,9 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const { user } = useAuthContext()
   const [polls] = useCollectionOnce(api.polls.queryUserPolls(user?.uid ?? "1"))
+
+  const { view, effectiveView, isMobile, setView } = useViewMode("polls:view")
+  const [query, setQuery] = useState("")
 
   const handleCreatePoll = () => {
     if (user) {
@@ -32,11 +47,21 @@ export default function Dashboard() {
     void navigate("/poll/join")
   }
 
+  const rows =
+    polls?.docs.map((doc) => ({ id: doc.id, data: doc.data() })) ?? []
+  /* filter polls by includes key word */
+  const normalizedQuery = query.trim().toLowerCase()
+  const filteredRows = normalizedQuery
+    ? rows.filter(({ data }) =>
+        data.title.toLowerCase().includes(normalizedQuery),
+      )
+    : rows
+
   return (
-    <Container maxWidth='md' sx={{ py: { xs: 3, md: 5 } }}>
+    <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
       <RA.Fade triggerOnce duration={600}>
         <Typography
-          variant='overline'
+          variant="overline"
           sx={{
             letterSpacing: 2,
             color: "primary.main",
@@ -44,7 +69,7 @@ export default function Dashboard() {
           }}>
           Home
         </Typography>
-        <Typography variant='h4' fontWeight={700} sx={{ mb: 4 }}>
+        <Typography variant="h4" fontWeight={700} sx={{ mb: 4 }}>
           Dashboard
         </Typography>
       </RA.Fade>
@@ -61,7 +86,7 @@ export default function Dashboard() {
         }}>
         <Button
           startIcon={<HowToVote />}
-          variant='contained'
+          variant="contained"
           onClick={handleUserJoin}
           fullWidth
           sx={{
@@ -75,7 +100,7 @@ export default function Dashboard() {
         </Button>
         <Button
           startIcon={<Add />}
-          variant='outlined'
+          variant="outlined"
           fullWidth
           onClick={handleCreatePoll}
           sx={{
@@ -89,25 +114,68 @@ export default function Dashboard() {
         </Button>
       </Box>
 
-      {polls && polls.docs.length > 0 && (
-        <Typography variant='h6' fontWeight={600} sx={{ mt: 5, mb: 2 }}>
-          Your Polls
-        </Typography>
+      {rows.length > 0 && (
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ mt: 5, mb: 2 }}>
+          <Typography variant="h6" fontWeight={600}>
+            Your Polls
+          </Typography>
+          {!isMobile && <ViewToggle value={view} onChange={setView} />}
+        </Stack>
       )}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "1fr 1fr",
-            md: "1fr 1fr 1fr",
-          },
-          gap: 2,
-        }}>
-        {polls?.docs.map((x) => (
-          <UserPollCard key={x.id} pid={x.id} poll={x.data()} />
-        ))}
-      </Box>
+
+      {/* render filter by text input */}
+      {rows.length > 0 && (
+        <TextField
+          fullWidth
+          size="small"
+          placeholder="Search polls by name"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search fontSize="small" />
+                </InputAdornment>
+              ),
+            },
+          }}
+          sx={{ mb: 2 }}
+        />
+      )}
+
+      {filteredRows.length > 0 && effectiveView === "cards" && (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "1fr 1fr",
+              md: "1fr 1fr 1fr",
+            },
+            gap: 2,
+          }}>
+          {filteredRows.map(({ id, data }) => (
+            <UserPollCard key={id} pid={id} poll={data} />
+          ))}
+        </Box>
+      )}
+
+      {filteredRows.length > 0 && effectiveView === "table" && (
+        <UserPollTable polls={filteredRows} />
+      )}
+
+      {rows.length > 0 && filteredRows.length === 0 && (
+        <Box sx={{ mt: 3, textAlign: "center", color: "text.secondary" }}>
+          <Typography variant="body2">
+            No polls match &ldquo;{query}&rdquo;.
+          </Typography>
+        </Box>
+      )}
     </Container>
   )
 }

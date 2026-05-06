@@ -14,8 +14,8 @@ export default function Register() {
         flexDirection: { xs: "column", md: "row" },
       }}>
       <AuthBranding
-        heading='Join PulseCheck.'
-        subtext='Create an account to start building interactive sessions and engaging your classroom in real time.'
+        heading="Join PulseCheck."
+        subtext="Create an account to start building interactive sessions and engaging your classroom in real time."
       />
       <Box
         sx={{

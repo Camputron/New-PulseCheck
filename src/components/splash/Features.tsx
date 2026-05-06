@@ -54,7 +54,7 @@ function Features(props: { ref?: React.Ref<unknown> }) {
     <Box ref={props.ref}>
       <RA.Fade triggerOnce duration={600}>
         <Typography
-          variant='overline'
+          variant="overline"
           sx={{
             letterSpacing: 2,
             color: "primary.main",
@@ -62,10 +62,10 @@ function Features(props: { ref?: React.Ref<unknown> }) {
           }}>
           Features
         </Typography>
-        <Typography variant='h4' fontWeight={700} sx={{ mb: 4 }}>
+        <Typography variant="h4" fontWeight={700} sx={{ mb: 4 }}>
           Built to Keep Every Student in the Conversation
         </Typography>
-        <Typography variant='body1' sx={{ color: "text.secondary", mb: 5 }}>
+        <Typography variant="body1" sx={{ color: "text.secondary", mb: 5 }}>
           From live polling to automatic grading, PulseCheck gives instructors
           the tools to run interactive sessions without slowing down the lecture
           -- and gives students a reason to stay engaged from start to finish.
@@ -98,10 +98,10 @@ function Features(props: { ref?: React.Ref<unknown> }) {
                 },
               }}>
               <Box sx={{ color: "primary.main", mb: 1.5 }}>{feature.icon}</Box>
-              <Typography variant='subtitle1' fontWeight={700} gutterBottom>
+              <Typography variant="subtitle1" fontWeight={700} gutterBottom>
                 {feature.title}
               </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              <Typography variant="body2" color="text.secondary">
                 {feature.description}
               </Typography>
             </Box>

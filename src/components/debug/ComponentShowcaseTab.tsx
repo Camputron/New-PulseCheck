@@ -116,11 +116,12 @@ import {
 } from "@mui/icons-material"
 import { useThemeContext } from "@/hooks/useThemeContext"
 import { useState, type SyntheticEvent } from "react"
+import CancelButton from "../CancelButton"
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <Typography
-      variant='overline'
+      variant="overline"
       sx={{
         fontWeight: 700,
         letterSpacing: 1,
@@ -144,7 +145,7 @@ function ShowcaseCard({
 }) {
   return (
     <Paper
-      variant='outlined'
+      variant="outlined"
       sx={{
         p: 2.5,
         borderRadius: 2,
@@ -152,7 +153,7 @@ function ShowcaseCard({
         flexDirection: "column",
         gap: 2,
       }}>
-      <Typography variant='subtitle2' fontWeight={600}>
+      <Typography variant="subtitle2" fontWeight={600}>
         {title}
       </Typography>
       {children}
@@ -207,19 +208,19 @@ export default function ComponentShowcaseTab() {
     <Box>
       {/* Header */}
       <Stack
-        direction='row'
-        justifyContent='space-between'
-        alignItems='center'
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
         sx={{ mb: 1 }}>
         <Box>
-          <Typography variant='h4' fontWeight={700}>
+          <Typography variant="h4" fontWeight={700}>
             Component Showcase
           </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          <Typography variant="body2" color="text.secondary">
             All MUI components rendered with the current theme
           </Typography>
         </Box>
-        <IconButton onClick={toggleTheme} size='large'>
+        <IconButton onClick={toggleTheme} size="large">
           {isDark ? <LightMode /> : <DarkMode />}
         </IconButton>
       </Stack>
@@ -230,7 +231,7 @@ export default function ComponentShowcaseTab() {
           INPUTS
           ═══════════════════════════════════════════ */}
 
-      <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+      <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
         Inputs
       </Typography>
 
@@ -238,7 +239,7 @@ export default function ComponentShowcaseTab() {
       <SectionTitle>Buttons</SectionTitle>
       {(["contained", "outlined", "text"] as const).map((variant) => (
         <ShowcaseCard key={variant} title={`${variant} buttons`}>
-          <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap>
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
             {COLORS.map((color) => (
               <Button key={color} variant={variant} color={color}>
                 {color}
@@ -251,39 +252,39 @@ export default function ComponentShowcaseTab() {
         </ShowcaseCard>
       ))}
 
-      <ShowcaseCard title='Icon Buttons'>
-        <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap>
+      <ShowcaseCard title="Icon Buttons">
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
           {COLORS.map((color) => (
-            <IconButton key={color} color={color} size='small'>
-              <Star fontSize='small' />
+            <IconButton key={color} color={color} size="small">
+              <Star fontSize="small" />
             </IconButton>
           ))}
-          <IconButton disabled size='small'>
-            <Close fontSize='small' />
+          <IconButton disabled size="small">
+            <Close fontSize="small" />
           </IconButton>
         </Stack>
       </ShowcaseCard>
 
-      <ShowcaseCard title='Button Sizes'>
-        <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap>
-          <Button variant='contained' size='small'>
+      <ShowcaseCard title="Button Sizes">
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button variant="contained" size="small">
             Small
           </Button>
-          <Button variant='contained' size='medium'>
+          <Button variant="contained" size="medium">
             Medium
           </Button>
-          <Button variant='contained' size='large'>
+          <Button variant="contained" size="large">
             Large
           </Button>
         </Stack>
-        <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap>
-          <Button variant='contained' color='primary' startIcon={<PlayArrow />}>
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button variant="contained" color="primary" startIcon={<PlayArrow />}>
             With Icon
           </Button>
-          <Button variant='outlined' startIcon={<Edit />}>
+          <Button variant="outlined" startIcon={<Edit />}>
             Edit
           </Button>
-          <Button variant='text' startIcon={<ArrowBack />}>
+          <Button variant="text" startIcon={<ArrowBack />}>
             Back
           </Button>
         </Stack>
@@ -310,15 +311,15 @@ export default function ComponentShowcaseTab() {
 
       {/* FAB */}
       <SectionTitle>Floating Action Button</SectionTitle>
-      <ShowcaseCard title='FAB variants'>
-        <Stack direction='row' spacing={2} flexWrap='wrap' useFlexGap>
-          <Fab color='primary' size='small'>
+      <ShowcaseCard title="FAB variants">
+        <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+          <Fab color="primary" size="small">
             <Add />
           </Fab>
-          <Fab color='secondary'>
+          <Fab color="secondary">
             <Edit />
           </Fab>
-          <Fab variant='extended' color='primary'>
+          <Fab variant="extended" color="primary">
             <Navigation sx={{ mr: 1 }} />
             Navigate
           </Fab>
@@ -336,35 +337,35 @@ export default function ComponentShowcaseTab() {
           gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
           gap: 3,
         }}>
-        <ShowcaseCard title='Exclusive selection'>
+        <ShowcaseCard title="Exclusive selection">
           <ToggleButtonGroup
             value={toggleValue}
             exclusive
             onChange={(_, val: string | null) => {
               if (val) setToggleValue(val)
             }}>
-            <ToggleButton value='left'>
+            <ToggleButton value="left">
               <FormatAlignLeft />
             </ToggleButton>
-            <ToggleButton value='center'>
+            <ToggleButton value="center">
               <FormatAlignCenter />
             </ToggleButton>
-            <ToggleButton value='right'>
+            <ToggleButton value="right">
               <FormatAlignRight />
             </ToggleButton>
           </ToggleButtonGroup>
         </ShowcaseCard>
-        <ShowcaseCard title='Multiple selection'>
+        <ShowcaseCard title="Multiple selection">
           <ToggleButtonGroup
             value={toggleFormats}
             onChange={(_, val: string[]) => setToggleFormats(val)}>
-            <ToggleButton value='bold'>
+            <ToggleButton value="bold">
               <FormatBold />
             </ToggleButton>
-            <ToggleButton value='italic'>
+            <ToggleButton value="italic">
               <FormatItalic />
             </ToggleButton>
-            <ToggleButton value='underlined'>
+            <ToggleButton value="underlined">
               <FormatUnderlined />
             </ToggleButton>
           </ToggleButtonGroup>
@@ -379,85 +380,85 @@ export default function ComponentShowcaseTab() {
           gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
           gap: 3,
         }}>
-        <ShowcaseCard title='Variants & states'>
-          <TextField placeholder='Outlined (default)' size='small' fullWidth />
+        <ShowcaseCard title="Variants & states">
+          <TextField placeholder="Outlined (default)" size="small" fullWidth />
           <TextField
-            placeholder='Filled'
-            variant='filled'
-            size='small'
+            placeholder="Filled"
+            variant="filled"
+            size="small"
             fullWidth
           />
           <TextField
-            placeholder='Standard'
-            variant='standard'
-            size='small'
+            placeholder="Standard"
+            variant="standard"
+            size="small"
             fullWidth
           />
-          <TextField placeholder='Disabled' size='small' fullWidth disabled />
+          <TextField placeholder="Disabled" size="small" fullWidth disabled />
           <TextField
-            placeholder='With error'
-            size='small'
+            placeholder="With error"
+            size="small"
             fullWidth
             error
-            helperText='This field is required'
+            helperText="This field is required"
           />
         </ShowcaseCard>
-        <ShowcaseCard title='Sizes & multiline'>
-          <TextField placeholder='Small' size='small' fullWidth />
-          <TextField placeholder='Medium' size='medium' fullWidth />
+        <ShowcaseCard title="Sizes & multiline">
+          <TextField placeholder="Small" size="small" fullWidth />
+          <TextField placeholder="Medium" size="medium" fullWidth />
           <TextField
-            placeholder='Multiline'
+            placeholder="Multiline"
             multiline
             rows={3}
             fullWidth
-            size='small'
+            size="small"
           />
         </ShowcaseCard>
       </Box>
 
       {/* AUTOCOMPLETE */}
       <SectionTitle>Autocomplete</SectionTitle>
-      <ShowcaseCard title='Autocomplete'>
+      <ShowcaseCard title="Autocomplete">
         <Autocomplete
           options={AUTOCOMPLETE_OPTIONS}
-          size='small'
+          size="small"
           sx={{ maxWidth: 400 }}
           renderInput={(params) => (
-            <TextField {...params} placeholder='Question type' />
+            <TextField {...params} placeholder="Question type" />
           )}
         />
       </ShowcaseCard>
 
       {/* SELECT */}
       <SectionTitle>Select</SectionTitle>
-      <ShowcaseCard title='Select'>
+      <ShowcaseCard title="Select">
         <Select
-          size='small'
+          size="small"
           value={selectValue}
           onChange={(e) => setSelectValue(e.target.value)}
           sx={{ maxWidth: 400 }}>
-          <MenuItem value='option1'>Multiple Choice</MenuItem>
-          <MenuItem value='option2'>Multi-Select</MenuItem>
-          <MenuItem value='option3'>Ranking Poll</MenuItem>
+          <MenuItem value="option1">Multiple Choice</MenuItem>
+          <MenuItem value="option2">Multi-Select</MenuItem>
+          <MenuItem value="option3">Ranking Poll</MenuItem>
         </Select>
       </ShowcaseCard>
 
       {/* CHECKBOX */}
       <SectionTitle>Checkboxes</SectionTitle>
-      <ShowcaseCard title='Checkbox variants'>
-        <Stack direction='row' spacing={1} alignItems='center' flexWrap='wrap'>
+      <ShowcaseCard title="Checkbox variants">
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
           <FormControlLabel
             control={<Checkbox defaultChecked />}
-            label='Checked'
+            label="Checked"
           />
-          <FormControlLabel control={<Checkbox />} label='Unchecked' />
+          <FormControlLabel control={<Checkbox />} label="Unchecked" />
           <FormControlLabel
             control={<Checkbox indeterminate />}
-            label='Indeterminate'
+            label="Indeterminate"
           />
-          <FormControlLabel control={<Checkbox disabled />} label='Disabled' />
+          <FormControlLabel control={<Checkbox disabled />} label="Disabled" />
         </Stack>
-        <Stack direction='row' spacing={0} flexWrap='wrap'>
+        <Stack direction="row" spacing={0} flexWrap="wrap">
           {COLORS.map((color) => (
             <Checkbox key={color} defaultChecked color={color} />
           ))}
@@ -466,18 +467,18 @@ export default function ComponentShowcaseTab() {
 
       {/* RADIO */}
       <SectionTitle>Radio Buttons</SectionTitle>
-      <ShowcaseCard title='Radio group'>
-        <RadioGroup row defaultValue='a'>
-          <FormControlLabel value='a' control={<Radio />} label='Option A' />
-          <FormControlLabel value='b' control={<Radio />} label='Option B' />
-          <FormControlLabel value='c' control={<Radio />} label='Option C' />
+      <ShowcaseCard title="Radio group">
+        <RadioGroup row defaultValue="a">
+          <FormControlLabel value="a" control={<Radio />} label="Option A" />
+          <FormControlLabel value="b" control={<Radio />} label="Option B" />
+          <FormControlLabel value="c" control={<Radio />} label="Option C" />
           <FormControlLabel
-            value='d'
+            value="d"
             control={<Radio disabled />}
-            label='Disabled'
+            label="Disabled"
           />
         </RadioGroup>
-        <Stack direction='row' spacing={0} flexWrap='wrap'>
+        <Stack direction="row" spacing={0} flexWrap="wrap">
           {COLORS.map((color) => (
             <Radio key={color} checked color={color} />
           ))}
@@ -486,8 +487,8 @@ export default function ComponentShowcaseTab() {
 
       {/* SWITCH */}
       <SectionTitle>Switches</SectionTitle>
-      <ShowcaseCard title='Switch variants'>
-        <Stack direction='row' spacing={2} alignItems='center' flexWrap='wrap'>
+      <ShowcaseCard title="Switch variants">
+        <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
           <FormControlLabel
             control={
               <Switch
@@ -495,15 +496,15 @@ export default function ComponentShowcaseTab() {
                 onChange={(e) => setSwitchChecked(e.target.checked)}
               />
             }
-            label='Controlled'
+            label="Controlled"
           />
           <FormControlLabel
             control={<Switch defaultChecked />}
-            label='Default On'
+            label="Default On"
           />
-          <FormControlLabel control={<Switch disabled />} label='Disabled' />
+          <FormControlLabel control={<Switch disabled />} label="Disabled" />
         </Stack>
-        <Stack direction='row' spacing={0} flexWrap='wrap'>
+        <Stack direction="row" spacing={0} flexWrap="wrap">
           {COLORS.map((color) => (
             <Switch key={color} defaultChecked color={color} />
           ))}
@@ -512,11 +513,11 @@ export default function ComponentShowcaseTab() {
 
       {/* SLIDER */}
       <SectionTitle>Slider</SectionTitle>
-      <ShowcaseCard title='Slider variants'>
+      <ShowcaseCard title="Slider variants">
         <Box sx={{ px: 2 }}>
           <Stack
             spacing={2}
-            direction='row'
+            direction="row"
             sx={{ alignItems: "center", mb: 2 }}>
             <VolumeDown />
             <Slider
@@ -533,17 +534,17 @@ export default function ComponentShowcaseTab() {
             marks
             min={0}
             max={100}
-            valueLabelDisplay='auto'
+            valueLabelDisplay="auto"
           />
         </Box>
       </ShowcaseCard>
 
       {/* RATING */}
       <SectionTitle>Rating</SectionTitle>
-      <ShowcaseCard title='Rating variants'>
+      <ShowcaseCard title="Rating variants">
         <Stack spacing={1}>
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <Typography variant='body2' sx={{ minWidth: 80 }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Typography variant="body2" sx={{ minWidth: 80 }}>
               Controlled
             </Typography>
             <Rating
@@ -551,26 +552,26 @@ export default function ComponentShowcaseTab() {
               onChange={(_, v) => setRatingValue(v)}
             />
           </Stack>
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <Typography variant='body2' sx={{ minWidth: 80 }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Typography variant="body2" sx={{ minWidth: 80 }}>
               Half stars
             </Typography>
             <Rating defaultValue={2.5} precision={0.5} />
           </Stack>
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <Typography variant='body2' sx={{ minWidth: 80 }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Typography variant="body2" sx={{ minWidth: 80 }}>
               Read only
             </Typography>
             <Rating value={4} readOnly />
           </Stack>
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <Typography variant='body2' sx={{ minWidth: 80 }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Typography variant="body2" sx={{ minWidth: 80 }}>
               Disabled
             </Typography>
             <Rating value={3} disabled />
           </Stack>
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <Typography variant='body2' sx={{ minWidth: 80 }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Typography variant="body2" sx={{ minWidth: 80 }}>
               Custom
             </Typography>
             <Rating
@@ -587,33 +588,33 @@ export default function ComponentShowcaseTab() {
           ═══════════════════════════════════════════ */}
 
       <Divider sx={{ my: 5 }} />
-      <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+      <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
         Data Display
       </Typography>
 
       {/* TYPOGRAPHY */}
       <SectionTitle>Typography</SectionTitle>
-      <ShowcaseCard title='Type Scale'>
-        <Typography variant='h1'>h1 Heading</Typography>
-        <Typography variant='h2'>h2 Heading</Typography>
-        <Typography variant='h3'>h3 Heading</Typography>
-        <Typography variant='h4'>h4 Heading</Typography>
-        <Typography variant='h5'>h5 Heading</Typography>
-        <Typography variant='h6'>h6 Heading</Typography>
+      <ShowcaseCard title="Type Scale">
+        <Typography variant="h1">h1 Heading</Typography>
+        <Typography variant="h2">h2 Heading</Typography>
+        <Typography variant="h3">h3 Heading</Typography>
+        <Typography variant="h4">h4 Heading</Typography>
+        <Typography variant="h5">h5 Heading</Typography>
+        <Typography variant="h6">h6 Heading</Typography>
         <Divider />
-        <Typography variant='subtitle1'>subtitle1 — Supporting text</Typography>
-        <Typography variant='subtitle2'>subtitle2 — Supporting text</Typography>
-        <Typography variant='body1'>
+        <Typography variant="subtitle1">subtitle1 — Supporting text</Typography>
+        <Typography variant="subtitle2">subtitle2 — Supporting text</Typography>
+        <Typography variant="body1">
           body1 — The quick brown fox jumps over the lazy dog.
         </Typography>
-        <Typography variant='body2'>
+        <Typography variant="body2">
           body2 — The quick brown fox jumps over the lazy dog.
         </Typography>
-        <Typography variant='caption'>
+        <Typography variant="caption">
           caption — Additional metadata or helper text
         </Typography>
-        <Typography variant='overline'>overline — Section label</Typography>
-        <Typography variant='button' display='block'>
+        <Typography variant="overline">overline — Section label</Typography>
+        <Typography variant="button" display="block">
           button — Button text
         </Typography>
       </ShowcaseCard>
@@ -622,32 +623,32 @@ export default function ComponentShowcaseTab() {
       <SectionTitle>Chips</SectionTitle>
       {(["filled", "outlined"] as const).map((variant) => (
         <ShowcaseCard key={variant} title={`${variant} chips`}>
-          <Stack direction='row' spacing={0.75} flexWrap='wrap' useFlexGap>
-            <Chip label='Default' variant={variant} />
+          <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+            <Chip label="Default" variant={variant} />
             {COLORS.map((color) => (
               <Chip key={color} label={color} color={color} variant={variant} />
             ))}
           </Stack>
         </ShowcaseCard>
       ))}
-      <ShowcaseCard title='Chip extras'>
-        <Stack direction='row' spacing={0.75} flexWrap='wrap' useFlexGap>
-          <Chip label='With Icon' icon={<Check />} color='success' />
+      <ShowcaseCard title="Chip extras">
+        <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+          <Chip label="With Icon" icon={<Check />} color="success" />
           <Chip
-            label='Deletable'
+            label="Deletable"
             onDelete={() => {
               /* noop */
             }}
           />
           <Chip
-            label='Clickable'
+            label="Clickable"
             onClick={() => {
               /* noop */
             }}
           />
-          <Chip avatar={<Avatar>MC</Avatar>} label='With Avatar' />
-          <Chip label='Small' size='small' />
-          <Chip label='Small Success' size='small' color='success' />
+          <Chip avatar={<Avatar>MC</Avatar>} label="With Avatar" />
+          <Chip label="Small" size="small" />
+          <Chip label="Small Success" size="small" color="success" />
         </Stack>
       </ShowcaseCard>
 
@@ -659,25 +660,25 @@ export default function ComponentShowcaseTab() {
           gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
           gap: 3,
         }}>
-        <ShowcaseCard title='Variants & sizes'>
-          <Stack direction='row' spacing={2} alignItems='center'>
+        <ShowcaseCard title="Variants & sizes">
+          <Stack direction="row" spacing={2} alignItems="center">
             <Avatar sx={{ bgcolor: "primary.main" }}>MC</Avatar>
             <Avatar sx={{ bgcolor: "secondary.main" }}>JD</Avatar>
             <Avatar sx={{ bgcolor: "error.main" }}>AB</Avatar>
-            <Avatar variant='rounded' sx={{ bgcolor: "success.main" }}>
+            <Avatar variant="rounded" sx={{ bgcolor: "success.main" }}>
               <Settings />
             </Avatar>
-            <Avatar variant='square' sx={{ bgcolor: "warning.main" }}>
+            <Avatar variant="square" sx={{ bgcolor: "warning.main" }}>
               N
             </Avatar>
           </Stack>
-          <Stack direction='row' spacing={2} alignItems='center'>
+          <Stack direction="row" spacing={2} alignItems="center">
             <Avatar sx={{ width: 24, height: 24, fontSize: 12 }}>S</Avatar>
             <Avatar>M</Avatar>
             <Avatar sx={{ width: 56, height: 56, fontSize: 24 }}>L</Avatar>
           </Stack>
         </ShowcaseCard>
-        <ShowcaseCard title='Avatar Group'>
+        <ShowcaseCard title="Avatar Group">
           <AvatarGroup max={4}>
             <Avatar sx={{ bgcolor: "primary.main" }}>A</Avatar>
             <Avatar sx={{ bgcolor: "secondary.main" }}>B</Avatar>
@@ -690,28 +691,28 @@ export default function ComponentShowcaseTab() {
 
       {/* BADGES */}
       <SectionTitle>Badges</SectionTitle>
-      <ShowcaseCard title='Badge variants & colors'>
-        <Stack direction='row' spacing={3} alignItems='center' flexWrap='wrap'>
+      <ShowcaseCard title="Badge variants & colors">
+        <Stack direction="row" spacing={3} alignItems="center" flexWrap="wrap">
           {COLORS.map((color) => (
             <Badge key={color} badgeContent={4} color={color}>
               <Mail />
             </Badge>
           ))}
         </Stack>
-        <Stack direction='row' spacing={3} alignItems='center'>
-          <Badge badgeContent={99} color='error'>
+        <Stack direction="row" spacing={3} alignItems="center">
+          <Badge badgeContent={99} color="error">
             <Notifications />
           </Badge>
-          <Badge badgeContent={1000} max={999} color='primary'>
+          <Badge badgeContent={1000} max={999} color="primary">
             <Mail />
           </Badge>
-          <Badge variant='dot' color='success'>
+          <Badge variant="dot" color="success">
             <Person />
           </Badge>
           <Badge
-            overlap='circular'
-            variant='dot'
-            color='success'
+            overlap="circular"
+            variant="dot"
+            color="success"
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
             <Avatar sx={{ width: 32, height: 32 }}>U</Avatar>
           </Badge>
@@ -720,30 +721,30 @@ export default function ComponentShowcaseTab() {
 
       {/* TOOLTIPS */}
       <SectionTitle>Tooltips</SectionTitle>
-      <ShowcaseCard title='Tooltip placements'>
-        <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap>
-          <Tooltip title='Top' placement='top'>
-            <Button variant='outlined' size='small'>
+      <ShowcaseCard title="Tooltip placements">
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Tooltip title="Top" placement="top">
+            <Button variant="outlined" size="small">
               Top
             </Button>
           </Tooltip>
-          <Tooltip title='Right' placement='right'>
-            <Button variant='outlined' size='small'>
+          <Tooltip title="Right" placement="right">
+            <Button variant="outlined" size="small">
               Right
             </Button>
           </Tooltip>
-          <Tooltip title='Bottom' placement='bottom'>
-            <Button variant='outlined' size='small'>
+          <Tooltip title="Bottom" placement="bottom">
+            <Button variant="outlined" size="small">
               Bottom
             </Button>
           </Tooltip>
-          <Tooltip title='Left' placement='left'>
-            <Button variant='outlined' size='small'>
+          <Tooltip title="Left" placement="left">
+            <Button variant="outlined" size="small">
               Left
             </Button>
           </Tooltip>
-          <Tooltip title='With arrow' arrow>
-            <Button variant='outlined' size='small'>
+          <Tooltip title="With arrow" arrow>
+            <Button variant="outlined" size="small">
               Arrow
             </Button>
           </Tooltip>
@@ -752,9 +753,9 @@ export default function ComponentShowcaseTab() {
 
       {/* TABLE */}
       <SectionTitle>Table</SectionTitle>
-      <Paper variant='outlined' sx={{ borderRadius: 2, overflow: "hidden" }}>
+      <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
         <TableContainer>
-          <Table size='small'>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell>Student</TableCell>
@@ -800,11 +801,11 @@ export default function ComponentShowcaseTab() {
               ].map((row) => (
                 <TableRow key={row.name}>
                   <TableCell>
-                    <Stack direction='row' spacing={1} alignItems='center'>
+                    <Stack direction="row" spacing={1} alignItems="center">
                       <Avatar sx={{ width: 24, height: 24, fontSize: 12 }}>
                         {row.initials}
                       </Avatar>
-                      <Typography variant='body2'>{row.name}</Typography>
+                      <Typography variant="body2">{row.name}</Typography>
                     </Stack>
                   </TableCell>
                   <TableCell>{row.score}</TableCell>
@@ -813,7 +814,7 @@ export default function ComponentShowcaseTab() {
                     <Chip
                       label={row.status}
                       color={row.color}
-                      size='small'
+                      size="small"
                       icon={row.status === "Perfect" ? <Star /> : undefined}
                     />
                   </TableCell>
@@ -826,66 +827,66 @@ export default function ComponentShowcaseTab() {
 
       {/* DIVIDERS */}
       <SectionTitle>Dividers</SectionTitle>
-      <ShowcaseCard title='Divider variants'>
+      <ShowcaseCard title="Divider variants">
         <Divider>Full width with text</Divider>
-        <Divider textAlign='left'>Left aligned</Divider>
-        <Divider textAlign='right'>Right aligned</Divider>
+        <Divider textAlign="left">Left aligned</Divider>
+        <Divider textAlign="right">Right aligned</Divider>
         <Stack
-          direction='row'
+          direction="row"
           spacing={2}
-          divider={<Divider orientation='vertical' flexItem />}>
-          <Typography variant='body2'>Item 1</Typography>
-          <Typography variant='body2'>Item 2</Typography>
-          <Typography variant='body2'>Item 3</Typography>
+          divider={<Divider orientation="vertical" flexItem />}>
+          <Typography variant="body2">Item 1</Typography>
+          <Typography variant="body2">Item 2</Typography>
+          <Typography variant="body2">Item 3</Typography>
         </Stack>
       </ShowcaseCard>
 
       {/* SKELETON */}
       <SectionTitle>Skeleton</SectionTitle>
-      <ShowcaseCard title='Skeleton variants'>
+      <ShowcaseCard title="Skeleton variants">
         <Stack spacing={1}>
-          <Skeleton variant='text' sx={{ fontSize: "1rem" }} />
-          <Skeleton variant='text' width='60%' sx={{ fontSize: "1rem" }} />
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <Skeleton variant='circular' width={40} height={40} />
+          <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+          <Skeleton variant="text" width="60%" sx={{ fontSize: "1rem" }} />
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Skeleton variant="circular" width={40} height={40} />
             <Box sx={{ flex: 1 }}>
-              <Skeleton variant='text' sx={{ fontSize: "1rem" }} />
+              <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
               <Skeleton
-                variant='text'
-                width='80%'
+                variant="text"
+                width="80%"
                 sx={{ fontSize: "0.75rem" }}
               />
             </Box>
           </Stack>
-          <Skeleton variant='rectangular' height={60} />
-          <Skeleton variant='rounded' height={60} />
+          <Skeleton variant="rectangular" height={60} />
+          <Skeleton variant="rounded" height={60} />
         </Stack>
       </ShowcaseCard>
 
       {/* LIST */}
       <SectionTitle>Lists</SectionTitle>
-      <ShowcaseCard title='List with icons'>
+      <ShowcaseCard title="List with icons">
         <List dense>
           <ListItem>
             <ListItemIcon>
               <Inbox />
             </ListItemIcon>
             <ListItemText
-              primary='Active Sessions'
-              secondary='3 sessions running'
+              primary="Active Sessions"
+              secondary="3 sessions running"
             />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <Mail />
             </ListItemIcon>
-            <ListItemText primary='Notifications' secondary='12 unread' />
+            <ListItemText primary="Notifications" secondary="12 unread" />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <Person />
             </ListItemIcon>
-            <ListItemText primary='Students' secondary='142 enrolled' />
+            <ListItemText primary="Students" secondary="142 enrolled" />
           </ListItem>
         </List>
       </ShowcaseCard>
@@ -895,7 +896,7 @@ export default function ComponentShowcaseTab() {
           ═══════════════════════════════════════════ */}
 
       <Divider sx={{ my: 5 }} />
-      <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+      <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
         Feedback
       </Typography>
 
@@ -909,7 +910,7 @@ export default function ComponentShowcaseTab() {
                 <Alert key={severity} severity={severity} variant={variant}>
                   {severity} — {variant} variant
                 </Alert>
-              )
+              ),
             )}
           </Stack>
         </ShowcaseCard>
@@ -923,24 +924,24 @@ export default function ComponentShowcaseTab() {
           gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
           gap: 3,
         }}>
-        <ShowcaseCard title='Linear Progress'>
+        <ShowcaseCard title="Linear Progress">
           <LinearProgress />
-          <LinearProgress variant='determinate' value={45} />
-          <LinearProgress variant='determinate' value={78} />
-          <LinearProgress variant='buffer' value={60} valueBuffer={80} />
-          <LinearProgress color='secondary' variant='determinate' value={60} />
-          <LinearProgress color='success' variant='determinate' value={90} />
+          <LinearProgress variant="determinate" value={45} />
+          <LinearProgress variant="determinate" value={78} />
+          <LinearProgress variant="buffer" value={60} valueBuffer={80} />
+          <LinearProgress color="secondary" variant="determinate" value={60} />
+          <LinearProgress color="success" variant="determinate" value={90} />
         </ShowcaseCard>
-        <ShowcaseCard title='Circular Progress'>
-          <Stack direction='row' spacing={3} alignItems='center'>
+        <ShowcaseCard title="Circular Progress">
+          <Stack direction="row" spacing={3} alignItems="center">
             <CircularProgress />
-            <CircularProgress color='secondary' />
-            <CircularProgress variant='determinate' value={25} />
-            <CircularProgress variant='determinate' value={50} />
-            <CircularProgress variant='determinate' value={75} />
-            <CircularProgress variant='determinate' value={100} />
+            <CircularProgress color="secondary" />
+            <CircularProgress variant="determinate" value={25} />
+            <CircularProgress variant="determinate" value={50} />
+            <CircularProgress variant="determinate" value={75} />
+            <CircularProgress variant="determinate" value={100} />
           </Stack>
-          <Stack direction='row' spacing={3} alignItems='center'>
+          <Stack direction="row" spacing={3} alignItems="center">
             <CircularProgress size={20} />
             <CircularProgress size={30} />
             <CircularProgress size={40} />
@@ -951,21 +952,21 @@ export default function ComponentShowcaseTab() {
 
       {/* SNACKBAR */}
       <SectionTitle>Snackbar</SectionTitle>
-      <ShowcaseCard title='Snackbar'>
-        <Button variant='outlined' onClick={() => setSnackbarOpen(true)}>
+      <ShowcaseCard title="Snackbar">
+        <Button variant="outlined" onClick={() => setSnackbarOpen(true)}>
           Open Snackbar
         </Button>
         <Snackbar
           open={snackbarOpen}
           autoHideDuration={3000}
           onClose={() => setSnackbarOpen(false)}
-          message='Response submitted successfully'
+          message="Response submitted successfully"
           action={
             <IconButton
-              size='small'
-              color='inherit'
+              size="small"
+              color="inherit"
               onClick={() => setSnackbarOpen(false)}>
-              <Close fontSize='small' />
+              <Close fontSize="small" />
             </IconButton>
           }
         />
@@ -973,8 +974,8 @@ export default function ComponentShowcaseTab() {
 
       {/* DIALOG */}
       <SectionTitle>Dialog</SectionTitle>
-      <ShowcaseCard title='Alert dialog'>
-        <Button variant='outlined' onClick={() => setDialogOpen(true)}>
+      <ShowcaseCard title="Alert dialog">
+        <Button variant="outlined" onClick={() => setDialogOpen(true)}>
           Open Dialog
         </Button>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
@@ -986,8 +987,8 @@ export default function ComponentShowcaseTab() {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button variant='contained' onClick={() => setDialogOpen(false)}>
+            <CancelButton onClick={() => setDialogOpen(false)} />
+            <Button variant="contained" onClick={() => setDialogOpen(false)}>
               End Session
             </Button>
           </DialogActions>
@@ -996,15 +997,15 @@ export default function ComponentShowcaseTab() {
 
       {/* BACKDROP */}
       <SectionTitle>Backdrop</SectionTitle>
-      <ShowcaseCard title='Backdrop with spinner'>
-        <Button variant='outlined' onClick={() => setBackdropOpen(true)}>
+      <ShowcaseCard title="Backdrop with spinner">
+        <Button variant="outlined" onClick={() => setBackdropOpen(true)}>
           Open Backdrop
         </Button>
         <Backdrop
           sx={{ color: "#fff", zIndex: (t) => t.zIndex.drawer + 1 }}
           open={backdropOpen}
           onClick={() => setBackdropOpen(false)}>
-          <CircularProgress color='inherit' />
+          <CircularProgress color="inherit" />
         </Backdrop>
       </ShowcaseCard>
 
@@ -1013,7 +1014,7 @@ export default function ComponentShowcaseTab() {
           ═══════════════════════════════════════════ */}
 
       <Divider sx={{ my: 5 }} />
-      <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+      <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
         Surfaces
       </Typography>
 
@@ -1028,39 +1029,39 @@ export default function ComponentShowcaseTab() {
         <Card>
           <CardHeader
             avatar={<Avatar sx={{ bgcolor: "primary.main" }}>S</Avatar>}
-            title='Session Card'
-            subheader='Default card variant'
+            title="Session Card"
+            subheader="Default card variant"
           />
           <CardContent>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               Default elevation-0 style with a border and gap.
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size='small'>View</Button>
-            <Button size='small'>Share</Button>
+            <Button size="small">View</Button>
+            <Button size="small">Share</Button>
           </CardActions>
         </Card>
 
-        <Card variant='outlined'>
-          <CardHeader title='Outlined Card' subheader='variant="outlined"' />
+        <Card variant="outlined">
+          <CardHeader title="Outlined Card" subheader='variant="outlined"' />
           <CardContent>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               Outlined variant with a different background in dark mode.
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size='small' variant='contained' color='primary'>
+            <Button size="small" variant="contained" color="primary">
               Action
             </Button>
           </CardActions>
         </Card>
 
-        <Paper variant='outlined' sx={{ p: 2 }}>
-          <Typography variant='subtitle2' fontWeight={600} gutterBottom>
+        <Paper variant="outlined" sx={{ p: 2 }}>
+          <Typography variant="subtitle2" fontWeight={600} gutterBottom>
             Paper (outlined)
           </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          <Typography variant="body2" color="text.secondary">
             Elevation-0 paper with border. Used for content containers
             throughout the app.
           </Typography>
@@ -1075,7 +1076,7 @@ export default function ComponentShowcaseTab() {
             <Typography fontWeight={600}>How do I create a poll?</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               Navigate to the dashboard and click "Create Poll". Fill in your
               questions and options, then start a live session.
             </Typography>
@@ -1088,7 +1089,7 @@ export default function ComponentShowcaseTab() {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               Yes, students can join as guests using just a room code. No
               account required.
             </Typography>
@@ -1099,7 +1100,7 @@ export default function ComponentShowcaseTab() {
             <Typography fontWeight={600}>How are scores calculated?</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               Each question has a point value. Correct answers earn full points,
               incorrect answers earn zero.
             </Typography>
@@ -1112,20 +1113,20 @@ export default function ComponentShowcaseTab() {
           ═══════════════════════════════════════════ */}
 
       <Divider sx={{ my: 5 }} />
-      <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+      <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
         Navigation
       </Typography>
 
       {/* TABS */}
       <SectionTitle>Tabs</SectionTitle>
-      <ShowcaseCard title='Tab navigation'>
+      <ShowcaseCard title="Tab navigation">
         <Tabs
           value={tabValue}
           onChange={(_: SyntheticEvent, v: number) => setTabValue(v)}>
-          <Tab label='Sessions' />
-          <Tab label='Submissions' />
-          <Tab label='Analytics' />
-          <Tab label='Settings' disabled />
+          <Tab label="Sessions" />
+          <Tab label="Submissions" />
+          <Tab label="Analytics" />
+          <Tab label="Settings" disabled />
         </Tabs>
         <Box
           sx={{
@@ -1135,7 +1136,7 @@ export default function ComponentShowcaseTab() {
             borderRadius: 1,
             mt: -0.5,
           }}>
-          <Typography variant='body2' color='text.secondary'>
+          <Typography variant="body2" color="text.secondary">
             {tabValue === 0 &&
               "View all your hosted sessions and their results."}
             {tabValue === 1 &&
@@ -1147,9 +1148,9 @@ export default function ComponentShowcaseTab() {
 
       {/* MENU */}
       <SectionTitle>Menu</SectionTitle>
-      <ShowcaseCard title='Dropdown menu'>
+      <ShowcaseCard title="Dropdown menu">
         <Button
-          variant='outlined'
+          variant="outlined"
           onClick={(e) => setMenuAnchor(e.currentTarget)}>
           Open Menu
         </Button>
@@ -1159,26 +1160,26 @@ export default function ComponentShowcaseTab() {
           onClose={() => setMenuAnchor(null)}>
           <MenuItem onClick={() => setMenuAnchor(null)}>
             <ListItemIcon>
-              <Home fontSize='small' />
+              <Home fontSize="small" />
             </ListItemIcon>
             Dashboard
           </MenuItem>
           <MenuItem onClick={() => setMenuAnchor(null)}>
             <ListItemIcon>
-              <Description fontSize='small' />
+              <Description fontSize="small" />
             </ListItemIcon>
             My Polls
           </MenuItem>
           <MenuItem onClick={() => setMenuAnchor(null)}>
             <ListItemIcon>
-              <BarChart fontSize='small' />
+              <BarChart fontSize="small" />
             </ListItemIcon>
             History
           </MenuItem>
           <Divider />
           <MenuItem onClick={() => setMenuAnchor(null)}>
             <ListItemIcon>
-              <Settings fontSize='small' />
+              <Settings fontSize="small" />
             </ListItemIcon>
             Settings
           </MenuItem>
@@ -1187,43 +1188,43 @@ export default function ComponentShowcaseTab() {
 
       {/* BREADCRUMBS */}
       <SectionTitle>Breadcrumbs</SectionTitle>
-      <ShowcaseCard title='Breadcrumb navigation'>
+      <ShowcaseCard title="Breadcrumb navigation">
         <Breadcrumbs>
-          <Link href='#' color='inherit'>
+          <Link href="#" color="inherit">
             Dashboard
           </Link>
-          <Link href='#' color='inherit'>
+          <Link href="#" color="inherit">
             Polls
           </Link>
-          <Typography color='text.primary'>CS 300 Midterm Review</Typography>
+          <Typography color="text.primary">CS 300 Midterm Review</Typography>
         </Breadcrumbs>
-        <Breadcrumbs separator='>'>
-          <Link href='#' color='inherit'>
+        <Breadcrumbs separator=">">
+          <Link href="#" color="inherit">
             <Home sx={{ mr: 0.5, fontSize: 18, verticalAlign: "middle" }} />
             Home
           </Link>
-          <Link href='#' color='inherit'>
+          <Link href="#" color="inherit">
             Sessions
           </Link>
-          <Typography color='text.primary'>Room ABC123</Typography>
+          <Typography color="text.primary">Room ABC123</Typography>
         </Breadcrumbs>
       </ShowcaseCard>
 
       {/* LINKS */}
       <SectionTitle>Links</SectionTitle>
-      <ShowcaseCard title='Link variants'>
-        <Stack direction='row' spacing={3} flexWrap='wrap' useFlexGap>
-          <Link href='#'>Default Link</Link>
-          <Link href='#' color='secondary'>
+      <ShowcaseCard title="Link variants">
+        <Stack direction="row" spacing={3} flexWrap="wrap" useFlexGap>
+          <Link href="#">Default Link</Link>
+          <Link href="#" color="secondary">
             Secondary
           </Link>
-          <Link href='#' color='text.primary'>
+          <Link href="#" color="text.primary">
             Text Link
           </Link>
-          <Link href='#' underline='hover'>
+          <Link href="#" underline="hover">
             Underline Hover
           </Link>
-          <Link href='#' underline='always'>
+          <Link href="#" underline="always">
             Underline Always
           </Link>
         </Stack>
@@ -1231,16 +1232,16 @@ export default function ComponentShowcaseTab() {
 
       {/* PAGINATION */}
       <SectionTitle>Pagination</SectionTitle>
-      <ShowcaseCard title='Pagination variants'>
+      <ShowcaseCard title="Pagination variants">
         <Stack spacing={2}>
-          <Pagination count={10} shape='rounded' />
-          <Pagination count={10} variant='outlined' shape='rounded' />
-          <Pagination count={10} color='primary' shape='rounded' />
-          <Pagination count={10} color='secondary' shape='rounded' />
+          <Pagination count={10} shape="rounded" />
+          <Pagination count={10} variant="outlined" shape="rounded" />
+          <Pagination count={10} color="primary" shape="rounded" />
+          <Pagination count={10} color="secondary" shape="rounded" />
           <Pagination
             count={10}
-            shape='rounded'
-            size='small'
+            shape="rounded"
+            size="small"
             showFirstButton
             showLastButton
           />
@@ -1249,26 +1250,26 @@ export default function ComponentShowcaseTab() {
 
       {/* STEPPER */}
       <SectionTitle>Stepper</SectionTitle>
-      <ShowcaseCard title='Horizontal stepper'>
+      <ShowcaseCard title="Horizontal stepper">
         <Stepper activeStep={activeStep}>
           {["Create Poll", "Add Questions", "Configure Settings", "Review"].map(
             (label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
               </Step>
-            )
+            ),
           )}
         </Stepper>
-        <Stack direction='row' spacing={1} justifyContent='center'>
+        <Stack direction="row" spacing={1} justifyContent="center">
           <Button
-            size='small'
+            size="small"
             disabled={activeStep === 0}
             onClick={() => setActiveStep((s) => s - 1)}>
             Back
           </Button>
           <Button
-            size='small'
-            variant='contained'
+            size="small"
+            variant="contained"
             disabled={activeStep === 3}
             onClick={() => setActiveStep((s) => s + 1)}>
             {activeStep === 3 ? "Finish" : "Next"}
@@ -1278,29 +1279,29 @@ export default function ComponentShowcaseTab() {
 
       {/* BOTTOM NAVIGATION */}
       <SectionTitle>Bottom Navigation</SectionTitle>
-      <ShowcaseCard title='Bottom navigation'>
-        <Paper variant='outlined' sx={{ borderRadius: 2, overflow: "hidden" }}>
+      <ShowcaseCard title="Bottom navigation">
+        <Paper variant="outlined" sx={{ borderRadius: 2, overflow: "hidden" }}>
           <BottomNavigation
             showLabels
             value={bottomNavValue}
             onChange={(_, v) => setBottomNavValue(v)}>
-            <BottomNavigationAction label='Recents' icon={<Restore />} />
-            <BottomNavigationAction label='Favorites' icon={<Favorite />} />
-            <BottomNavigationAction label='Nearby' icon={<LocationOn />} />
+            <BottomNavigationAction label="Recents" icon={<Restore />} />
+            <BottomNavigationAction label="Favorites" icon={<Favorite />} />
+            <BottomNavigationAction label="Nearby" icon={<LocationOn />} />
           </BottomNavigation>
         </Paper>
       </ShowcaseCard>
 
       {/* DRAWER */}
       <SectionTitle>Drawer</SectionTitle>
-      <ShowcaseCard title='Temporary drawer'>
-        <Button variant='outlined' onClick={() => setDrawerOpen(true)}>
+      <ShowcaseCard title="Temporary drawer">
+        <Button variant="outlined" onClick={() => setDrawerOpen(true)}>
           Open Drawer
         </Button>
         <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
           <Box
             sx={{ width: 250 }}
-            role='presentation'
+            role="presentation"
             onClick={() => setDrawerOpen(false)}>
             <List>
               {["Dashboard", "My Polls", "History", "Settings"].map(
@@ -1320,7 +1321,7 @@ export default function ComponentShowcaseTab() {
                       <ListItemText primary={text} />
                     </ListItemButton>
                   </ListItem>
-                )
+                ),
               )}
             </List>
             <Divider />
@@ -1342,10 +1343,10 @@ export default function ComponentShowcaseTab() {
 
       {/* SPEED DIAL */}
       <SectionTitle>Speed Dial</SectionTitle>
-      <ShowcaseCard title='Speed dial'>
+      <ShowcaseCard title="Speed dial">
         <Box sx={{ height: 200, position: "relative" }}>
           <SpeedDial
-            ariaLabel='Speed dial demo'
+            ariaLabel="Speed dial demo"
             sx={{ position: "absolute", bottom: 16, right: 16 }}
             icon={<SpeedDialIcon />}>
             {[
@@ -1369,34 +1370,34 @@ export default function ComponentShowcaseTab() {
           ═══════════════════════════════════════════ */}
 
       <Divider sx={{ my: 5 }} />
-      <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+      <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
         Utils & Overlays
       </Typography>
 
       {/* APP BAR */}
       <SectionTitle>App Bar</SectionTitle>
-      <ShowcaseCard title='Basic app bar'>
-        <MuiAppBar position='static' sx={{ borderRadius: 1 }}>
+      <ShowcaseCard title="Basic app bar">
+        <MuiAppBar position="static" sx={{ borderRadius: 1 }}>
           <Toolbar>
             <IconButton
-              size='large'
-              edge='start'
-              color='inherit'
+              size="large"
+              edge="start"
+              color="inherit"
               sx={{ mr: 2 }}>
               <MenuIcon />
             </IconButton>
-            <Typography variant='h6' sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
               PulseCheck
             </Typography>
-            <Button color='inherit'>Login</Button>
+            <Button color="inherit">Login</Button>
           </Toolbar>
         </MuiAppBar>
       </ShowcaseCard>
 
       {/* MODAL */}
       <SectionTitle>Modal</SectionTitle>
-      <ShowcaseCard title='Basic modal'>
-        <Button variant='outlined' onClick={() => setModalOpen(true)}>
+      <ShowcaseCard title="Basic modal">
+        <Button variant="outlined" onClick={() => setModalOpen(true)}>
           Open Modal
         </Button>
         <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
@@ -1414,10 +1415,10 @@ export default function ComponentShowcaseTab() {
               boxShadow: 24,
               p: 4,
             }}>
-            <Typography variant='h6' gutterBottom>
+            <Typography variant="h6" gutterBottom>
               Modal Title
             </Typography>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               This is a basic modal. It uses the Modal component directly
               instead of Dialog, giving you full control over the content.
             </Typography>
@@ -1427,9 +1428,9 @@ export default function ComponentShowcaseTab() {
 
       {/* POPOVER */}
       <SectionTitle>Popover</SectionTitle>
-      <ShowcaseCard title='Basic popover'>
+      <ShowcaseCard title="Basic popover">
         <Button
-          variant='outlined'
+          variant="outlined"
           onClick={(e) => setPopoverAnchor(e.currentTarget)}>
           Open Popover
         </Button>
@@ -1438,7 +1439,7 @@ export default function ComponentShowcaseTab() {
           anchorEl={popoverAnchor}
           onClose={() => setPopoverAnchor(null)}
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}>
-          <Typography sx={{ p: 2 }} variant='body2'>
+          <Typography sx={{ p: 2 }} variant="body2">
             The content of the Popover.
           </Typography>
         </Popover>
@@ -1446,14 +1447,14 @@ export default function ComponentShowcaseTab() {
 
       {/* TRANSFER LIST */}
       <SectionTitle>Transfer List</SectionTitle>
-      <ShowcaseCard title='Transfer list'>
+      <ShowcaseCard title="Transfer list">
         <Stack
-          direction='row'
+          direction="row"
           spacing={2}
-          justifyContent='center'
-          alignItems='center'>
+          justifyContent="center"
+          alignItems="center">
           <Paper
-            variant='outlined'
+            variant="outlined"
             sx={{ width: 200, height: 230, overflow: "auto" }}>
             <List dense>
               {transferLeft.map((value) => (
@@ -1463,7 +1464,7 @@ export default function ComponentShowcaseTab() {
                     setTransferChecked((prev) =>
                       prev.includes(value)
                         ? prev.filter((v) => v !== value)
-                        : [...prev, value]
+                        : [...prev, value],
                     )
                   }}>
                   <ListItemIcon>
@@ -1480,36 +1481,36 @@ export default function ComponentShowcaseTab() {
           </Paper>
           <Stack spacing={0.5}>
             <Button
-              variant='outlined'
-              size='small'
+              variant="outlined"
+              size="small"
               onClick={() => {
                 const moving = transferLeft.filter((v) =>
-                  transferChecked.includes(v)
+                  transferChecked.includes(v),
                 )
                 setTransferRight((prev) => [...prev, ...moving])
                 setTransferLeft((prev) =>
-                  prev.filter((v) => !moving.includes(v))
+                  prev.filter((v) => !moving.includes(v)),
                 )
                 setTransferChecked((prev) =>
-                  prev.filter((v) => !moving.includes(v))
+                  prev.filter((v) => !moving.includes(v)),
                 )
               }}
               disabled={!transferLeft.some((v) => transferChecked.includes(v))}>
               &gt;
             </Button>
             <Button
-              variant='outlined'
-              size='small'
+              variant="outlined"
+              size="small"
               onClick={() => {
                 const moving = transferRight.filter((v) =>
-                  transferChecked.includes(v)
+                  transferChecked.includes(v),
                 )
                 setTransferLeft((prev) => [...prev, ...moving])
                 setTransferRight((prev) =>
-                  prev.filter((v) => !moving.includes(v))
+                  prev.filter((v) => !moving.includes(v)),
                 )
                 setTransferChecked((prev) =>
-                  prev.filter((v) => !moving.includes(v))
+                  prev.filter((v) => !moving.includes(v)),
                 )
               }}
               disabled={
@@ -1519,7 +1520,7 @@ export default function ComponentShowcaseTab() {
             </Button>
           </Stack>
           <Paper
-            variant='outlined'
+            variant="outlined"
             sx={{ width: 200, height: 230, overflow: "auto" }}>
             <List dense>
               {transferRight.map((value) => (
@@ -1529,7 +1530,7 @@ export default function ComponentShowcaseTab() {
                     setTransferChecked((prev) =>
                       prev.includes(value)
                         ? prev.filter((v) => v !== value)
-                        : [...prev, value]
+                        : [...prev, value],
                     )
                   }}>
                   <ListItemIcon>
@@ -1549,9 +1550,9 @@ export default function ComponentShowcaseTab() {
 
       <Divider sx={{ my: 3 }} />
       <Typography
-        variant='body2'
-        color='text.secondary'
-        textAlign='center'
+        variant="body2"
+        color="text.secondary"
+        textAlign="center"
         sx={{ mb: 4 }}>
         Toggle dark mode (top-right) to preview both themes
       </Typography>

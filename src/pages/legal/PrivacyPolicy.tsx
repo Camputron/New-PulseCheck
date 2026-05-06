@@ -36,11 +36,11 @@ export default function PrivacyPolicy(props: { ref?: React.Ref<unknown> }) {
             ? "linear-gradient(160deg, rgba(0,150,136,0.15) 0%, rgba(0,0,0,0) 60%)"
             : "linear-gradient(160deg, rgba(0,150,136,0.08) 0%, rgba(255,255,255,0) 60%)",
       }}>
-      <Container maxWidth='md'>
+      <Container maxWidth="md">
         <Box ref={props.ref}>
           <RA.Fade triggerOnce duration={600}>
             <Typography
-              variant='overline'
+              variant="overline"
               sx={{
                 letterSpacing: 2,
                 color: "primary.main",
@@ -48,10 +48,10 @@ export default function PrivacyPolicy(props: { ref?: React.Ref<unknown> }) {
               }}>
               Legal
             </Typography>
-            <Typography variant='h4' fontWeight={700} sx={{ mb: 1 }}>
+            <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
               Privacy Policy
             </Typography>
-            <Typography variant='body1' sx={{ color: "text.secondary", mb: 6 }}>
+            <Typography variant="body1" sx={{ color: "text.secondary", mb: 6 }}>
               At PulseCheck, we respect your privacy and are committed to
               protecting your personal information. This policy explains how we
               collect, use, and safeguard your data.
@@ -67,10 +67,10 @@ export default function PrivacyPolicy(props: { ref?: React.Ref<unknown> }) {
                   border: 1,
                   borderColor: "divider",
                 }}>
-                <Typography variant='subtitle1' fontWeight={700} gutterBottom>
+                <Typography variant="subtitle1" fontWeight={700} gutterBottom>
                   {s.title}
                 </Typography>
-                <Typography variant='body2' color='text.secondary'>
+                <Typography variant="body2" color="text.secondary">
                   {s.body}
                 </Typography>
               </Box>

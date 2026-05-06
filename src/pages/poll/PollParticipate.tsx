@@ -1,6 +1,7 @@
 import Header from "@/components/poll/session/participate/Header"
 import ResponseDialog from "@/components/poll/session/participate/ResponseDialog"
 import ResultsChart from "@/components/poll/session/ResultsChart"
+import LeaderboardCard from "@/components/poll/session/LeaderboardCard"
 import UserSessionGrid from "@/components/poll/session/UserSessionGrid"
 import api from "@/api"
 import { useAuthContext, useSnackbar } from "@/hooks"
@@ -18,11 +19,11 @@ import {
   Typography,
 } from "@mui/material"
 import { deleteDoc, doc } from "firebase/firestore"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore"
 import { useNavigate, useParams } from "react-router-dom"
-import MemoryGame from "react-card-memory-game"
-import Confetti from "react-confetti"
+// import MemoryGame from "react-card-memory-game"
+// import Confetti from "react-confetti"
 import useRequireAuth from "@/hooks/useRequireAuth"
 import { saveActiveSession, clearActiveSession } from "@/utils"
 
@@ -39,18 +40,44 @@ export default function PollParticipate() {
   const [session, sessionLoading] = useDocumentData(sref)
   const [users] = useCollection(api.sessions.users.collect(sid))
   const [gettingstated, setGettingStated] = useState(false)
-  const [completedGame, setCompletedGame] = useState(false)
+  // const [completedGame, setCompletedGame] = useState(false)
   const [allowNavigation, setAllowNavigation] = useState(false)
+  const hasHandledTerminalState = useRef(false)
 
   /* Block browser back / swipe-back via popstate.
      Pushes a duplicate history entry so pressing back lands on the same page,
      then shows a confirmation dialog instead of navigating away. */
   const [showLeaveDialog, setShowLeaveDialog] = useState(false)
 
+  const leaveSession = () => {
+    async function leaveAsync() {
+      if (!user) return
+      try {
+        const uid = user.uid
+        await api.sessions.leaveSession(sid, uid)
+        clearActiveSession()
+        setAllowNavigation(true)
+        snackbar.show({
+          message: "You left the session",
+          type: "info",
+        })
+        if (user.isAnonymous) {
+          await user.delete()
+          void navigate("/get-started", { replace: true })
+        } else {
+          void navigate("/poll/join", { replace: true })
+        }
+      } catch (err: unknown) {
+        console.error(err)
+      }
+    }
+    void leaveAsync()
+  }
+
   useEffect(() => {
     if (allowNavigation) return undefined
 
-    // Push a sentinel entry so the first "back" stays on this page
+    /* push setinel entry so the first "back" stays on this page */
     window.history.pushState({ sentinel: true }, "")
 
     const handlePopState = () => {
@@ -75,7 +102,15 @@ export default function PollParticipate() {
 
   useEffect(() => {
     if (session && !sessionLoading) {
+      if (
+        hasHandledTerminalState.current &&
+        (session.state === SessionState.CLOSED ||
+          session.state === SessionState.FINISHED)
+      ) {
+        return
+      }
       if (session.state === SessionState.CLOSED) {
+        hasHandledTerminalState.current = true
         clearActiveSession()
         setAllowNavigation(true)
         snackbar.show({
@@ -86,6 +121,7 @@ export default function PollParticipate() {
       } else if (session.state === SessionState.IN_PROGRESS) {
         setGettingStated(true)
       } else if (session.state === SessionState.FINISHED) {
+        hasHandledTerminalState.current = true
         clearActiveSession()
         setAllowNavigation(true)
         snackbar.show({
@@ -94,12 +130,14 @@ export default function PollParticipate() {
         })
         /* navigate to submission */
         if (!user) return
+        const fromGuestSession = user.isAnonymous
         api.sessions.submissions
           .get(sref.id, user.uid)
           .then((x) => {
             void navigate(`/poll/submission/${x.ref.id}/results`, {
               state: {
                 finished: true,
+                fromGuestSession,
               },
             })
           })
@@ -110,7 +148,11 @@ export default function PollParticipate() {
 
   useEffect(() => {
     if (session && !sessionLoading) {
-      saveActiveSession({ sid, roomCode: session.room_code })
+      saveActiveSession({
+        sid,
+        roomCode: session.room_code,
+        role: "participant",
+      })
     }
   }, [session, sessionLoading, sid])
 
@@ -129,9 +171,9 @@ export default function PollParticipate() {
           setAllowNavigation(true)
           if (user.isAnonymous) {
             await user.delete()
-            await navigate("/get-started")
+            void navigate("/get-started")
           } else {
-            await navigate("/poll/join")
+            void navigate("/poll/join")
           }
         } else {
           const wuref = api.sessions.waiting_users.collect(sid)
@@ -161,18 +203,13 @@ export default function PollParticipate() {
 
   return (
     <React.Fragment>
-      {completedGame && <Confetti tweenDuration={5000} recycle={false} />}
+      {/* {completedGame && <Confetti tweenDuration={5000} recycle={false} />} */}
       <ResponseDialog session={session} sref={sref} />
-      <Header
-        sid={sid}
-        session={session}
-        users={users}
-        onAllowNavigation={() => setAllowNavigation(true)}
-      />
+      <Header session={session} users={users} onLeaveSession={leaveSession} />
       {!gettingstated && <LinearProgress />}
       <Container sx={{ mt: 2 }}>
         {!gettingstated && (
-          <Typography variant='h5' mb={2}>
+          <Typography variant="h5" mb={2}>
             Waiting for Host...
           </Typography>
         )}
@@ -181,15 +218,15 @@ export default function PollParticipate() {
             <ResultsChart results={session.results} />
           </Box>
         )}
-        {session?.state === SessionState.OPEN && (
-          <Box marginInline={8}>
-            <MemoryGame
-              gridNumber={4}
-              foundCardsColor='hsl(45, 95%, 50%)'
-              holeCardsColor='hsl(174, 80%, 42%)'
-              gameFinished={() => setCompletedGame(true)}
-            />
-          </Box>
+        {/* if we have results and leaderboard is enabled, render this */}
+        {session?.results && session?.leaderboard_scores && (
+          <LeaderboardCard
+            leaderboard={session.leaderboard_scores}
+            isAnonymous={
+              Boolean(session?.anonymous) ||
+              Boolean(session?.results?.question?.anonymous)
+            }
+          />
         )}
         {/* render the users who are in the poll session */}
         <UserSessionGrid
@@ -200,6 +237,16 @@ export default function PollParticipate() {
             Boolean(session?.results?.question?.anonymous)
           }
         />
+        {/* {session?.state === SessionState.OPEN && (
+          <Box marginInline={8}>
+            <MemoryGame
+              gridNumber={4}
+              foundCardsColor='hsl(45, 95%, 50%)'
+              holeCardsColor='hsl(174, 80%, 42%)'
+              gameFinished={() => setCompletedGame(true)}
+            />
+          </Box>
+        )} */}
       </Container>
 
       {/* Navigation guard dialog — shown when user tries to leave via back/swipe */}
@@ -207,18 +254,18 @@ export default function PollParticipate() {
         <DialogTitle>Leave session?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You are still in an active session. If you leave now, you can rejoin
-            from the banner on the dashboard.
+            {user?.isAnonymous
+              ? "Your submitted answers are saved and any remaining questions will be marked 0. As a guest, leaving will permanently delete your account — you won't be able to rejoin this session."
+              : "Your submitted answers are saved, but you will receive a 0 for any remaining questions."}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowLeaveDialog(false)}>Stay</Button>
           <Button
-            color='error'
+            color="error"
             onClick={() => {
               setShowLeaveDialog(false)
-              setAllowNavigation(true)
-              void navigate(-1)
+              leaveSession()
             }}>
             Leave
           </Button>

@@ -70,7 +70,7 @@ export default function UploadPDFDialog(props: UploadPDFBoxProps) {
         open={open}
         onClose={onClose}
         fullWidth
-        maxWidth='sm'
+        maxWidth="sm"
         slots={{
           transition: SlideUpTransition,
         }}>
@@ -81,7 +81,7 @@ export default function UploadPDFDialog(props: UploadPDFBoxProps) {
           </Typography>
           {error && (
             <Box mb={2}>
-              <Alert severity='error' onClose={() => setError("")}>
+              <Alert severity="error" onClose={() => setError("")}>
                 {error}
               </Alert>
             </Box>
@@ -107,20 +107,20 @@ export default function UploadPDFDialog(props: UploadPDFBoxProps) {
             }}>
             {text ? (
               <>
-                <Typography variant='h6'>{text}</Typography>
+                <Typography variant="h6">{text}</Typography>
                 <LinearProgress sx={{ width: "100%" }} />
               </>
             ) : (
               <>
-                <Fab component='label' color='primary' size='large'>
+                <Fab component="label" color="primary" size="large">
                   <Upload />
                   <VisuallyHiddenInput
-                    type='file'
-                    accept='application/pdf'
+                    type="file"
+                    accept="application/pdf"
                     onChange={handleFile}
                   />
                 </Fab>
-                <Typography variant='subtitle1' color='textSecondary'>
+                <Typography variant="subtitle1" color="textSecondary">
                   Click the button above to upload a PDF
                 </Typography>
               </>

@@ -9,8 +9,9 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material"
-import React, { useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import CancelButton from "@/components/CancelButton"
 
 interface DeleteMenuItemProps {
   pid: string
@@ -35,7 +36,7 @@ export default function DeleteMenuItem(props: DeleteMenuItemProps) {
         const pref = api.polls.doc(pid)
         console.debug(pref.path)
         await api.polls.delete(pref)
-        await navigate("/dashboard")
+        void navigate("/dashboard")
       } catch (err) {
         console.debug(err)
       } finally {
@@ -46,9 +47,9 @@ export default function DeleteMenuItem(props: DeleteMenuItemProps) {
   }
 
   const handleClose = () => setOpen(false)
-
+  /* TODO, decouple dialog to header */
   return (
-    <React.Fragment>
+    <>
       <MenuItem icon={Delete} onClick={onClick}>
         Delete
       </MenuItem>
@@ -60,12 +61,12 @@ export default function DeleteMenuItem(props: DeleteMenuItemProps) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete} color='error'>
+          <CancelButton onClick={handleClose} />
+          <Button onClick={handleDelete} color="error">
             Delete
           </Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </>
   )
 }

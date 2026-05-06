@@ -12,7 +12,7 @@ import { clx } from "@/api"
  */
 export default class SubmissionStore extends BaseStore {
   public doc(sid: string, uid: string): DocumentReference<SessionSubmission> {
-    const ref = doc(this.db, clx.submissions, sid, clx.sessions, uid)
+    const ref = doc(this.db, clx.sessions, sid, clx.submissions, uid)
     return ref as DocumentReference<SessionSubmission>
   }
 

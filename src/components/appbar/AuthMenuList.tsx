@@ -1,6 +1,12 @@
 import { Divider, MenuList, useMediaQuery, useTheme } from "@mui/material"
 import MenuItem from "./MenuItem"
-import { BarChart, Dashboard, HowToVote, Settings } from "@mui/icons-material"
+import {
+  BarChart,
+  Dashboard,
+  HowToVote,
+  Inventory2,
+  Settings,
+} from "@mui/icons-material"
 import { useAuthContext } from "@/hooks"
 
 interface AuthMenuListProps {
@@ -30,13 +36,16 @@ export default function AuthMenuList(props: AuthMenuListProps) {
     <MenuList sx={{ py: 1 }}>
       {isPhone && (
         <>
-          <MenuItem icon={Dashboard} to='/dashboard' onClick={handleClose}>
+          <MenuItem icon={Dashboard} to="/dashboard" onClick={handleClose}>
             Dashboard
           </MenuItem>
-          <MenuItem icon={HowToVote} to='/poll/join' onClick={handleClose}>
+          <MenuItem icon={HowToVote} to="/poll/join" onClick={handleClose}>
             Join Poll
           </MenuItem>
-          <MenuItem icon={BarChart} to='/poll/history' onClick={handleClose}>
+          <MenuItem icon={Inventory2} to="/banks" onClick={handleClose}>
+            Question Banks
+          </MenuItem>
+          <MenuItem icon={BarChart} to="/poll/history" onClick={handleClose}>
             History
           </MenuItem>
           <Divider sx={{ my: 0.5 }} />

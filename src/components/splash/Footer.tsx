@@ -46,7 +46,7 @@ export default function Footer({ onScrollTo }: Props) {
   const navigate = useNavigate()
 
   const handleClick = (
-    action: (typeof footerLinks)[number]["links"][number]["action"]
+    action: (typeof footerLinks)[number]["links"][number]["action"],
   ) => {
     if (action.type === "scroll" && onScrollTo) {
       onScrollTo(action.target)
@@ -57,9 +57,9 @@ export default function Footer({ onScrollTo }: Props) {
   }
 
   return (
-    <Box component='footer' sx={{ mt: 8 }}>
+    <Box component="footer" sx={{ mt: 8 }}>
       <Divider />
-      <Container maxWidth='md' sx={{ py: 6, textAlign: "left" }}>
+      <Container maxWidth="md" sx={{ py: 6, textAlign: "left" }}>
         <Box
           sx={{
             display: "flex",
@@ -70,12 +70,12 @@ export default function Footer({ onScrollTo }: Props) {
           }}>
           {/* Branding */}
           <Box sx={{ maxWidth: 280 }}>
-            <Typography variant='h6' fontWeight={700} sx={{ mb: 1 }}>
+            <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
               PulseCheck
             </Typography>
             <Typography
-              variant='body2'
-              color='text.secondary'
+              variant="body2"
+              color="text.secondary"
               sx={{ lineHeight: 1.6 }}>
               Real-time classroom polling that keeps every student engaged.
             </Typography>
@@ -86,7 +86,7 @@ export default function Footer({ onScrollTo }: Props) {
             {footerLinks.map((column) => (
               <Box key={column.heading}>
                 <Typography
-                  variant='caption'
+                  variant="caption"
                   fontWeight={600}
                   sx={{
                     textTransform: "uppercase",
@@ -107,9 +107,9 @@ export default function Footer({ onScrollTo }: Props) {
                   {column.links.map((link) => (
                     <MuiLink
                       key={link.text}
-                      component='button'
-                      variant='body2'
-                      underline='none'
+                      component="button"
+                      variant="body2"
+                      underline="none"
                       onClick={() => handleClick(link.action)}
                       sx={{
                         color: "text.secondary",
@@ -129,7 +129,7 @@ export default function Footer({ onScrollTo }: Props) {
 
         {/* Copyright */}
         <Divider sx={{ my: 4 }} />
-        <Typography variant='body2' color='text.secondary' textAlign='center'>
+        <Typography variant="body2" color="text.secondary" textAlign="center">
           &copy; {new Date().getFullYear()} PulseCheck. All rights reserved.
         </Typography>
       </Container>

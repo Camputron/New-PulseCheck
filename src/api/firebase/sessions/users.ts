@@ -19,7 +19,7 @@ export default class UserStore extends BaseStore {
       clx.sessions,
       sid,
       clx.users,
-      uid
+      uid,
     ) as DocumentReference<SessionUser>
   }
 
@@ -28,7 +28,7 @@ export default class UserStore extends BaseStore {
       this.db,
       clx.sessions,
       sid,
-      clx.users
+      clx.users,
     ) as CollectionReference<SessionUser>
   }
 

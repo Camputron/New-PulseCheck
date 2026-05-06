@@ -14,7 +14,7 @@ export default function AppBar() {
   return (
     <HideOnScroll>
       <MUIAppbar
-        position='sticky'
+        position="sticky"
         elevation={0}
         sx={{
           backdropFilter: "blur(24px)",
@@ -60,7 +60,7 @@ function HideOnScroll({ children }: HideOnScrollProps) {
   return (
     <Slide
       appear={false}
-      direction='down'
+      direction="down"
       in={!trigger}
       timeout={{ enter: 500, exit: 300 }}>
       {children}

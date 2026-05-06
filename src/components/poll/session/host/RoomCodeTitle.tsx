@@ -11,7 +11,7 @@ interface RoomCodeTitleProps {
 export default function RoomCodeTitle(props: RoomCodeTitleProps) {
   const { session } = props
   return (
-    <Typography variant='h5' mb={2}>
+    <Typography variant="h5" mb={2}>
       Room Code: {session.room_code}
     </Typography>
   )

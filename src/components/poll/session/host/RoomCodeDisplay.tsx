@@ -39,7 +39,7 @@ export default function RoomCodeDisplay({ session }: RoomCodeDisplayProps) {
         }}>
         Join at{" "}
         <Box
-          component='span'
+          component="span"
           sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
           {window.location.host}
         </Box>
@@ -54,7 +54,7 @@ export default function RoomCodeDisplay({ session }: RoomCodeDisplayProps) {
           alignItems: "center",
           justifyContent: "center",
         }}>
-        <QRCodeSVG value={joinUrl} size={qrSize} level='M' />
+        <QRCodeSVG value={joinUrl} size={qrSize} level="M" />
       </Box>
     </Box>
   )

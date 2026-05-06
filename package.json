@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "vitest",
+    "test": "vitest run --exclude src/__tests__/firestore-rules.test.ts",
+    "test:emulator": "vitest run src/__tests__/firestore-rules.test.ts",
     "emulators": "firebase emulators:start",
     "build": "tsc -b && vite build",
     "lint": "eslint src",
@@ -24,6 +25,7 @@
     "@mui/material": "^6.4.4",
     "@mui/x-charts": "8.0.0-beta.3",
     "firebase": "^11.3.1",
+    "jspdf": "^4.2.1",
     "mui-image": "^1.0.7",
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
@@ -37,6 +39,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@firebase/rules-unit-testing": "^4.0.1",
     "@types/mui-image": "^1",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",

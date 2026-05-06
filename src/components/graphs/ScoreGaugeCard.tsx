@@ -15,9 +15,9 @@ export default function ScoreGaugeCard(props: Props) {
 
   const name = sub.display_name
   return (
-    <Card variant='outlined'>
+    <Card variant="outlined">
       <CardContent>
-        <Typography variant='h6' align='center'>
+        <Typography variant="h6" align="center">
           {name}'s Score
         </Typography>
         <Box display={"flex"} justifyContent={"center"}>
@@ -25,14 +25,14 @@ export default function ScoreGaugeCard(props: Props) {
         </Box>
         <Box>
           <Typography
-            variant='h6'
+            variant="h6"
             fontWeight={"bold"}
-            align='center'
+            align="center"
             gutterBottom>
             {sub.title}
           </Typography>
 
-          <Typography variant='body2' color='textSecondary' align='center'>
+          <Typography variant="body2" color="textSecondary" align="center">
             Submitted: {sub.submitted_at?.toDate().toLocaleDateString()}{" "}
             {sub.submitted_at?.toDate().toLocaleTimeString()}
           </Typography>

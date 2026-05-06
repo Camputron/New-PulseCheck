@@ -6,8 +6,6 @@ import {
   Typography,
   AppBar,
   Stack,
-  FormControlLabel,
-  Switch,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -17,29 +15,33 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import api from "@/api"
 import useSnackbar from "@/hooks/useSnackbar"
 import {
   ArrowBack,
   AutoAwesome,
+  BookmarkAdd,
+  ContentCopy,
   Done,
   Edit,
   MenuOpen,
   ScreenShare,
 } from "@mui/icons-material"
-import { useAuthContext } from "@/hooks"
 import { useNavigate } from "react-router-dom"
 import { Poll } from "@/types"
 import DeleteMenuItem from "./DeleteMenuItem"
+import DownloadPDFMenuItem from "./DownloadPDFMenuItem"
+import ImportFromBankMenuItem from "./ImportFromBankMenuItem"
+import SavePollToBankDialog from "./SavePollToBankDialog"
 import UploadPDFDialog from "../UploadPDFDialog"
+import { useAuthContext } from "@/hooks"
 
 interface HeaderProps {
   pid: string /* poll id */
   poll: Poll
-  // title: string /* poll title from firestore */
-  // anonymous: boolean | null
-  // time: number | null
+  canHost: boolean
+  onStartConfig: () => void
 }
 
 /**
@@ -50,38 +52,19 @@ interface HeaderProps {
  * @returns {JSX.Element}
  */
 export default function Header(props: HeaderProps) {
-  const { pid, poll } = props
-  const auth = useAuthContext()
+  const { pid, poll, canHost, onStartConfig } = props
   const [title, setTitle] = useState(poll.title)
   const [isEditing, setIsEditing] = useState(false)
   const snackbar = useSnackbar()
-  const [anonymous, setAnonymous] = useState(poll.anonymous)
   const [anchorElPoll, setAnchorElPoll] = useState<HTMLElement | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const navigate = useNavigate()
   const [generateWithAIModal, setGenerateWithAIModal] = useState(false)
+  const [isCloning, setIsCloning] = useState(false)
+  const [saveToBankOpen, setSaveToBankOpen] = useState(false)
   const muiTheme = useTheme()
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
-
-  useEffect(() => {
-    async function saveAnonymous(bool: boolean | null) {
-      try {
-        if (bool === poll.anonymous) {
-          return
-        }
-        const ref = api.polls.doc(pid)
-        await api.polls.update(ref, {
-          anonymous: bool,
-        })
-      } catch {
-        snackbar.show({
-          message: "Failed to update",
-          type: "error",
-        })
-      }
-    }
-    void saveAnonymous(anonymous)
-  }, [pid, poll, anonymous, snackbar])
+  const { user } = useAuthContext()
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (isMobile) {
@@ -137,24 +120,39 @@ export default function Header(props: HeaderProps) {
   }
 
   const handleHostClick = () => {
-    if (auth.user) {
-      const user = auth.user
-      /* create a poll session and host it */
-      api.sessions
-        .host(pid, user.uid)
-        .then((sessionId) => {
-          void navigate(`/poll/session/${sessionId}/host`)
-        })
-        .catch((err) => console.debug(err))
-    }
+    onStartConfig()
     handleClose()
+  }
+
+  const handleClone = async () => {
+    if (!user) return
+    handleClose()
+    setIsCloning(true)
+    try {
+      const ownerRef = api.users.doc(user.uid)
+      const newPollRef = await api.polls.clone(pid, ownerRef)
+      snackbar.show({
+        type: "success",
+        message: "Poll cloned",
+      })
+      void navigate("/dashboard", { replace: true })
+      void navigate(`/poll/${newPollRef.id}/edit`)
+    } catch (err) {
+      console.error(`Failed to clone poll ${pid}`, err)
+      snackbar.show({
+        type: "error",
+        message: "Failed to clone poll",
+      })
+    } finally {
+      setIsCloning(false)
+    }
   }
 
   return (
     <React.Fragment>
       <AppBar
         elevation={0}
-        position='relative'
+        position="relative"
         sx={{
           bgcolor: (t) =>
             t.palette.mode === "dark"
@@ -166,7 +164,7 @@ export default function Header(props: HeaderProps) {
           color: "text.primary",
         }}>
         <Toolbar>
-          <Stack direction='row' alignItems='center' flex={1}>
+          <Stack direction="row" alignItems="center" flex={1}>
             <IconButton
               onClick={() => {
                 void navigate(-1)
@@ -175,8 +173,8 @@ export default function Header(props: HeaderProps) {
             </IconButton>
             {isEditing ? (
               <TextField
-                size='small'
-                placeholder='Poll Title'
+                size="small"
+                placeholder="Poll Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 onKeyDown={handleKeyPress}
@@ -184,7 +182,7 @@ export default function Header(props: HeaderProps) {
                 slotProps={{
                   input: {
                     endAdornment: isEditing && (
-                      <IconButton color='primary' onClick={handleClickEdit}>
+                      <IconButton color="primary" onClick={handleClickEdit}>
                         <Done />
                       </IconButton>
                     ),
@@ -194,22 +192,22 @@ export default function Header(props: HeaderProps) {
             ) : (
               <Typography
                 onDoubleClick={handleTitleClick}
-                textAlign='left'
+                textAlign="left"
                 fontWeight={600}>
                 {title}
               </Typography>
             )}
             {!isEditing && (
               <IconButton
-                size='small'
-                color='primary'
+                size="small"
+                color="primary"
                 onClick={handleClickEdit}>
                 <Edit />
               </IconButton>
             )}
             <Box flex={1} marginInline={2} />
             <Box>
-              <IconButton onClick={handleOpen} color='inherit'>
+              <IconButton onClick={handleOpen} color="inherit">
                 <MenuOpen />
               </IconButton>
               {/* Desktop: dropdown menu */}
@@ -234,28 +232,38 @@ export default function Header(props: HeaderProps) {
                       },
                     },
                   }}>
-                  <MenuItem>
-                    <FormControlLabel
-                      label='Anonymous'
-                      checked={Boolean(anonymous)}
-                      control={
-                        <Switch
-                          onChange={(e) => setAnonymous(e.target.checked)}
-                        />
-                      }
-                    />
-                  </MenuItem>
-                  <Divider />
                   <MenuItem onClick={openGenerateWithAI}>
                     <ListItemIcon>
                       <AutoAwesome />
                     </ListItemIcon>
                     <ListItemText>Generate with AI</ListItemText>
                   </MenuItem>
+                  <ImportFromBankMenuItem pid={pid} onClick={handleClose} />
+                  <MenuItem
+                    onClick={() => {
+                      handleClose()
+                      setSaveToBankOpen(true)
+                    }}>
+                    <ListItemIcon>
+                      <BookmarkAdd />
+                    </ListItemIcon>
+                    <ListItemText>Save All to Bank</ListItemText>
+                  </MenuItem>
+                  <DownloadPDFMenuItem poll={poll} onClick={handleClose} />
+                  <MenuItem
+                    onClick={() => void handleClone()}
+                    disabled={isCloning || !user}>
+                    <ListItemIcon>
+                      <ContentCopy />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {isCloning ? "Cloning..." : "Clone Poll"}
+                    </ListItemText>
+                  </MenuItem>
                   <Divider />
                   <DeleteMenuItem pid={pid} onClick={handleClose} />
                   <Divider />
-                  <MenuItem onClick={handleHostClick}>
+                  <MenuItem onClick={handleHostClick} disabled={!canHost}>
                     <ListItemIcon>
                       <ScreenShare />
                     </ListItemIcon>
@@ -266,7 +274,7 @@ export default function Header(props: HeaderProps) {
               {/* Mobile: bottom sheet drawer */}
               {isMobile && (
                 <SwipeableDrawer
-                  anchor='bottom'
+                  anchor="bottom"
                   open={drawerOpen}
                   onClose={handleClose}
                   onOpen={() => setDrawerOpen(true)}
@@ -289,24 +297,12 @@ export default function Header(props: HeaderProps) {
                     }}
                   />
                   <Typography
-                    variant='body2'
-                    color='text.secondary'
+                    variant="body2"
+                    color="text.secondary"
                     fontWeight={600}
                     sx={{ px: 2, pb: 1 }}>
                     Poll Options
                   </Typography>
-                  <Divider />
-                  <MenuItem sx={{ py: 1.5 }}>
-                    <FormControlLabel
-                      label='Anonymous'
-                      checked={Boolean(anonymous)}
-                      control={
-                        <Switch
-                          onChange={(e) => setAnonymous(e.target.checked)}
-                        />
-                      }
-                    />
-                  </MenuItem>
                   <Divider />
                   <MenuItem onClick={openGenerateWithAI} sx={{ py: 1.5 }}>
                     <ListItemIcon>
@@ -314,10 +310,41 @@ export default function Header(props: HeaderProps) {
                     </ListItemIcon>
                     <ListItemText>Generate with AI</ListItemText>
                   </MenuItem>
+                  <ImportFromBankMenuItem
+                    pid={pid}
+                    onClick={handleClose}
+                    mobile
+                  />
+                  <MenuItem
+                    onClick={() => {
+                      handleClose()
+                      setSaveToBankOpen(true)
+                    }}
+                    sx={{ py: 1.5 }}>
+                    <ListItemIcon>
+                      <BookmarkAdd />
+                    </ListItemIcon>
+                    <ListItemText>Save All to Bank</ListItemText>
+                  </MenuItem>
+                  <DownloadPDFMenuItem poll={poll} onClick={handleClose} />
+                  <MenuItem
+                    onClick={() => void handleClone()}
+                    disabled={isCloning || !user}
+                    sx={{ py: 1.5 }}>
+                    <ListItemIcon>
+                      <ContentCopy />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {isCloning ? "Cloning..." : "Clone Poll"}
+                    </ListItemText>
+                  </MenuItem>
                   <Divider />
                   <DeleteMenuItem pid={pid} onClick={handleClose} />
                   <Divider />
-                  <MenuItem onClick={handleHostClick} sx={{ py: 1.5 }}>
+                  <MenuItem
+                    onClick={handleHostClick}
+                    disabled={!canHost}
+                    sx={{ py: 1.5 }}>
                     <ListItemIcon>
                       <ScreenShare />
                     </ListItemIcon>
@@ -338,6 +365,12 @@ export default function Header(props: HeaderProps) {
         pid={pid}
         open={generateWithAIModal}
         onClose={() => setGenerateWithAIModal(false)}
+      />
+      <SavePollToBankDialog
+        open={saveToBankOpen}
+        onClose={() => setSaveToBankOpen(false)}
+        pid={pid}
+        poll={poll}
       />
     </React.Fragment>
   )

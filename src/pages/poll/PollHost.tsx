@@ -1,9 +1,19 @@
 import api from "@/api"
 import { useAuthContext } from "@/hooks"
 import { SessionState, WaitingUser } from "@/types"
-import { Box, Container, LinearProgress } from "@mui/material"
+import {
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  LinearProgress,
+} from "@mui/material"
 import { onSnapshot } from "firebase/firestore"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore"
 import { useNavigate, useParams } from "react-router-dom"
 import RoomCodeDisplay from "@/components/poll/session/host/RoomCodeDisplay"
@@ -11,7 +21,9 @@ import UserSessionGrid from "@/components/poll/session/UserSessionGrid"
 import ResultsChart from "@/components/poll/session/ResultsChart"
 import Header from "@/components/poll/session/host/Header"
 import QuestionBox from "@/components/poll/session/host/QuestionBox"
+import LeaderboardCard from "@/components/poll/session/LeaderboardCard"
 import useRequireAuth from "@/hooks/useRequireAuth"
+import { saveActiveSession, clearActiveSession } from "@/utils"
 
 export default function PollHost() {
   useRequireAuth({ blockGuests: true })
@@ -25,6 +37,36 @@ export default function PollHost() {
   /** the current questiont to be shown */
   const question = session?.question
   const [timeLeft, setTimeLeft] = useState(0)
+  const sessionRef = useRef(session)
+  sessionRef.current = session
+  const [allowNavigation, setAllowNavigation] = useState(false)
+  const [showLeaveDialog, setShowLeaveDialog] = useState(false)
+
+  /* Block browser back / swipe-back via popstate.
+     Pushes a duplicate history entry so pressing back lands on the same page,
+     then shows a confirmation dialog instead of navigating away. */
+  useEffect(() => {
+    if (allowNavigation) return undefined
+
+    window.history.pushState({ sentinel: true }, "")
+
+    const handlePopState = () => {
+      setShowLeaveDialog(true)
+      window.history.pushState({ sentinel: true }, "")
+    }
+
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [allowNavigation])
+
+  /* Block page refresh / tab close */
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (!allowNavigation) e.preventDefault()
+    }
+    window.addEventListener("beforeunload", handler)
+    return () => window.removeEventListener("beforeunload", handler)
+  }, [allowNavigation])
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
@@ -46,7 +88,7 @@ export default function PollHost() {
   }, [timeLeft])
 
   useEffect(() => {
-    /* set timer if it exists */
+    /* set timer for question if it exists */
     if (session?.question?.time) {
       setTimeLeft(session.question.time)
     } else {
@@ -58,10 +100,13 @@ export default function PollHost() {
     /* if session exists and is done loading */
     if (session) {
       if (session.state === SessionState.CLOSED) {
+        clearActiveSession()
+        setAllowNavigation(true)
         void navigate("/dashboard")
       } else if (session.state === SessionState.FINISHED) {
-        /* session finished successfully! */
-        /* view results */
+        /* session finished successfully! view the results */
+        clearActiveSession()
+        setAllowNavigation(true)
         void navigate(`/poll/session/${sref.id}/results`, {
           state: {
             finished: true,
@@ -70,6 +115,17 @@ export default function PollHost() {
       }
     }
   }, [session, navigate, sref])
+
+  useEffect(() => {
+    /* if session is defined and not loading, update active session */
+    if (session && !sessionLoading) {
+      saveActiveSession({
+        sid,
+        roomCode: session.room_code,
+        role: "host",
+      })
+    }
+  }, [session, sessionLoading, sid])
 
   useEffect(() => {
     /* ensure user is host */
@@ -112,7 +168,10 @@ export default function PollHost() {
           const userId = change.doc.id
           const userData = change.doc.data()
           /* if the session state is open, then allow the user to join */
-          if (session && session.state === SessionState.OPEN) {
+          if (
+            sessionRef.current &&
+            sessionRef.current.state === SessionState.OPEN
+          ) {
             void addUser(userId, userData)
           }
         }
@@ -122,7 +181,7 @@ export default function PollHost() {
     return () => {
       unsubscribeUsers()
     }
-  }, [sid, session])
+  }, [sid])
 
   if (sessionLoading) {
     return <LinearProgress />
@@ -155,6 +214,16 @@ export default function PollHost() {
             <ResultsChart results={session.results} />
           </Box>
         )}
+        {/* if we have results and leaderboard is enabled, render this */}
+        {session?.results && session?.leaderboard_scores && (
+          <LeaderboardCard
+            leaderboard={session.leaderboard_scores}
+            isAnonymous={
+              Boolean(session?.anonymous) ||
+              Boolean(session?.results?.question?.anonymous)
+            }
+          />
+        )}
         {/* render users currently in the poll session */}
         <UserSessionGrid
           users={users}
@@ -165,6 +234,29 @@ export default function PollHost() {
           }
         />
       </Container>
+
+      {/* Navigation guard dialog — shown when host tries to leave via back/swipe */}
+      <Dialog open={showLeaveDialog}>
+        <DialogTitle>Leave this session?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Your session will keep running. You can rejoin from the banner on
+            the dashboard.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowLeaveDialog(false)}>Stay</Button>
+          <Button
+            color="error"
+            onClick={() => {
+              setShowLeaveDialog(false)
+              setAllowNavigation(true)
+              void navigate(-1)
+            }}>
+            Leave
+          </Button>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   )
 }

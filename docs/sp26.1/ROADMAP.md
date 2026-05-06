@@ -1,6 +1,6 @@
 # PulseCheck — Roadmap
 
-> **Last Updated:** 2026-03-25
+> **Last Updated:** 2026-04-27
 > **Sprint:** S3 (Weeks 4–5)
 > **Timeline:** 2026-03-11 → 2026-05-06 (8 weeks)
 
@@ -12,9 +12,9 @@ Also see: [SRS](SRS.md) | [Architecture](ARCHITECTURE.md) | [Project Plan](PROJE
 
 - [Board](#board)
   - [Legend](#legend)
-  - [DONE](#done)
-  - [IN PROGRESS](#in-progress)
   - [TODO](#todo)
+  - [IN PROGRESS](#in-progress)
+  - [DONE](#done)
   - [BACKLOG](#backlog)
 - [Bug Tracker](#bug-tracker)
   - [Critical](#critical)
@@ -42,12 +42,36 @@ Also see: [SRS](SRS.md) | [Architecture](ARCHITECTURE.md) | [Project Plan](PROJE
 
 ---
 
+### TODO
+
+Scheduled for upcoming sprints. Ready to be picked up.
+
+| ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
+|----|------|--------|---------|----------|-------------|
+| F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
+
+| — | **Bug fixes, testing, polish** | S5 | — | — | — |
+
+---
+
+### IN PROGRESS
+
+Actively being worked on this sprint.
+
+| ID | Item | Sprint | SRS Ref | Owner | Notes |
+|----|------|--------|---------|-------|-------|
+
+---
+
 ### DONE
 
-Completed and verified. Shipped in S1–S2.
+Completed and verified.
 
 | ID | Item | Sprint | SRS Ref |
 |----|------|--------|---------|
+| F19 | **Testing & CI/CD** — business logic tests, Cloud Functions tests (emulator), Firestore rules tests, GitHub Actions CI/CD | S5 | IO-4, IO-5 | 5–8 days | F16 |
+| F12 | **Auto-Fill Prompts** — quick-fill option presets (T/F, Agree Scale, Rating 1-5, Confidence, Frequency, Blank), question-level chips in editor | S4 | PM-6, PM-7, AI-6 |
+| F13a | **Poll Templates** — 8 pre-built templates (Quick Quiz, T/F, Vocab, Exit Ticket, Survey, Icebreaker, Muddiest Point, Discussion Prep), template picker empty state, preview dialog, post-apply acceleration (auto-expand, auto-focus, tab-through, completion bar) | S4 | PM-8 |
 | F11 | **Fat Finger** — rejoin after accidental back-out via `localStorage` persistence + "Rejoin" banner on Dashboard/Join | S1 | SL-7 |
 | F17.1 | **Poll History** — fix `setTimeout` cleanup in `PollSessionHistory` and `PollSubmissionHistory` | S1 | AR-1 |
 | F17.2 | **Poll History** — sort dropdown (date, score, participants/alpha) on both history views | S1 | AR-2 |
@@ -73,6 +97,7 @@ Completed and verified. Shipped in S1–S2.
 | F16.5 | **Backend** — remove client-side Vertex AI SDK usage | S1 | IO-1 |
 | F16.6 | **Backend** — `UploadPDFDialog` passes `gs://` URI instead of download URL | S1 | AI-1 |
 | F16.7 | **Backend** — end-to-end emulator test (upload PDF → callable → questions) | S1 | IO-2 |
+| F16.8 | **Backend** — deploy Cloud Functions to production + verify | S3 | IO-3 |
 | F16-P2 | **Backend** — grading moved to Firestore trigger (`onSessionFinish`) | S1 | AI-4 |
 | F32.1 | **UI** — glass-morphism on all 5 sub AppBars | S2 | UI-2 |
 | F32.2 | **UI** — bordered card pattern on 5 card components | S2 | UI-3 |
@@ -88,39 +113,19 @@ Completed and verified. Shipped in S1–S2.
 | F33.4 | **UI** — `PulseGauge` dynamic score colors (red→teal gradient) | S2 | UI-7 |
 | F33.5 | **UI** — `PulseGauge` aspect ratio fix (4:3) | S2 | UI-7 |
 | F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 |
-
----
-
-### IN PROGRESS
-
-Actively being worked on this sprint.
-
-| ID | Item | Sprint | SRS Ref | Owner | Notes |
-|----|------|--------|---------|-------|-------|
-| F16.8 | **Backend** — deploy Cloud Functions to production + verify | S3 | IO-3 | Michael | Last step of F16. Blocked on final testing. |
-
----
-
-### TODO
-
-Scheduled for upcoming sprints. Ready to be picked up.
-
-| ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
-|----|------|--------|---------|----------|-------------|
-| F12 | **Auto-Fill Prompts** — duplicate questions, quick templates, topic field in AI dialog | S3 | PM-6, PM-7, AI-6 | 1–2 days | None |
-| F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 | 1–2 days | None |
-| F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | S3 | RG-6 | 3–5 days | None |
-| F2 | **Peer Pulse** — optional ranked leaderboard (host toggle, per-question, top-10 filter) | S3 | AR-10 | 2–3 days | None |
-| F14 | **Async Results** — show results to participants post-session (gated behind submission) | S3 | SL-9 | 3–5 days | None |
-| F3 | **AI Summaries** — post-session AI analysis (accuracy, misconceptions, review topics) | S4 | AI-5 | 3–4 days | F16 |
-| F13a | **Poll Templates** — Quick Quiz, Survey, Exit Ticket pre-built templates | S4 | PM-8 | 3–5 days | None |
-| F34 | **Design System Overhaul** — MUI v7 template design language adoption | S5 | UI-9 | 5–8 days | None |
-| — | **Bug fixes, testing, polish** | S5 | — | — | — |
-| BUG | **Firestore listener leaks** — no `useEffect` cleanup in `SessionView.tsx` | S5 | — | 1 day | None |
-| BUG | **No double-join protection** — `joinSession` called twice in React Strict Mode | S5 | — | 0.5 day | None |
-| BUG | **Incorrect `await navigate()`** — React Router `navigate()` is not a Promise | S5 | — | 0.5 day | None |
-| BUG | **`poll.updated_at` not updating** on question/option edits | S5 | PM-11 | 0.5 day | None |
-| BUG | **Rejoin after host ends** — participant sees white screen instead of redirect | S5 | SL-10 | 1 day | None |
+| F2 | **Peer Pulse** — optional ranked leaderboard (host toggle, per-question, top-10 filter) | S3 | AR-10 |
+| F34 | **Design System Overhaul** — MUI v7 template design language adoption | S3 | UI-9 |
+| BUG | **Firestore listener leaks** — `useEffect` cleanup in `SessionView.tsx` | S3 | — |
+| BUG-3 | **Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx` | S3 | — |
+| F38 | **Download Poll to PDF** — export poll as printable PDF with numbered questions, options, and answer blanks | S3 | PM-14 |
+| F37 | **Clone Polls** — deep-copy entire poll (questions + options) into new poll; "Clone Poll" in editor menu + 3-dot menu on dashboard cards | S4 | PM-13 |
+| F35 | **Guest Account Upgrade** — anonymous → registered account linking via `linkWithCredential` (email/password + Google); auto-open dialog on session finish; banner on submission results page | S5 | SL-11 |
+| F39 | **Cloud Poll Session Settings** — move session defaults from localStorage to Firestore user profile; editable in Settings page | S5 | PM-15 |
+| F40 | **Question Bank** — named reusable question collections; bulk add; import into polls; works with F13a templates | S4 | PM-16 |
+| BUG-16 | **`poll.updated_at` not updating** on question/option edits — store-layer cascade so subcollection mutations bump the parent poll | S5 | PM-11 |
+| BUG | **Rejoin after host ends** — participant sees white screen instead of redirect | S5 | SL-10 |
+| CHORE | **Table View Mode** — `useViewMode` hook for Cards/Table toggle on Dashboard, Banks, and history views; per-key localStorage persistence; mobile forces Cards | S5 | UI-3 |
+| BUG | **No double-join protection** — `PollJoin` already guarded (`disable` state + `fire` flag for Strict Mode auto-fire); `GuestJoin` follow-up tracked separately | S3 | — |
 
 ---
 
@@ -130,15 +135,15 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 
 | ID | Item | Priority | SRS Ref | Estimate | Dependencies |
 |----|------|----------|---------|----------|-------------|
+| F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
+| F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
+| F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | P1 | RG-6 | 3–5 days | None |
+| F3 | **AI Summaries** — post-session AI analysis (accuracy, misconceptions, review topics) | P2 | AI-5 | 3–4 days | F16 |
 | F10 | **Instructor Dashboard** — engagement metrics over time (line/bar charts, stats) | P2 | AR-11 | 4–6 days | None |
-| F15 | **Sharing Polls** — share with view/edit permissions via email | P2 | PM-9 | 3–5 days | None |
-| F8 | **Topics Struggled With** — tag-based weak topic identification | P2 | — | 4–6 days | F5 |
-| F19 | **Testing & CI/CD** — E2E (Playwright), Firestore rules tests, GitHub Actions | P1 | IO-4, IO-5 | 5–8 days | F16 |
 | F20 | **Build Security** — disable source maps, App Check, security rules hardening | P3 | IO-6, IO-7, IO-8 | 1–2 days | F16 |
 | F5 | **Learning Pulse Dashboard** — student performance over time, weak areas | P3 | AR-12 | 5–8 days | F8 |
 | F6 | **Weekly Reflection** — aggregated weekly performance summaries | P3 | AR-13 | 3–4 days | F5 |
 | F18 | **Gemini AI Overhaul** — migrate from `@firebase/vertexai` to `@google/genai` SDK | P1 | — | 3–5 days | None |
-| F35 | **Guest Account Upgrade** — anonymous → registered account linking | P4 | SL-11 | 3–5 days | F11 |
 | F29 | **True/False Question Type** — simplified MCQ with 2 options | P4 | PM-10 | 1 day | None |
 | F22 | **Open-Ended / Short Answer** — free-text responses with optional AI grading | P4 | RG-7 | 4–6 days | None |
 | F21 | **Word Clouds** — word cloud visualization for open-ended responses | P4 | UI-12 | 3–5 days | F22 |
@@ -147,10 +152,13 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 | F13b | **UI Customization** — per-user color theme, font size, font family | P4 | UI-11 | 3–5 days | None |
 | F23 | **LMS Integration** — Canvas/Blackboard via LTI 1.3 | P4 | IO-9 | 8–12 days | F16 |
 | F24 | **AI Learning Analytics** — cross-session misconception analysis | P4 | AI-11 | 5–8 days | F3, F8 |
-| F25 | **AI Study Guides** — personalized study material from wrong answers | P4 | AI-9 | 3–5 days | F3, F9 |
 | F26 | **Bloom's Taxonomy Tagging** — AI auto-tags questions by cognitive level | P4 | AI-7 | 2–3 days | F18 |
 | F27 | **Misconception Detection** — AI wrong-answer pattern analysis | P4 | AI-8 | 3–5 days | F3 |
 | F9 | **Study Resources** — attach source PDF + AI study suggestions | P3 | AI-10 | 3–5 days | F8, F16 |
+| F41 | **Question Difficulty Ranking** — per-question % correct stats ranked most→least difficult on session results | P3 | AR-15 | 2–3 days | None |
+| F25 | **Personalized Study Guides** — wrong-answer compilation, self-quiz mode with timed input, attempt history for improvement tracking, tag-filtered study guides | P3 | AI-9 | 5–8 days | F3, F8, F9 |
+| F15 | **Sharing Polls** — share with view/edit permissions via email | P3 | PM-9 | 3–5 days | None |
+| F14 | **Async Results** — show results to participants post-session (gated behind submission) | P3 | SL-9 | 3–5 days | None |
 | BUG | **Undefined data access in `gradeSubmission`** — missing `.exists()` check | High | — | 0.5 day | None |
 | BUG | **Array index out of bounds on `currentQuestion`** — no bounds check | High | — | 0.5 day | None |
 | BUG | **Missing error handling in Vertex AI calls** — no try/catch on AI grading | High | — | 0.5 day | None |
@@ -166,7 +174,6 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 | CHORE | **Multi-session guard** — enforce single active session per user | P2 | — | 1 day | None |
 | CHORE | **SnackBar improvements** — hide close button if auto-hide, animated progress | P3 | — | 1 day | None |
 | CHORE | **Mobile bottom nav** — phone-optimized navigation bar | P3 | — | 2 days | None |
-| CHORE | **Host edit ended session** — allow host to edit ended poll session | P3 | — | 1 day | None |
 | CHORE | **History state filter** — filter sessions/submissions by state (open, closed, done, finished); default to "finished" | P3 | — | 1 day | None |
 
 ---
@@ -177,9 +184,9 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
 
 ### Critical
 
-- [ ] **BUG-1: Firestore listener leaks — no useEffect cleanup** — `SessionView.tsx`
-  - **Sprint:** S5 (TODO)
-  - `listenToSession`, `listenToWaitingRoom`, `listenToResponses`, and `listenToSubmissions` are called in `useEffect` but no cleanup/unsubscribe function is returned. Each navigation away and back creates new listeners without removing old ones, causing duplicate state updates, increasing memory/network usage, and potential stale data overwrites.
+- [x] **BUG-1: Firestore listener leak — unnecessary re-attachment** — `PollHost.tsx`
+  - **Sprint:** S5 (DONE)
+  - The `onSnapshot` listener on `waiting_users` included `session` in its `useEffect` dependency array, causing the listener to tear down and re-create on every session state change. Fixed by using a `useRef` to track current session state and removing `session` from the dependency array.
 
 - [ ] **BUG-2: No double-join protection** — `join/[code]/page.tsx`
   - **Sprint:** S5 (TODO)
@@ -187,8 +194,8 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
 
 ### High
 
-- [ ] **BUG-3: Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx`
-  - **Sprint:** S5 (TODO)
+- [x] **BUG-3: Incorrect `await navigate()` usage** — `PollSession.tsx`, `PollJoin.tsx`, `PollParticipate.tsx`, `GuestJoin.tsx`
+  - **Sprint:** S3 (DONE)
   - React Router's `navigate()` does not return a Promise. Using `await` on it is a no-op and allows subsequent code (like error throws) to execute when it shouldn't.
 
 - [ ] **BUG-4: NaN / division-by-zero in score calculations** — `sessions.ts`, `ScoreCard.tsx`, `PollMetricsCard.tsx`
@@ -244,8 +251,8 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
   - **Sprint:** Backlog
   - No visible sanitization on user-submitted poll responses before storing in Firestore or rendering in the UI.
 
-- [ ] **BUG-16: Poll `updated_at` not updating on question edits**
-  - **Sprint:** S5 (TODO)
+- [x] **BUG-16: Poll `updated_at` not updating on question edits**
+  - **Sprint:** S5 (DONE)
   - Poll `updated_at` field only updates when the title is edited, not when questions or options are modified.
 
 - [ ] **BUG-17: Dead code — `sessions/submissions.ts` store** — `src/api/firebase/sessions/submissions.ts`
@@ -260,8 +267,8 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
 |--------|-------|---------|-----------|-----------|
 | **S1** | Mar 11–17 | F11, F17, F31, F16 P1–P2 | F11, F17 (11 items), F31 (6 items), F16 P1 (7 items), F16 P2 | F16.8 |
 | **S2** | Mar 18–24 | F32, F33, F12, F4 | F32 (8 items), F33 (6 items) | F12, F4 |
-| **S3** | Apr 1–14 | F12, F4, F1, F2, F14, F16.8 | — | — |
-| **S4** | Apr 15–28 | F3, F13a | — | — |
+| **S3** | Apr 1–14 | F12, F4, F1, F2, F14, F16.8 | F2, F34, BUG (listener leak), BUG-3 | F12, F4, F1, F14, F16.8 |
+| **S4** | Apr 15–28 | F3, F13a, F12, F42, F36, F37, F41, F8 | F12, F13a | — |
 | **S5** | Apr 29 – May 6 | F34, bugs, polish | — | — |
 
 ---

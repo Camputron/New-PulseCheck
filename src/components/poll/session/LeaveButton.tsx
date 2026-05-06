@@ -36,7 +36,9 @@ export default function LeaveButton(props: Props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>No</Button>
-          <Button onClick={handleLeave}>Yes</Button>
+          <Button color="error" onClick={handleLeave}>
+            Yes
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

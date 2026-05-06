@@ -27,7 +27,7 @@ export default function NoRecentPolls() {
 
   return (
     <Card
-      variant='outlined'
+      variant="outlined"
       sx={{
         mt: 4,
         borderRadius: 2,
@@ -54,12 +54,12 @@ export default function NoRecentPolls() {
           })}>
           <PollOutlined sx={{ fontSize: 28, color: "primary.main" }} />
         </Box>
-        <Typography variant='h6' fontWeight={600}>
+        <Typography variant="h6" fontWeight={600}>
           Welcome, {displayName}
         </Typography>
         <Typography
-          variant='body2'
-          color='text.secondary'
+          variant="body2"
+          color="text.secondary"
           sx={{ maxWidth: 320, textAlign: "center" }}>
           No recent polls yet — create or join one to get started!
         </Typography>

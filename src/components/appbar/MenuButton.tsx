@@ -30,8 +30,8 @@ export default function MenuButton() {
   if (!user) {
     return (
       <Button
-        variant='outlined'
-        size='small'
+        variant="outlined"
+        size="small"
         startIcon={<Login />}
         onClick={() => void navigate("/login")}
         sx={{ textTransform: "none", borderRadius: 2 }}>
@@ -56,8 +56,8 @@ export default function MenuButton() {
   return (
     <React.Fragment>
       <IconButton
-        color='inherit'
-        size='large'
+        color="inherit"
+        size="large"
         onClick={handleClick}
         sx={{ border: "none" }}>
         <ProfileIcon />
@@ -65,7 +65,7 @@ export default function MenuButton() {
       {/* Mobile only: bottom sheet drawer */}
       {isMobile && (
         <SwipeableDrawer
-          anchor='bottom'
+          anchor="bottom"
           open={drawerOpen}
           onClose={handleClose}
           onOpen={() => setDrawerOpen(true)}
@@ -88,8 +88,8 @@ export default function MenuButton() {
             }}
           />
           <Typography
-            variant='body2'
-            color='text.secondary'
+            variant="body2"
+            color="text.secondary"
             fontWeight={600}
             sx={{ px: 2, pb: 1 }}>
             Menu

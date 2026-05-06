@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore"
-import { ActiveSession } from "@/types"
+import { ActiveSession, HostSettings, PromptType } from "@/types"
 
 const ACTIVE_SESSION_KEY = "active-session"
 
@@ -23,6 +23,36 @@ export function getActiveSession(): ActiveSession | null {
 
 export function clearActiveSession(): void {
   localStorage.removeItem(ACTIVE_SESSION_KEY)
+}
+
+const HOST_SETTINGS_PREFIX = "host-settings"
+
+/** @deprecated F39 migration only. Use useUser().updateSessionDefaults instead. */
+export function saveHostSettings(uid: string, settings: HostSettings): void {
+  try {
+    localStorage.setItem(
+      `${HOST_SETTINGS_PREFIX}:${uid}`,
+      JSON.stringify(settings),
+    )
+  } catch (err) {
+    console.warn("Failed to save host settings to localStorage", err)
+  }
+}
+
+/** @deprecated F39 migration only. Use useUser().user?.session_defaults instead. */
+export function getHostSettings(uid: string): HostSettings | null {
+  try {
+    const raw = localStorage.getItem(`${HOST_SETTINGS_PREFIX}:${uid}`)
+    if (!raw) return null
+    return JSON.parse(raw) as HostSettings
+  } catch {
+    return null
+  }
+}
+
+/** @deprecated F39 migration only. */
+export function clearHostSettings(uid: string): void {
+  localStorage.removeItem(`${HOST_SETTINGS_PREFIX}:${uid}`)
 }
 
 /**
@@ -55,7 +85,7 @@ export function stoc(str?: string): string {
 }
 
 /**
- * Generated initials from a given name string based on the following rules:
+ * Generates initials from a given name string based on the following rules:
  *  - If there is only one word, return the first character.
  *  - If there are two words, return the first character of each word.
  *  - If there are three or more words, take the first characters of the first and last word.
@@ -141,13 +171,19 @@ export function ntoq(n: number) {
   return `${n} Question${n !== 1 ? "s" : ""}`
 }
 
-export function tstos(timestamp: Timestamp) {
+export function tstos(timestamp: Timestamp | null | undefined) {
+  /* serverTimestamp() writes flash through as null on the immediate local
+   * snapshot before the server stamp arrives — that window only ever shows
+   * up on a record the current user just touched, so "Just Now" is accurate. */
+  if (!timestamp) {
+    return "Just Now"
+  }
   const lastUpdated = timestamp.toDate()
   const now = new Date()
 
-  // Calculate time difference in seconds
+  /* calculate time diff in seconds */
   const diffInSeconds = Math.floor(
-    (now.getTime() - lastUpdated.getTime()) / 1000
+    (now.getTime() - lastUpdated.getTime()) / 1000,
   )
 
   let timeAgo = ""
@@ -208,4 +244,35 @@ export function ntogc(score: number | undefined): string {
   const clamped = Math.max(0, Math.min(100, score ?? NaN))
   const hue = clamped * 1.2
   return `hsl(${hue}, 58%, 25%)`
+}
+
+/**
+ * Decides whether a participant's choice set is correct for a given prompt type.
+ *
+ * - "multiple-choice": correct if any chosen key matches any correct key
+ * - "multi-select":    correct only if the chosen set equals the correct set
+ * - "ranking-poll":    correct if the participant submitted any answer
+ */
+export function isResponseCorrect(
+  prompt_type: PromptType,
+  correct_keys: string[],
+  chosen_keys: string[],
+): boolean {
+  switch (prompt_type) {
+    case "multi-select": {
+      if (correct_keys.length !== chosen_keys.length) return false
+      const chosen = new Set(chosen_keys)
+      return correct_keys.every((k) => chosen.has(k))
+    }
+    case "multiple-choice": {
+      const chosen = new Set(chosen_keys)
+      return correct_keys.some((k) => chosen.has(k))
+    }
+    case "ranking-poll": {
+      return chosen_keys.length > 0
+    }
+    default: {
+      throw new Error(`Invalid PromptType: ${String(prompt_type)}`)
+    }
+  }
 }

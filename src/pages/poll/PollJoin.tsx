@@ -34,8 +34,8 @@ function DisplayNameField(props: {
   return (
     <React.Fragment>
       <TextField
-        placeholder='Display Name'
-        variant='outlined'
+        placeholder="Display Name"
+        variant="outlined"
         fullWidth
         value={displayName}
         onChange={(e) => setDisplayName(e.target.value)}
@@ -83,7 +83,7 @@ export default function PollJoin() {
           display_name: displayName,
           photo_url: user.photoURL,
         })
-        await navigate(`/poll/session/${sref.id}`)
+        void navigate(`/poll/session/${sref.id}`)
       } catch (err: unknown) {
         if (err instanceof Error) {
           snackbar.show({
@@ -112,11 +112,11 @@ export default function PollJoin() {
         justifyContent: "center",
         py: { xs: 4, md: 8 },
       }}>
-      <Container maxWidth='xs'>
+      <Container maxWidth="xs">
         <RA.Fade triggerOnce duration={600}>
           <RejoinBanner />
           <Typography
-            variant='overline'
+            variant="overline"
             sx={{
               letterSpacing: 2,
               color: "primary.main",
@@ -124,22 +124,22 @@ export default function PollJoin() {
             }}>
             Session
           </Typography>
-          <Typography variant='h4' fontWeight={700} sx={{ mb: 1 }}>
+          <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
             Join Poll
           </Typography>
-          <Typography variant='body2' color='text.secondary' sx={{ mb: 4 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
             Enter the room code provided by your instructor.
           </Typography>
           <Stack
-            component='form'
+            component="form"
             onSubmit={handleJoinClick}
             spacing={2.5}
             noValidate
-            autoComplete='off'>
+            autoComplete="off">
             <TextField
-              id='room-code'
-              placeholder='Room Code'
-              variant='outlined'
+              id="room-code"
+              placeholder="Room Code"
+              variant="outlined"
               fullWidth
               value={roomCode}
               onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
@@ -153,9 +153,9 @@ export default function PollJoin() {
             )}
             <Button
               ref={ref}
-              type='submit'
-              variant='contained'
-              color='primary'
+              type="submit"
+              variant="contained"
+              color="primary"
               onClick={handleJoinClick}
               fullWidth
               disabled={disable}

@@ -11,6 +11,9 @@ interface Props {
   anonymous: boolean
 }
 
+/**
+ * Component for rendering users currently in poll session
+ */
 export default function UserSessionCard(props: Props) {
   const { u_ss, res, anonymous } = props
   const user = u_ss.data()
@@ -61,9 +64,9 @@ export default function UserSessionCard(props: Props) {
           {res && !anonymous && (
             <React.Fragment>
               {res.correct ? (
-                <Check color='success' />
+                <Check color="success" />
               ) : (
-                <Clear color='error' />
+                <Clear color="error" />
               )}
             </React.Fragment>
           )}

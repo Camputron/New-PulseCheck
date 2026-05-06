@@ -7,5 +7,5 @@ interface PollSessionContextType {
 }
 
 export const PollSessionContext = createContext<PollSessionContextType | null>(
-  null
+  null,
 )

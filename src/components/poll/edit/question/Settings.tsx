@@ -1,13 +1,12 @@
 import {
-  Divider,
   FormControlLabel,
-  Grid2,
+  Stack,
   Switch,
   TextField,
   Typography,
 } from "@mui/material"
 import TimerSwitch from "./TimerSwitch"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import useSnackbar from "@/hooks/useSnackbar"
 import api from "@/api"
 
@@ -105,44 +104,57 @@ export default function Settings(props: Props) {
     return graded
   }
   return (
-    <React.Fragment>
-      <Divider>
-        <Typography>Question Settings</Typography>
-      </Divider>
-      <Grid2 container spacing={2}>
-        <Grid2 size={{ xl: 3, lg: 3, md: 4, sm: 6, xs: 12 }}>
-          <FormControlLabel
-            label='Anonymous'
-            checked={anonymous}
-            control={
-              <Switch onChange={(e) => setAnonymous(e.target.checked)} />
-            }
+    <Stack
+      direction="row"
+      spacing={2}
+      alignItems="center"
+      flexWrap="wrap"
+      sx={{
+        pt: 1,
+        mt: 0.5,
+        borderTop: 1,
+        borderColor: "divider",
+      }}>
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        sx={{ textTransform: "uppercase", letterSpacing: 0.5, mr: 1 }}>
+        Settings
+      </Typography>
+      <FormControlLabel
+        label="Anonymous"
+        checked={anonymous}
+        control={
+          <Switch
+            size="small"
+            onChange={(e) => setAnonymous(e.target.checked)}
           />
-        </Grid2>
-        <Grid2 size={{ xl: 3, lg: 3, md: 4, sm: 6, xs: 12 }}>
-          <TimerSwitch pid={pid} qid={qid} time={time} />
-        </Grid2>
-        <Grid2 size={{ xl: 3, lg: 3, md: 4, sm: 6, xs: 12 }}>
-          <FormControlLabel
-            label='Points'
-            checked={graded}
-            control={<Switch onChange={handleGraded} />}
-          />
-          {/* {graded && ( */}
-          <TextField
-            style={{ opacity: graded ? 1 : 0 }}
-            type='number'
-            size='small'
-            placeholder='1'
-            hiddenLabel
-            defaultValue={props.points}
-            onChange={(e) => setPoints(parseInt(e.target.value))}
-            error={points < 0}
-            helperText={points < 0 ? "invalid number" : ""}
-          />
-          {/* )} */}
-        </Grid2>
-      </Grid2>
-    </React.Fragment>
+        }
+        slotProps={{ typography: { variant: "body2" } }}
+      />
+      <TimerSwitch pid={pid} qid={qid} time={time} />
+      <Stack direction="row" spacing={1} alignItems="center">
+        <FormControlLabel
+          label="Points"
+          checked={graded}
+          control={<Switch size="small" onChange={handleGraded} />}
+          slotProps={{ typography: { variant: "body2" } }}
+        />
+        <TextField
+          sx={{
+            width: "8ch",
+            opacity: graded ? 1 : 0,
+            transition: "opacity 150ms ease",
+          }}
+          type="number"
+          size="small"
+          placeholder="1"
+          hiddenLabel
+          defaultValue={props.points}
+          onChange={(e) => setPoints(parseInt(e.target.value))}
+          error={points < 0}
+        />
+      </Stack>
+    </Stack>
   )
 }

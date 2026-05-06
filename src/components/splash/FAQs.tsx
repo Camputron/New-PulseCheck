@@ -44,7 +44,7 @@ function FAQs(props: { ref?: React.Ref<unknown> }) {
     <Box ref={props.ref}>
       <RA.Fade triggerOnce duration={600}>
         <Typography
-          variant='overline'
+          variant="overline"
           sx={{
             letterSpacing: 2,
             color: "primary.main",
@@ -52,10 +52,10 @@ function FAQs(props: { ref?: React.Ref<unknown> }) {
           }}>
           FAQs
         </Typography>
-        <Typography variant='h4' fontWeight={700} sx={{ mb: 4 }}>
+        <Typography variant="h4" fontWeight={700} sx={{ mb: 4 }}>
           Frequently Asked Questions
         </Typography>
-        <Typography variant='body1' sx={{ color: "text.secondary", mb: 4 }}>
+        <Typography variant="body1" sx={{ color: "text.secondary", mb: 4 }}>
           Whether you are an instructor setting up your first session or a
           student joining for the first time, here is what you need to know.
         </Typography>
@@ -79,7 +79,7 @@ function FAQs(props: { ref?: React.Ref<unknown> }) {
                 <Typography fontWeight={600}>{faq.question}</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ px: 3, pb: 2.5 }}>
-                <Typography variant='body2' color='text.secondary'>
+                <Typography variant="body2" color="text.secondary">
                   {faq.answer}
                 </Typography>
               </AccordionDetails>

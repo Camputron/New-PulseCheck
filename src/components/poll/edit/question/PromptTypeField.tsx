@@ -18,6 +18,10 @@ export default function PromptTypeField(props: Props) {
   const snackbar = useSnackbar()
 
   useEffect(() => {
+    setPromptType(props.promptType)
+  }, [props.promptType])
+
+  useEffect(() => {
     async function savePromptType(text: PromptType) {
       try {
         if (text === props.promptType) {
@@ -45,7 +49,7 @@ export default function PromptTypeField(props: Props) {
   return (
     <React.Fragment>
       <TextField
-        placeholder='Type of Question'
+        placeholder="Type of Question"
         select
         value={promptType}
         onChange={(e) => setPromptType(e.target.value as PromptType)}>

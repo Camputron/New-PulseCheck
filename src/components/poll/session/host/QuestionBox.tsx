@@ -19,11 +19,11 @@ export default function QuestionBox(props: QuestionBoxProps) {
           border: 1,
           borderColor: "divider",
         }}>
-        <Typography gutterBottom variant='body2' color='text.secondary'>
+        <Typography gutterBottom variant="body2" color="text.secondary">
           Question
         </Typography>
         {question.prompt.split(/\n/).map((x, i) => (
-          <Typography textAlign='initial' key={i}>
+          <Typography textAlign="initial" key={i}>
             {x}
           </Typography>
         ))}

@@ -40,11 +40,11 @@ export default function TermsOfService(props: { ref?: React.Ref<unknown> }) {
             ? "linear-gradient(160deg, rgba(0,150,136,0.15) 0%, rgba(0,0,0,0) 60%)"
             : "linear-gradient(160deg, rgba(0,150,136,0.08) 0%, rgba(255,255,255,0) 60%)",
       }}>
-      <Container maxWidth='md'>
+      <Container maxWidth="md">
         <Box ref={props.ref}>
           <RA.Fade triggerOnce duration={600}>
             <Typography
-              variant='overline'
+              variant="overline"
               sx={{
                 letterSpacing: 2,
                 color: "primary.main",
@@ -52,10 +52,10 @@ export default function TermsOfService(props: { ref?: React.Ref<unknown> }) {
               }}>
               Legal
             </Typography>
-            <Typography variant='h4' fontWeight={700} sx={{ mb: 1 }}>
+            <Typography variant="h4" fontWeight={700} sx={{ mb: 1 }}>
               Terms of Service
             </Typography>
-            <Typography variant='body1' sx={{ color: "text.secondary", mb: 6 }}>
+            <Typography variant="body1" sx={{ color: "text.secondary", mb: 6 }}>
               By creating an account or using PulseCheck, you agree to the
               following terms. Please read them carefully.
             </Typography>
@@ -70,10 +70,10 @@ export default function TermsOfService(props: { ref?: React.Ref<unknown> }) {
                   border: 1,
                   borderColor: "divider",
                 }}>
-                <Typography variant='subtitle1' fontWeight={700} gutterBottom>
+                <Typography variant="subtitle1" fontWeight={700} gutterBottom>
                   {s.title}
                 </Typography>
-                <Typography variant='body2' color='text.secondary'>
+                <Typography variant="body2" color="text.secondary">
                   {s.body}
                 </Typography>
               </Box>

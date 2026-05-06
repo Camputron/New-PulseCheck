@@ -50,7 +50,7 @@ export default class QuestionStore extends BaseStore {
     sid: string,
     qid: string,
     prompt_type: PromptType,
-    correct_opts: QueryDocumentSnapshot<SessionOption>[]
+    correct_opts: QueryDocumentSnapshot<SessionOption>[],
   ) {
     const responses = await this.responses.getAllAsMap(sid, qid)
     const promises: Promise<void>[] = []

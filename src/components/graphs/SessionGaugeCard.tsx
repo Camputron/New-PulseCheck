@@ -21,22 +21,22 @@ export default function SessionGaugeCard(props: Props) {
   }
 
   return (
-    <Card variant='outlined'>
+    <Card variant="outlined">
       <CardContent>
-        <Typography variant='h6' align='center'>
+        <Typography variant="h6" align="center">
           Average Score
         </Typography>
         <Box display={"flex"} justifyContent={"center"}>
           <PulseGauge score={score} />
         </Box>
         <Typography
-          variant='h6'
+          variant="h6"
           fontWeight={"bold"}
-          align='center'
+          align="center"
           gutterBottom>
           {title}
         </Typography>
-        <Typography variant='body2' color='textSecondary' align={"center"}>
+        <Typography variant="body2" color="textSecondary" align={"center"}>
           Hosted: {timestamp?.toDate().toLocaleDateString()}
         </Typography>
       </CardContent>

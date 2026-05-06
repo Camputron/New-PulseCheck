@@ -15,6 +15,7 @@ export interface User {
   email: string
   photo_url: string | null
   created_at: Timestamp
+  session_defaults?: HostSettings
 }
 
 /**
@@ -110,6 +111,7 @@ export interface Session {
   title: string
   async: boolean
   anonymous: boolean | null
+  leaderboard: boolean
   time: number | null
   /* the current question to display */
   question: CurrentQuestion | null
@@ -121,6 +123,8 @@ export interface Session {
   questions: DocumentReference<SessionQuestion>[]
   /* current state of the session */
   state: SessionState
+  leaderboard_scores: LeaderboardData | null
+  leaderboard_cumulative: Record<string, number> | null
   created_at: Timestamp
 }
 
@@ -133,6 +137,7 @@ export interface CurrentQuestion {
   options: SessionChoice[]
   anonymous: boolean | null
   time: number | null
+  displayed_at: Timestamp | null
 }
 
 /** data model to display question results of user responses  */
@@ -192,6 +197,8 @@ export interface SessionQuestion {
   points: number
   anonymous: boolean | null
   time: number | null
+  displayed_at?: Timestamp
+  closed_at?: Timestamp
 }
 
 export interface SessionOption {
@@ -204,6 +211,7 @@ export interface SessionResponse {
   choices: DocumentReference<SessionOption>[]
   correct: boolean
   created_at: Timestamp
+  updated_at?: Timestamp
 }
 
 /** data model to display a user's score */
@@ -234,4 +242,84 @@ export type AIQuestions = {
 export interface ActiveSession {
   sid: string
   roomCode: string
+  role: "host" | "participant"
+}
+
+export interface HostSettings {
+  isAnonymous: boolean
+  hasLeaderboard: boolean
+}
+
+export interface LeaderboardEntry {
+  uid: string
+  displayName: string
+  photoUrl: string | null
+  questionScore: number
+  cumulativeScore: number
+}
+
+export interface LeaderboardData {
+  questionId: string
+  entries: LeaderboardEntry[]
+}
+
+export type TemplateCategory = "assessment" | "feedback" | "engagement"
+
+export interface PollTemplate {
+  id: string
+  name: string
+  description: string
+  icon: string
+  category: TemplateCategory
+  questions: AIQuestions
+}
+
+export interface OptionPreset {
+  id: string
+  label: string
+  options: string[]
+  correctIndex?: number
+}
+
+export interface PollPDFData {
+  title: string
+  createdAt: Date
+  questions: PollPDFQuestion[]
+}
+
+export interface PollPDFQuestion {
+  prompt: string
+  promptType: PromptType
+  options: { text: string }[]
+}
+
+/**
+ * A user-owned named collection of reusable question snapshots.
+ * Stored at /users/{uid}/question_banks/{bid}.
+ * `question_count` is denormalized and maintained by `BankQuestionStore`.
+ */
+export interface QuestionBank {
+  owner: DocumentReference<User>
+  name: string
+  description: string | null
+  question_count: number
+  created_at: Timestamp
+  updated_at: Timestamp
+}
+
+/**
+ * A question snapshot stored in a question bank.
+ * Options are inline (not refs) so the snapshot is fully self-contained.
+ * Stored at /users/{uid}/question_banks/{bid}/questions/{qid}.
+ */
+export interface BankQuestion {
+  prompt: string
+  prompt_type: PromptType
+  prompt_img: string | null
+  options: PromptOption[]
+  points: number
+  anonymous: boolean
+  time: number | null
+  created_at: Timestamp
+  updated_at: Timestamp
 }

@@ -26,7 +26,7 @@ export default class OptionStore extends BaseStore {
       sid,
       clx.questions,
       qid,
-      clx.options
+      clx.options,
     )
   }
   public async getAllByRef(qref: DocumentReference<SessionQuestion>) {

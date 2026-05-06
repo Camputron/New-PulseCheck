@@ -25,10 +25,10 @@ export default function AppTitle({ minecraft }: { minecraft?: boolean }) {
           color: "inherit",
         },
       }}>
-      <Box position='relative' display='inline-flex'>
+      <Box position="relative" display="inline-flex">
         <NewBadge defaultMinecraft={minecraft} />
         <Typography
-          variant='h6'
+          variant="h6"
           sx={{
             fontWeight: 700,
             fontSize: "1.1rem",
@@ -44,7 +44,7 @@ export default function AppTitle({ minecraft }: { minecraft?: boolean }) {
             right: -4,
           }}>
           <Image
-            src='/favicon.svg'
+            src="/favicon.svg"
             width={SZ}
             height={SZ}
             style={{ borderRadius: 4 }}

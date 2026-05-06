@@ -136,7 +136,7 @@ export default function MostRecentGaugeCard(props: Props) {
         minWidth={0}
         textAlign={isPhone ? "center" : "left"}
         width={isPhone ? "100%" : "auto"}>
-        <Typography variant='body2' color='text.secondary' fontWeight={500}>
+        <Typography variant="body2" color="text.secondary" fontWeight={500}>
           {heading}
         </Typography>
         <Typography
@@ -147,76 +147,76 @@ export default function MostRecentGaugeCard(props: Props) {
           {sub?.title}
         </Typography>
         <Box
-          display='flex'
-          alignItems='center'
+          display="flex"
+          alignItems="center"
           justifyContent={isPhone ? "center" : "flex-start"}
-          flexWrap='wrap'
+          flexWrap="wrap"
           gap={0.75}
           mt={1}>
           {scoreValid && (
             <>
               <Chip
-                size='small'
+                size="small"
                 label={`${sub.score_100.toFixed(0)}%`}
-                color='primary'
-                variant='outlined'
+                color="primary"
+                variant="outlined"
               />
               <Chip
-                size='small'
+                size="small"
                 label={`${sub.score}/${sub.max_score} pts`}
-                variant='outlined'
+                variant="outlined"
                 sx={{ fontSize: "0.75rem" }}
               />
             </>
           )}
           {classAvgValid && scoreValid && (
             <Chip
-              size='small'
+              size="small"
               icon={
                 sub.score_100 >= classAvg ? (
-                  <TrendingUp fontSize='small' />
+                  <TrendingUp fontSize="small" />
                 ) : (
-                  <TrendingDown fontSize='small' />
+                  <TrendingDown fontSize="small" />
                 )
               }
               label={`Avg ${classAvg.toFixed(0)}%`}
-              variant='outlined'
+              variant="outlined"
               color={sub.score_100 >= classAvg ? "success" : "warning"}
               sx={{ fontSize: "0.75rem" }}
             />
           )}
           {questionCount !== undefined && questionCount > 0 && (
             <Chip
-              size='small'
-              icon={<QuestionAnswer fontSize='small' />}
+              size="small"
+              icon={<QuestionAnswer fontSize="small" />}
               label={`${questionCount} Question${questionCount !== 1 ? "s" : ""}`}
-              variant='outlined'
+              variant="outlined"
               sx={{ px: 0.5, fontSize: "0.75rem" }}
             />
           )}
           {participants !== undefined && participants > 0 && (
             <Chip
-              size='small'
-              icon={<Groups fontSize='small' />}
+              size="small"
+              icon={<Groups fontSize="small" />}
               label={`${participants}`}
-              variant='outlined'
+              variant="outlined"
               sx={{ px: 0.5, fontSize: "0.75rem" }}
             />
           )}
         </Box>
         {formattedDate && (
           <Typography
-            variant='caption'
-            color='text.secondary'
+            variant="caption"
+            color="text.secondary"
             sx={{ mt: 1, display: "block" }}>
             {formattedDate}
           </Typography>
         )}
         {scoreValid && (
           <Typography
-            variant='body2'
-            color='text.secondary'
-            fontStyle='italic'
+            variant="body2"
+            color="text.secondary"
+            fontStyle="italic"
             sx={{ mt: 1 }}>
             {scoreMessage(sub.score_100)}
           </Typography>

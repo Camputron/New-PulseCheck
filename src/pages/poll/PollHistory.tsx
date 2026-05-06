@@ -27,7 +27,7 @@ export default function PollHistory() {
   const tabParam = params.get("tab") ?? "sessions"
   const tabIndex = Math.max(
     TAB_MAP.indexOf(tabParam as (typeof TAB_MAP)[number]),
-    0
+    0,
   )
 
   const setParam = useCallback(
@@ -43,10 +43,10 @@ export default function PollHistory() {
           }
           return next
         },
-        { replace: true }
+        { replace: true },
       )
     },
-    [setParams]
+    [setParams],
   )
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
@@ -64,15 +64,15 @@ export default function PollHistory() {
         }
         return next
       },
-      { replace: true }
+      { replace: true },
     )
   }
 
   return (
-    <Container maxWidth='md' sx={{ py: { xs: 3, md: 5 } }}>
+    <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
       <RA.Fade triggerOnce duration={600}>
         <Typography
-          variant='overline'
+          variant="overline"
           sx={{
             letterSpacing: 2,
             color: "primary.main",
@@ -80,7 +80,7 @@ export default function PollHistory() {
           }}>
           Activity
         </Typography>
-        <Typography variant='h4' fontWeight={700} sx={{ mb: 3 }}>
+        <Typography variant="h4" fontWeight={700} sx={{ mb: 3 }}>
           History
         </Typography>
       </RA.Fade>
@@ -96,7 +96,7 @@ export default function PollHistory() {
         <Tabs
           value={tabIndex}
           onChange={handleTabChange}
-          aria-label='history tabs'
+          aria-label="history tabs"
           sx={{
             "& .MuiTab-root": {
               textTransform: "none",
@@ -104,8 +104,8 @@ export default function PollHistory() {
               fontSize: "0.95rem",
             },
           }}>
-          <Tab label='Sessions' />
-          <Tab label='Submissions' />
+          <Tab label="Sessions" />
+          <Tab label="Submissions" />
         </Tabs>
       </Box>
       <TabPanel value={tabIndex} index={0}>

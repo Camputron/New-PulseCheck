@@ -40,7 +40,7 @@ export default function ResponseDialog(props: ResponseDialogProps) {
 
   useEffect(() => {
     return () => {
-      console.debug("goodbye world")
+      /* reset the selected options on unmount */
       setSelectedOptions([])
     }
   }, [currentQuestion])
@@ -52,7 +52,7 @@ export default function ResponseDialog(props: ResponseDialogProps) {
         sref.id,
         currentQuestion.ref.id,
         auth.user.uid,
-        selectedOptions
+        selectedOptions,
       )
     }
   }, [auth.user, currentQuestion, sref.id, selectedOptions])
@@ -65,7 +65,7 @@ export default function ResponseDialog(props: ResponseDialogProps) {
       slots={{
         transition: SlideUpTransition,
       }}>
-      <AppBar position='relative' enableColorOnDark>
+      <AppBar position="relative" enableColorOnDark>
         <Toolbar>
           <Stack spacing={1} direction={"row"}>
             <QuestionAnswer />

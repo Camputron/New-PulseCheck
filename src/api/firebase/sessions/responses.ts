@@ -7,12 +7,12 @@ import {
   getDocs,
   query,
   QueryDocumentSnapshot,
-  refEqual,
   serverTimestamp,
   setDoc,
 } from "firebase/firestore"
 import { clx } from "@/api"
 import { PromptType, SessionOption, SessionResponse } from "@/types"
+import { isResponseCorrect } from "@/utils"
 import BaseStore from "../store"
 
 /**
@@ -27,7 +27,7 @@ export default class ResponseStore extends BaseStore {
       clx.questions,
       qid,
       clx.responses,
-      rid
+      rid,
     ) as DocumentReference<SessionResponse>
   }
 
@@ -38,7 +38,7 @@ export default class ResponseStore extends BaseStore {
       sid,
       clx.questions,
       qid,
-      clx.responses
+      clx.responses,
     ) as CollectionReference<SessionResponse>
   }
 
@@ -46,7 +46,7 @@ export default class ResponseStore extends BaseStore {
     sid: string,
     qid: string,
     uid: string,
-    payload: Partial<SessionResponse>
+    payload: Partial<SessionResponse>,
   ) {
     const ref = this.doc(sid, qid, uid)
     const ss = await getDoc(ref)
@@ -58,13 +58,13 @@ export default class ResponseStore extends BaseStore {
           choices: payload.choices,
           correct: payload.correct,
         },
-        { merge: true }
+        { merge: true },
       )
     } else {
       await setDoc(ref, {
         user: doc(this.db, clx.users, uid),
-        choices: payload.choices,
-        correct: payload.correct,
+        choices: payload.choices!,
+        correct: payload.correct!,
         created_at: serverTimestamp(),
       })
     }
@@ -82,7 +82,7 @@ export default class ResponseStore extends BaseStore {
     sid: string,
     qid: string,
     uid: string,
-    choices: DocumentReference<SessionOption>[]
+    choices: DocumentReference<SessionOption>[],
   ) {
     /* init path to response doc */
     const ref = this.doc(sid, qid, uid)
@@ -93,8 +93,9 @@ export default class ResponseStore extends BaseStore {
         {
           user: doc(this.db, clx.users, uid),
           choices: choices,
+          updated_at: serverTimestamp(),
         },
-        { merge: true }
+        { merge: true },
       )
     } else {
       await setDoc(
@@ -104,7 +105,7 @@ export default class ResponseStore extends BaseStore {
           choices: choices,
           created_at: serverTimestamp(),
         },
-        { merge: false }
+        { merge: false },
       )
     }
   }
@@ -118,36 +119,16 @@ export default class ResponseStore extends BaseStore {
   public async grade(
     rref: DocumentReference<SessionResponse>,
     prompt_type: PromptType,
-    correct_opts: QueryDocumentSnapshot<SessionOption>[]
+    correct_opts: QueryDocumentSnapshot<SessionOption>[],
   ) {
     const r_ss = await getDoc(rref)
     if (!r_ss.exists()) throw new Error(`${rref.path} does not exist!`)
     const choices = r_ss.data().choices
-    let correct = false
-    switch (prompt_type) {
-      case "multi-select": {
-        correct =
-          correct_opts.every((x) => choices.some((y) => refEqual(x.ref, y))) &&
-          correct_opts.length === choices.length
-        break
-      }
-      case "multiple-choice": {
-        correct = correct_opts.some((x) =>
-          choices.some((y) => refEqual(x.ref, y))
-        )
-        break
-      }
-      case "ranking-poll": {
-        if (choices.length > 0) {
-          correct = true
-        }
-        break
-      }
-      default: {
-        throw new Error(`Invalid PromptType!`)
-      }
-    }
-    /* update user response */
+    const correct = isResponseCorrect(
+      prompt_type,
+      correct_opts.map((x) => x.ref.path),
+      choices.map((y) => y.path),
+    )
     await setDoc(rref, { correct }, { merge: true })
   }
 }

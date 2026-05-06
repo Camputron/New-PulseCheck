@@ -22,7 +22,7 @@ export default function Header(props: HeaderProps) {
     async function killAsync() {
       try {
         await api.sessions.close(sref)
-        await navigate("/dashboard", { replace: true })
+        void navigate("/dashboard", { replace: true })
       } catch (err) {
         console.debug(err)
       }
@@ -33,7 +33,7 @@ export default function Header(props: HeaderProps) {
   return (
     <AppBar
       elevation={0}
-      position='relative'
+      position="relative"
       sx={{
         bgcolor: (t) =>
           t.palette.mode === "dark"
@@ -47,12 +47,12 @@ export default function Header(props: HeaderProps) {
       <MUIToolbar>
         <LeaveButton
           callback={handleKillSession}
-          dialogTitle='Are you sure you want to end the session?'
-          dialogContent='All answers submitted will be discarded!'
+          dialogTitle="Are you sure you want to end the session?"
+          dialogContent="All answers submitted will be discarded!"
         />
-        <Box textAlign='initial'>
+        <Box textAlign="initial">
           <Typography fontWeight={600}>{session?.title}</Typography>
-          <Typography variant='caption' component='div' color='text.secondary'>
+          <Typography variant="caption" component="div" color="text.secondary">
             {ntops(users?.docs.length ?? 0)}
           </Typography>
         </Box>

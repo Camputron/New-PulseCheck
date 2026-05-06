@@ -30,7 +30,7 @@ export default function ScoreCard(props: Props) {
           boxShadow: (t) => `0 0 0 1px ${t.palette.primary.main}`,
         },
       }}>
-      <Box display='flex' alignItems='center'>
+      <Box display="flex" alignItems="center">
         {sub.photo_url ? (
           <Avatar src={sub.photo_url} sx={{ width: 32, height: 32 }} />
         ) : (
@@ -41,7 +41,7 @@ export default function ScoreCard(props: Props) {
         <Typography flex={1} ml={1.5} fontWeight={500}>
           {sub.display_name}
         </Typography>
-        <Typography variant='body2' color='text.secondary'>
+        <Typography variant="body2" color="text.secondary">
           {isFinite(sub.score_100) ? `${sub.score_100.toFixed()}%` : "—"}
         </Typography>
       </Box>

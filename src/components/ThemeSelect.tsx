@@ -8,7 +8,7 @@ type ThemeSelectProps = SelectProps
 const ThemeSelect = (props: ThemeSelectProps) => {
   const theme = useThemeContext()
   const [selected, setSelected] = useState(
-    (localStorage.getItem("theme") as ThemeType) ?? ThemeType.SYSTEM_THEME
+    (localStorage.getItem("theme") as ThemeType) ?? ThemeType.SYSTEM_THEME,
   )
 
   const handleChange = (e: SelectChangeEvent<unknown>) => {

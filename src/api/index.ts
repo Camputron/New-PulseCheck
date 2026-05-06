@@ -11,6 +11,7 @@ import SessionStore from "./firebase/sessions/sessions"
 import SubmissionStore from "./firebase/submissions"
 import VertexStore from "./firebase/vertex"
 import GitHubStore from "./github"
+import QuestionBankStore from "./firebase/banks/banks"
 
 const config: FirebaseOptions = {
   apiKey: "AIzaSyDWTmXZvlh_kWxwROS6ma1XZz9VSpBAOEQ",
@@ -60,6 +61,8 @@ export enum clx {
   responses = "responses",
   /* Collection for storing user submissions for poll sessions */
   submissions = "submissions",
+  /* Subcollection (under /users/{uid}) for a user's named question banks */
+  question_banks = "question_banks",
   /* Collection for storing user answers of the current question */
 }
 
@@ -74,6 +77,7 @@ class APIStore {
   private readonly _submissions: SubmissionStore
   private readonly _vertex: VertexStore
   private readonly _github: GitHubStore
+  private readonly _banks: QuestionBankStore
 
   constructor(db: Firestore) {
     this._auth = new AuthStore()
@@ -83,6 +87,7 @@ class APIStore {
     this._submissions = new SubmissionStore(db)
     this._vertex = new VertexStore(functions)
     this._github = new GitHubStore()
+    this._banks = new QuestionBankStore(db)
   }
 
   public get auth(): AuthStore {
@@ -111,6 +116,10 @@ class APIStore {
 
   public get github(): GitHubStore {
     return this._github
+  }
+
+  public get banks(): QuestionBankStore {
+    return this._banks
   }
 }
 

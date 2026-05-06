@@ -28,7 +28,7 @@ export default class UserStore extends BaseStore {
           display_name: payload.display_name,
           photo_url: payload.photo_url,
         },
-        { merge: true }
+        { merge: true },
       )
     } else {
       return setDoc(
@@ -39,7 +39,7 @@ export default class UserStore extends BaseStore {
           photo_url: payload.photo_url,
           created_at: serverTimestamp(),
         },
-        { merge: false }
+        { merge: false },
       )
     }
   }
@@ -51,5 +51,10 @@ export default class UserStore extends BaseStore {
       throw new Error(`User${uid} does not exist!`)
     }
     return userDoc.data()
+  }
+
+  public async update(uid: string, payload: Partial<User>) {
+    const uref = this.doc(uid)
+    return setDoc(uref, payload, { merge: true })
   }
 }

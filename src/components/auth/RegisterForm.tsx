@@ -66,7 +66,7 @@ export default function RegisterForm() {
     } else if (password.length < PASS_LEN) {
       setFieldError(
         "password",
-        `Password needs to be at least ${PASS_LEN} characters.`
+        `Password needs to be at least ${PASS_LEN} characters.`,
       )
       validated = false
     }
@@ -86,7 +86,7 @@ export default function RegisterForm() {
       const UserCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       )
 
       const user = UserCredential.user
@@ -118,18 +118,18 @@ export default function RegisterForm() {
   return (
     <Box sx={{ width: "100%", maxWidth: 400 }}>
       <RA.Fade triggerOnce duration={600}>
-        <Typography variant='h5' fontWeight={700} sx={{ mb: 1 }}>
+        <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
           Create Account
         </Typography>
-        <Typography variant='body2' color='text.secondary' sx={{ mb: 4 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
           Sign up to start using PulseCheck.
         </Typography>
 
-        <Stack component={"form"} spacing={2.5} noValidate autoComplete='off'>
+        <Stack component={"form"} spacing={2.5} noValidate autoComplete="off">
           <TextField
-            placeholder='Display Name'
+            placeholder="Display Name"
             fullWidth
-            size='medium'
+            size="medium"
             value={displayName}
             onChange={(e) => {
               setDisplayName(e.target.value)
@@ -139,10 +139,10 @@ export default function RegisterForm() {
             helperText={errors.displayName}
           />
           <TextField
-            placeholder='Email'
-            type='email'
+            placeholder="Email"
+            type="email"
             fullWidth
-            size='medium'
+            size="medium"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value)
@@ -152,11 +152,11 @@ export default function RegisterForm() {
             helperText={errors.email}
           />
           <TextField
-            placeholder='Password'
+            placeholder="Password"
             fullWidth
-            size='medium'
+            size="medium"
             value={password}
-            type='password'
+            type="password"
             onChange={(e) => {
               setPassword(e.target.value)
               clearFieldError("password")
@@ -165,11 +165,11 @@ export default function RegisterForm() {
             helperText={errors.password}
           />
           <TextField
-            placeholder='Confirm Password'
+            placeholder="Confirm Password"
             fullWidth
-            size='medium'
+            size="medium"
             value={retypePassword}
-            type='password'
+            type="password"
             onChange={(e) => {
               setRetypePassword(e.target.value)
               clearFieldError("retypePassword")
@@ -179,10 +179,10 @@ export default function RegisterForm() {
           />
 
           <Button
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             fullWidth
-            type='submit'
+            type="submit"
             sx={{ borderRadius: 2 }}
             onClick={(e) => {
               e.preventDefault()
@@ -192,7 +192,7 @@ export default function RegisterForm() {
           </Button>
 
           <Divider sx={{ my: 3 }}>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               or register with
             </Typography>
           </Divider>
@@ -201,9 +201,9 @@ export default function RegisterForm() {
 
           <Box display={"flex"} justifyContent={"center"}>
             <Link
-              color='text.secondary'
+              color="text.secondary"
               onClick={handleLink}
-              variant='body2'
+              variant="body2"
               sx={{
                 cursor: "pointer",
                 transition: "color 0.2s",

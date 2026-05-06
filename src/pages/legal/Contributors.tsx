@@ -67,11 +67,11 @@ export default function Contributors() {
           pointerEvents: "none",
         },
       }}>
-      <Container maxWidth='sm'>
+      <Container maxWidth="sm">
         <RA.Fade triggerOnce duration={600}>
           <Box sx={{ textAlign: "center", mb: { xs: 4, sm: 8 } }}>
             <Typography
-              variant='overline'
+              variant="overline"
               sx={{
                 letterSpacing: { xs: 2, sm: 3 },
                 color: "primary.main",
@@ -81,7 +81,7 @@ export default function Contributors() {
               The Team
             </Typography>
             <Typography
-              variant='h3'
+              variant="h3"
               fontWeight={800}
               sx={{
                 mt: 0.5,
@@ -92,8 +92,8 @@ export default function Contributors() {
               Meet the Contributors
             </Typography>
             <Typography
-              variant='body2'
-              color='text.secondary'
+              variant="body2"
+              color="text.secondary"
               sx={{
                 maxWidth: 420,
                 mx: "auto",
@@ -123,9 +123,9 @@ export default function Contributors() {
                     gap: 1.5,
                     width: { xs: 100, sm: 120 },
                   }}>
-                  <Skeleton variant='circular' width={96} height={96} />
-                  <Skeleton variant='text' width={80} />
-                  <Skeleton variant='text' width={60} />
+                  <Skeleton variant="circular" width={96} height={96} />
+                  <Skeleton variant="text" width={80} />
+                  <Skeleton variant="text" width={60} />
                 </Box>
               ))
             : contributors.map((contributor, i) => (
@@ -169,10 +169,10 @@ function GitHubUserCard({
 }: GitHubUserProps) {
   return (
     <Box
-      component='a'
+      component="a"
       href={htmlUrl}
-      target='_blank'
-      rel='noopener noreferrer'
+      target="_blank"
+      rel="noopener noreferrer"
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -199,7 +199,7 @@ function GitHubUserCard({
         },
       }}>
       <Avatar
-        className='github-user-avatar'
+        className="github-user-avatar"
         src={avatarUrl}
         alt={name}
         sx={{
@@ -213,7 +213,7 @@ function GitHubUserCard({
         }}
       />
       <Typography
-        className='github-user-name'
+        className="github-user-name"
         // variant='caption'
         fontWeight={700}
         sx={{
@@ -225,7 +225,7 @@ function GitHubUserCard({
         {name}
       </Typography>
       <Box
-        className='github-user-handle'
+        className="github-user-handle"
         sx={{
           display: "flex",
           alignItems: "center",
@@ -234,7 +234,7 @@ function GitHubUserCard({
           transition: "color 0.2s",
         }}>
         <GitHub sx={{ fontSize: 12 }} />
-        <Typography variant='subtitle2'>{login}</Typography>
+        <Typography variant="subtitle2">{login}</Typography>
       </Box>
     </Box>
   )
