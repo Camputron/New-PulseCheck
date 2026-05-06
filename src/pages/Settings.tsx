@@ -15,30 +15,15 @@ import { Edit, Check, Close, Google, Email, Logout } from "@mui/icons-material"
 import { RA } from "@/styles"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import api, { auth } from "@/api"
-import { useAuthState } from "react-firebase-hooks/auth"
+import api from "@/api"
 import useSnackbar from "@/hooks/useSnackbar"
-import { firestore } from "@/api"
-import { doc, Timestamp, getDoc, updateDoc } from "firebase/firestore"
-import {
-  updateEmail,
-  updateProfile,
-  updatePassword,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-} from "firebase/auth"
 import { FirebaseError } from "firebase/app"
 import ThemeSelect from "@/components/ThemeSelect"
 import useRequireAuth from "@/hooks/useRequireAuth"
+import { useUser } from "@/hooks"
 import { stoc, stoni } from "@/utils"
 
 type ErrorField = "displayName" | "email"
-
-interface UserData {
-  display_name: string
-  created_at: Timestamp
-  email?: string
-}
 
 function SettingsRow({
   label,
@@ -75,15 +60,17 @@ export default function Settings() {
   const snackbar = useSnackbar()
   const navigate = useNavigate()
 
-  const [user] = useAuthState(auth)
+  const {
+    user: profile,
+    authUser,
+    updateDisplayName,
+    updateEmail: updateUserEmail,
+    updatePassword: updateUserPassword,
+  } = useUser()
+
   const [save, setSave] = useState(false)
-  const [email, setEmail] = useState<string>("")
   const [originalEmail, setOriginalEmail] = useState<string>("")
-  const [name, setName] = useState("")
   const [originalName, setOriginalName] = useState("")
-  const [photoURL, setPhotoURL] = useState("")
-  const [displayName, setDisplayName] = useState("")
-  const [createdAt, setCreatedAt] = useState<Timestamp | null>(null)
   const [error, setError] = useState({
     displayName: "",
     username: "",
@@ -92,44 +79,18 @@ export default function Settings() {
   const [editUser, setEditUser] = useState<string | null>(null)
   const [tempVal, setTempVal] = useState("")
 
-  useEffect(() => {
-    console.debug("originalEmail", originalEmail)
-    console.debug("name", name)
-    console.debug("originalName", originalName)
-  }, [originalEmail, name, originalName])
+  const email = profile?.email ?? authUser?.email ?? ""
+  const displayName = profile?.display_name ?? authUser?.displayName ?? ""
+  const photoURL = profile?.photo_url ?? authUser?.photoURL ?? ""
+  const createdAt = profile?.created_at ?? null
 
   useEffect(() => {
-    const loadUserData = async () => {
-      if (user) {
-        setEmail(user.email ?? "")
-        setOriginalEmail(user.email ?? "")
-        setPhotoURL(user.photoURL ?? "")
+    setOriginalEmail(email)
+  }, [email])
 
-        try {
-          const userRef = doc(firestore, "users", user.uid)
-          const userDoc = await getDoc(userRef)
-          if (userDoc.exists()) {
-            const userData = userDoc.data() as UserData
-            const firestoreDisplayName = userData.display_name ?? ""
-            const createdTimestamp = userData.created_at ?? null
-
-            setCreatedAt(createdTimestamp)
-            setName(firestoreDisplayName)
-            setDisplayName(firestoreDisplayName)
-            setOriginalName(firestoreDisplayName)
-          } else {
-            setName(user.displayName ?? "")
-            setDisplayName(user.displayName ?? "")
-            setOriginalName(user.displayName ?? "")
-          }
-        } catch (err) {
-          console.error("Error fetching user data:", err)
-        }
-      }
-    }
-
-    void loadUserData()
-  }, [user, navigate, snackbar])
+  useEffect(() => {
+    setOriginalName(displayName)
+  }, [displayName])
 
   const clearFieldError = (field: ErrorField) => {
     setError((prev) => ({ ...prev, [field]: "" }))
@@ -146,7 +107,7 @@ export default function Settings() {
   }
 
   const saveChanges = async (field: string): Promise<void> => {
-    if (!user) {
+    if (!authUser) {
       return
     }
     setSave(true)
@@ -162,18 +123,11 @@ export default function Settings() {
         return
       }
 
-      const userRef = doc(firestore, "users", user.uid)
-
       if (field === "displayName") {
-        await updateProfile(user, { displayName: tempVal })
-        await updateDoc(userRef, { display_name: tempVal })
-        setName(tempVal)
-        setDisplayName(tempVal)
+        await updateDisplayName(tempVal)
         setOriginalName(tempVal)
       } else if (field === "email") {
-        await updateEmail(user, tempVal)
-        await updateDoc(userRef, { email: tempVal })
-        setEmail(tempVal)
+        await updateUserEmail(tempVal)
         setOriginalEmail(tempVal)
       }
 
@@ -214,7 +168,7 @@ export default function Settings() {
     void saveChanges("displayName")
   }
 
-  const providerId = user?.providerData[0]?.providerId
+  const providerId = authUser?.providerData[0]?.providerId
   const isPasswordProvider = providerId === "password"
 
   const [changingPassword, setChangingPassword] = useState(false)
@@ -224,7 +178,7 @@ export default function Settings() {
   const [passwordError, setPasswordError] = useState("")
 
   const handleChangePassword = async () => {
-    if (!user?.email) return
+    if (!authUser?.email) return
     if (newPassword.length < 6) {
       setPasswordError("Password must be at least 6 characters")
       return
@@ -236,12 +190,7 @@ export default function Settings() {
     setSave(true)
     setPasswordError("")
     try {
-      const credential = EmailAuthProvider.credential(
-        user.email,
-        currentPassword,
-      )
-      await reauthenticateWithCredential(user, credential)
-      await updatePassword(user, newPassword)
+      await updateUserPassword(currentPassword, newPassword)
       snackbar.show({
         message: "Password updated successfully",
         type: "success",

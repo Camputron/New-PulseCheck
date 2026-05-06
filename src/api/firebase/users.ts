@@ -52,4 +52,9 @@ export default class UserStore extends BaseStore {
     }
     return userDoc.data()
   }
+
+  public async update(uid: string, payload: Partial<User>) {
+    const uref = this.doc(uid)
+    return setDoc(uref, payload, { merge: true })
+  }
 }

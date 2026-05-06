@@ -2,6 +2,7 @@ import { useAuthState } from "react-firebase-hooks/auth"
 import { auth } from "@/api"
 import useSnackbar from "./useSnackbar"
 import { useThemeContext } from "./useThemeContext"
+import useUser from "./useUser"
 
 /**
  * Custom hook to get the current authenticated user state from firebase.
@@ -22,4 +23,4 @@ export function useAuthContext() {
   return { user, loading, error }
 }
 
-export { useSnackbar, useThemeContext }
+export { useSnackbar, useThemeContext, useUser }
