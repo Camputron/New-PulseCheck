@@ -16,6 +16,7 @@ import { RA } from "@/styles"
 export default function GuestJoin() {
   const navigate = useNavigate()
   const [query] = useSearchParams()
+  const [isJoining, setIsJoining] = useState(false)
   const [roomCode, setRoomCode] = useState<string>(query.get("code") ?? "")
   const [displayName, setDisplayName] = useState<string>("")
   const snackbar = useSnackbar()
@@ -24,6 +25,7 @@ export default function GuestJoin() {
     e.preventDefault()
     const aux = async () => {
       try {
+        setIsJoining(true)
         if (!roomCode.trim()) {
           throw new Error("Room Code cannot be blank!")
         }
@@ -53,6 +55,8 @@ export default function GuestJoin() {
             type: "error",
           })
         }
+      } finally {
+        setIsJoining(false)
       }
     }
     void aux()
@@ -114,6 +118,7 @@ export default function GuestJoin() {
               variant="contained"
               color="primary"
               onClick={handleJoinClick}
+              disabled={isJoining}
               fullWidth
               sx={{
                 py: 1.5,
