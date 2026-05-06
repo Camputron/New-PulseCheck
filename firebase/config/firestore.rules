@@ -2,18 +2,190 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
 
-    // This rule allows anyone with your Firestore database reference to view, edit,
-    // and delete all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
-    match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2026, 5, 10);
+    function isUser(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Ownership helpers. Ownership fields are DocumentReferences, which appear
+    // in rules as `path` values — paths don't expose `.id`, so we compare the
+    // whole path against the expected `/databases/{db}/documents/users/{uid}`.
+    function userPath() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    function ownsPoll() {
+      return isSignedIn() && resource.data.owner == userPath();
+    }
+
+    function willOwnPoll() {
+      return isSignedIn() && request.resource.data.owner == userPath();
+    }
+
+    function ownsBank() {
+      return isSignedIn() && resource.data.owner == userPath();
+    }
+
+    function willOwnBank() {
+      return isSignedIn() && request.resource.data.owner == userPath();
+    }
+
+    function ownsSubmission() {
+      return isSignedIn() && resource.data.user == userPath();
+    }
+
+    function hostsSession() {
+      return isSignedIn() && resource.data.host == userPath();
+    }
+
+    function willHostSession() {
+      return isSignedIn() && request.resource.data.host == userPath();
+    }
+
+    function isSessionHost(sid) {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/sessions/$(sid)).data.host == userPath();
+    }
+
+    function isSessionParticipant(sid) {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/sessions/$(sid)/users/$(request.auth.uid));
+    }
+
+    // ---------- /users ----------
+
+    match /users/{uid} {
+      allow read: if isUser(uid);
+      allow create: if isUser(uid);
+      allow update: if isUser(uid);
+      allow delete: if false;
+
+      // Question banks are owned by the parent user (structural ownership).
+      match /question_banks/{bid} {
+        allow read: if isUser(uid);
+        allow create: if isUser(uid) && willOwnBank();
+        allow update: if isUser(uid) && ownsBank();
+        allow delete: if isUser(uid) && ownsBank();
+
+        match /questions/{qid} {
+          allow read, write: if isUser(uid);
+        }
+      }
+    }
+
+    // ---------- /polls ----------
+
+    match /polls/{pid} {
+      allow read: if ownsPoll();
+      allow create: if willOwnPoll();
+      allow update: if ownsPoll() && willOwnPoll();
+      allow delete: if ownsPoll();
+
+      function isPollOwner() {
+        return isSignedIn()
+          && get(/databases/$(database)/documents/polls/$(pid)).data.owner == userPath();
+      }
+
+      match /questions/{qid} {
+        allow read, write: if isPollOwner();
+
+        match /options/{oid} {
+          allow read, write: if isPollOwner();
+        }
+      }
+    }
+
+    // ---------- /sessions ----------
+
+    match /sessions/{sid} {
+      // Any signed-in user (incl. anonymous guests) needs to read sessions to
+      // resolve a room code and view the live question. Sessions are not
+      // sensitive — they're meant to be joined.
+      allow read: if isSignedIn();
+      allow create: if willHostSession();
+      allow update: if hostsSession();
+      allow delete: if hostsSession();
+
+      match /waiting_users/{uid} {
+        // get: per-doc — only the user themselves or the host
+        allow get: if isUser(uid) || isSessionHost(sid);
+        // list: any signed-in user. Host needs it to manage the queue;
+        // participants don't list it but rules can't distinguish, and
+        // waiting_users only contain a display name + photo.
+        allow list: if isSignedIn();
+        allow create: if isUser(uid);
+        allow update: if isSessionHost(sid);
+        allow delete: if isUser(uid) || isSessionHost(sid);
+      }
+
+      match /users/{uid} {
+        allow get: if isUser(uid) || isSessionHost(sid);
+        // list: any signed-in user. Both host and participants render the
+        // roster (see PollHost.tsx, PollParticipate.tsx → UserSessionGrid).
+        allow list: if isSignedIn();
+        allow create: if isSessionHost(sid);
+        allow update: if isUser(uid) || isSessionHost(sid);
+        allow delete: if isSessionHost(sid);
+      }
+
+      match /questions/{qid} {
+        allow read: if isSessionParticipant(sid) || isSessionHost(sid);
+        allow create, update, delete: if isSessionHost(sid);
+
+        match /options/{oid} {
+          allow read: if isSessionParticipant(sid) || isSessionHost(sid);
+          allow create, update, delete: if isSessionHost(sid);
+        }
+
+        match /responses/{uid} {
+          allow get: if isUser(uid) || isSessionHost(sid);
+          // list: only the host (used to compute results / leaderboards).
+          allow list: if isSessionHost(sid);
+          // On create, doc id must equal the caller's uid AND the embedded
+          // user ref must point to the caller, so guests can't impersonate.
+          allow create: if isUser(uid)
+            && request.resource.data.user == userPath();
+          // On update: either the participant editing their own response, or
+          // the host writing the `correct` flag during grading (NextButton →
+          // gradeAll). Host writes don't need to preserve the user field.
+          allow update: if (isUser(uid)
+              && request.resource.data.user == userPath())
+            || isSessionHost(sid);
+          allow delete: if isSessionHost(sid);
+        }
+      }
+
+      match /chat/{mid} {
+        allow read: if isSessionParticipant(sid) || isSessionHost(sid);
+        allow create: if (isSessionParticipant(sid) || isSessionHost(sid))
+          && request.resource.data.user == userPath();
+        allow update: if false;
+        allow delete: if isSessionHost(sid);
+      }
+
+      // Pointer docs written by the `finishSession` Cloud Function so each
+      // participant can find their own top-level /submissions doc.
+      // Doc id == participant uid; the doc holds `{ ref: <Submission ref> }`.
+      match /submissions/{uid} {
+        allow get: if isUser(uid) || isSessionHost(sid);
+        allow list: if isSessionHost(sid);
+        // Cloud Function writes only.
+        allow create, update, delete: if false;
+      }
+    }
+
+    // ---------- /submissions ----------
+    // Submissions are written exclusively by the `finishSession` Cloud Function
+    // running with admin privileges (which bypasses these rules). Clients only
+    // read.
+
+    match /submissions/{subid} {
+      allow read: if ownsSubmission()
+        || (isSignedIn() && get(resource.data.session).data.host == userPath());
+      allow create, update, delete: if false;
     }
   }
 }
