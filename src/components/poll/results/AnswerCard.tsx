@@ -89,14 +89,13 @@ export default function AnswerCard(props: Props) {
         <React.Fragment>
           <Typography color="error">Response left blank</Typography>
           {!res?.correct &&
-            options.map((x) => {
-              if (!x.data().correct) return <></>
-              return (
+            options
+              .filter((x) => x.data().correct)
+              .map((x) => (
                 <Typography key={x.id} color="success">
                   {"•"} {x.data().text}
                 </Typography>
-              )
-            })}
+              ))}
         </React.Fragment>
       ) : (
         <React.Fragment>
@@ -109,14 +108,13 @@ export default function AnswerCard(props: Props) {
             ))}
           {/* if the user got this question wrong, render the correct results */}
           {!res?.correct &&
-            options.map((x) => {
-              if (!x.data().correct) return <></>
-              return (
+            options
+              .filter((x) => x.data().correct)
+              .map((x) => (
                 <Typography key={x.id} color="success">
                   {"•"} {x.data().text}
                 </Typography>
-              )
-            })}
+              ))}
         </React.Fragment>
       )}
       <Box display="flex" justifyContent="end">

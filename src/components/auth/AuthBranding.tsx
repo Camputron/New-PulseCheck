@@ -41,7 +41,7 @@ export default function AuthBranding({ heading, subtext }: Props) {
             mt: 1,
             mb: 2,
             fontSize: { xs: "1.5rem", md: "2.75rem" },
-            lineHeight: 1.15,
+            // lineHeight: 1.15,
           }}>
           {heading}
         </Typography>
@@ -51,8 +51,8 @@ export default function AuthBranding({ heading, subtext }: Props) {
           variant="body2"
           sx={{
             color: "text.secondary",
-            lineHeight: 1.6,
             display: { xs: "none", sm: "block" },
+            // lineHeight: 1.6,
           }}>
           {subtext}
         </Typography>

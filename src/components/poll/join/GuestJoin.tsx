@@ -30,10 +30,10 @@ export default function GuestJoin() {
         if (!displayName.trim()) {
           throw new Error("Display Name cannot be blank!")
         }
+        /* sign in as a guest first so room-code lookup is authenticated */
+        const cred = await api.auth.loginAsGuest()
         /* find session with code */
         const sref = await api.sessions.getByCode(roomCode)
-        /* then sign in as a guest */
-        const cred = await api.auth.loginAsGuest()
         /* add yourself to the queue */
         await api.sessions.enqueue(sref.id, cred.user.uid, {
           display_name: displayName,

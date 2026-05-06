@@ -136,7 +136,7 @@ export default function UploadImageBox(props: Props) {
           alert("Please upload a file smaller than 10mb")
           return
         }
-        await fileUpload(selectedFile, `pollImages/${selectedFile.name}`)
+        await fileUpload(selectedFile, `poll-images/${selectedFile.name}`)
       }
     }
 

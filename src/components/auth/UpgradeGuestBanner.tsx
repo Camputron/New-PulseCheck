@@ -10,11 +10,15 @@ export default function UpgradeGuestBanner(props: Props) {
     <Alert
       severity="info"
       variant="outlined"
-      sx={{ borderRadius: 2 }}
+      sx={{
+        // borderRadius: 2,
+        alignItems: "center",
+        "& .MuiAlert-action": { alignItems: "center", pt: 0, mr: 0 },
+      }}
       action={
         <Button
           color="primary"
-          variant="contained"
+          variant="text"
           size="small"
           onClick={onUpgrade}
           sx={{ textTransform: "none", fontWeight: 600 }}>

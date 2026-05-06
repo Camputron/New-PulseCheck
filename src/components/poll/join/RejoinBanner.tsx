@@ -107,7 +107,12 @@ export default function RejoinBanner() {
   return (
     <Alert
       severity="info"
-      sx={{ mb: 3, borderRadius: 2 }}
+      sx={{
+        mb: 3,
+        borderRadius: 2,
+        alignItems: "center",
+        "& .MuiAlert-action": { alignItems: "center", pt: 0, mr: 0 },
+      }}
       action={
         <Stack direction="row" spacing={1}>
           <Button
