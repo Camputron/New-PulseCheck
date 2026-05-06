@@ -48,20 +48,12 @@ Scheduled for upcoming sprints. Ready to be picked up.
 
 | ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
 |----|------|--------|---------|----------|-------------|
-| F4 | **Persistent Poll Data** — additional search/filter/export on session history | S3 | AR-14 | 1–2 days | None |
-| F14 | **Async Results** — show results to participants post-session (gated behind submission) | S3 | SL-9 | 3–5 days | None |
 | F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
 | F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
-| F41 | **Question Difficulty Ranking** — per-question % correct stats ranked most→least difficult on session results | S4 | AR-15 | 2–3 days | None |
 | F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
 | F19 | **Testing & CI/CD** — business logic tests, Cloud Functions tests (emulator), Firestore rules tests, GitHub Actions CI/CD | S5 | IO-4, IO-5 | 5–8 days | F16 |
-| F15 | **Sharing Polls** — share with view/edit permissions via email | S4 | PM-9 | 3–5 days | None |
-| F25 | **Personalized Study Guides** — wrong-answer compilation, self-quiz mode with timed input, attempt history for improvement tracking, tag-filtered study guides | S4 | AI-9 | 5–8 days | F3, F8, F9 |
-| F40 | **Question Bank** — named reusable question collections; bulk add; import into polls; works with F13a templates | S4 | PM-16 | 4–6 days | F13a |
 | — | **Bug fixes, testing, polish** | S5 | — | — | — |
 | BUG | **No double-join protection** — `joinSession` called twice in React Strict Mode | S5 | — | 0.5 day | None |
-| BUG | **`poll.updated_at` not updating** on question/option edits | S5 | PM-11 | 0.5 day | None |
-| BUG | **Rejoin after host ends** — participant sees white screen instead of redirect | S5 | SL-10 | 1 day | None |
 
 ---
 
@@ -71,7 +63,6 @@ Actively being worked on this sprint.
 
 | ID | Item | Sprint | SRS Ref | Owner | Notes |
 |----|------|--------|---------|-------|-------|
-| F16.8 | **Backend** — deploy Cloud Functions to production + verify | S3 | IO-3 | Michael | Last step of F16. Blocked on final testing. |
 
 ---
 
@@ -108,6 +99,7 @@ Completed and verified.
 | F16.5 | **Backend** — remove client-side Vertex AI SDK usage | S1 | IO-1 |
 | F16.6 | **Backend** — `UploadPDFDialog` passes `gs://` URI instead of download URL | S1 | AI-1 |
 | F16.7 | **Backend** — end-to-end emulator test (upload PDF → callable → questions) | S1 | IO-2 |
+| F16.8 | **Backend** — deploy Cloud Functions to production + verify | S3 | IO-3 |
 | F16-P2 | **Backend** — grading moved to Firestore trigger (`onSessionFinish`) | S1 | AI-4 |
 | F32.1 | **UI** — glass-morphism on all 5 sub AppBars | S2 | UI-2 |
 | F32.2 | **UI** — bordered card pattern on 5 card components | S2 | UI-3 |
@@ -131,6 +123,9 @@ Completed and verified.
 | F37 | **Clone Polls** — deep-copy entire poll (questions + options) into new poll; "Clone Poll" in editor menu + 3-dot menu on dashboard cards | S4 | PM-13 |
 | F35 | **Guest Account Upgrade** — anonymous → registered account linking via `linkWithCredential` (email/password + Google); auto-open dialog on session finish; banner on submission results page | S5 | SL-11 |
 | F39 | **Cloud Poll Session Settings** — move session defaults from localStorage to Firestore user profile; editable in Settings page | S5 | PM-15 |
+| F40 | **Question Bank** — named reusable question collections; bulk add; import into polls; works with F13a templates | S4 | PM-16 |
+| BUG-16 | **`poll.updated_at` not updating** on question/option edits — store-layer cascade so subcollection mutations bump the parent poll | S5 | PM-11 |
+| BUG | **Rejoin after host ends** — participant sees white screen instead of redirect | S5 | SL-10 |
 | CHORE | **Table View Mode** — `useViewMode` hook for Cards/Table toggle on Dashboard, Banks, and history views; per-key localStorage persistence; mobile forces Cards | S5 | UI-3 |
 
 ---
@@ -159,6 +154,10 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 | F26 | **Bloom's Taxonomy Tagging** — AI auto-tags questions by cognitive level | P4 | AI-7 | 2–3 days | F18 |
 | F27 | **Misconception Detection** — AI wrong-answer pattern analysis | P4 | AI-8 | 3–5 days | F3 |
 | F9 | **Study Resources** — attach source PDF + AI study suggestions | P3 | AI-10 | 3–5 days | F8, F16 |
+| F41 | **Question Difficulty Ranking** — per-question % correct stats ranked most→least difficult on session results | P3 | AR-15 | 2–3 days | None |
+| F25 | **Personalized Study Guides** — wrong-answer compilation, self-quiz mode with timed input, attempt history for improvement tracking, tag-filtered study guides | P3 | AI-9 | 5–8 days | F3, F8, F9 |
+| F15 | **Sharing Polls** — share with view/edit permissions via email | P3 | PM-9 | 3–5 days | None |
+| F14 | **Async Results** — show results to participants post-session (gated behind submission) | P3 | SL-9 | 3–5 days | None |
 | BUG | **Undefined data access in `gradeSubmission`** — missing `.exists()` check | High | — | 0.5 day | None |
 | BUG | **Array index out of bounds on `currentQuestion`** — no bounds check | High | — | 0.5 day | None |
 | BUG | **Missing error handling in Vertex AI calls** — no try/catch on AI grading | High | — | 0.5 day | None |
@@ -251,8 +250,8 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
   - **Sprint:** Backlog
   - No visible sanitization on user-submitted poll responses before storing in Firestore or rendering in the UI.
 
-- [ ] **BUG-16: Poll `updated_at` not updating on question edits**
-  - **Sprint:** S5 (TODO)
+- [x] **BUG-16: Poll `updated_at` not updating on question edits**
+  - **Sprint:** S5 (DONE)
   - Poll `updated_at` field only updates when the title is edited, not when questions or options are modified.
 
 - [ ] **BUG-17: Dead code — `sessions/submissions.ts` store** — `src/api/firebase/sessions/submissions.ts`
