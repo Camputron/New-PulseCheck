@@ -1,29 +1,81 @@
-# Runs the Vitest unit/integration test suite (with Playwright for browser tests).
+# Runs the test suite on every push/PR to main and dev.
+#
+# Two jobs run in parallel:
+#   - unit:     pure Vitest unit tests (utils, grading). Fast
+#   - emulator: Firestore rules tests + Cloud Functions integration tests
+#               run against the Firebase emulator. Slower
 name: CI / Test
 
 on:
-    push:
-        branches: [main, dev]
-    pull_request:
-        branches: [main, dev]
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
 
-jobs:  
-  test:  
-    runs-on: ubuntu-latest  
-    steps:  
-      - name: Checkout Code  
-        uses: actions/checkout@v4  
+jobs:
+  unit:
+    name: Unit (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
 
       - name: Enable Corepack and Install Yarn v4
         run: |
-            corepack enable
-            corepack prepare yarn@stable --activate
+          corepack enable
+          corepack prepare yarn@stable --activate
 
-      - name: Install Dependencies
-        run: yarn install 
+      - name: Install dependencies
+        run: yarn install --immutable
 
-      - name: Install Playwright
-        run: yarn playwright install
+      - name: Run Vitest (unit tests)
+        run: yarn test
 
-      - name: Run Vitest  
-        run: yarn test  
+  emulator:
+    name: Emulator (rules + functions)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Setup Java (required by Firestore emulator)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Enable Corepack and Install Yarn v4
+        run: |
+          corepack enable
+          corepack prepare yarn@stable --activate
+
+      - name: Install root dependencies
+        run: yarn install --immutable
+
+      - name: Install Cloud Functions dependencies
+        working-directory: firebase/functions
+        run: npm ci
+
+      - name: Build Cloud Functions
+        working-directory: firebase/functions
+        run: npm run build
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Run rules + functions tests against the emulator
+        run: |
+          firebase emulators:exec \
+            --only firestore,auth,functions \
+            --project pulsecheck-ci-test \
+            "yarn test:emulator && cd firebase/functions && npm test"

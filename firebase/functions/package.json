@@ -11,7 +11,8 @@
     "logs": "firebase functions:log",
     "seed": "npx ts-node src/seed.ts",
     "seed:prod": "npx ts-node src/seed.ts --prod",
-    "seed:clean": "npx ts-node src/seed.ts --clean"
+    "seed:clean": "npx ts-node src/seed.ts --clean",
+    "test": "vitest run"
   },
   "engines": {
     "node": "24"
@@ -31,7 +32,8 @@
     "eslint-plugin-import": "^2.25.4",
     "firebase-functions-test": "^3.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^3.2.4"
   },
   "private": true
 }

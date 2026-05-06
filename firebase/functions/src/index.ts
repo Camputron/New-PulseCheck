@@ -6,11 +6,11 @@ import {
   HarmCategory,
   HarmBlockThreshold,
 } from "@google-cloud/vertexai"
-import { initializeApp } from "firebase-admin/app"
+import { getApps, initializeApp } from "firebase-admin/app"
 import { getFirestore, FieldValue } from "firebase-admin/firestore"
 import { getStorage } from "firebase-admin/storage"
 
-const admin = initializeApp()
+const admin = getApps().length ? getApps()[0] : initializeApp()
 
 setGlobalOptions({ maxInstances: 10 })
 
@@ -113,7 +113,7 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
     const MIN_QUESTIONS = 1
     const MAX_QUESTIONS = 20
 
-    // Input validation
+    /* ensure input is valid */
     if (!n || typeof n !== "number" || n < MIN_QUESTIONS || n > MAX_QUESTIONS) {
       throw new HttpsError(
         "invalid-argument",
@@ -132,8 +132,7 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
     "question" (string), "options" (array of exactly 4 strings), and 
     "correct_answer" (string matching one of the options).`
 
-    // In emulator: download file and send inline (Gemini can't access local storage)
-    // In production: pass gs:// URI directly (Gemini fetches from GCS)
+    /* download file via cloud storage service */
     const isEmulator = process.env.FUNCTIONS_EMULATOR === "true"
     let filePart:
       | { inlineData: { mimeType: string; data: string } }
@@ -211,7 +210,7 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
       }
     }
 
-    // Should never reach here, but TypeScript needs it
+    /* prog should never reach here, but eslint requires it  */
     throw new HttpsError("internal", "Unexpected error")
   }
 )

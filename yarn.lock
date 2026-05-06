@@ -1106,6 +1106,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@firebase/rules-unit-testing@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@firebase/rules-unit-testing@npm:4.0.1"
+  peerDependencies:
+    firebase: ^11.0.0
+  checksum: 10c0/d206f1f1e949a5da721ad99e47536e9b8ff32e4159f2e7dfad8de8cd89fa6966fff52e3783eb5009530bc2a11d6e36fa2136a238a5915bb6a97cc614ad523782
+  languageName: node
+  linkType: hard
+
 "@firebase/storage-compat@npm:0.3.16":
   version: 0.3.16
   resolution: "@firebase/storage-compat@npm:0.3.16"
@@ -4491,6 +4500,7 @@ __metadata:
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.0"
     "@eslint/js": "npm:^9.19.0"
+    "@firebase/rules-unit-testing": "npm:^4.0.1"
     "@fontsource/inter": "npm:^5.2.8"
     "@mui/icons-material": "npm:^6.4.4"
     "@mui/material": "npm:^6.4.4"

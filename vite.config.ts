@@ -17,5 +17,9 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    // Only run the root-level src/ test suite. Cloud Functions tests live in
+    // firebase/functions/ and are run by that package's own vitest config.
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    exclude: ["node_modules/**", "dist/**", "firebase/**"],
   },
 })

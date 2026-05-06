@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore"
-import { ActiveSession, HostSettings } from "@/types"
+import { ActiveSession, HostSettings, PromptType } from "@/types"
 
 const ACTIVE_SESSION_KEY = "active-session"
 
@@ -244,4 +244,35 @@ export function ntogc(score: number | undefined): string {
   const clamped = Math.max(0, Math.min(100, score ?? NaN))
   const hue = clamped * 1.2
   return `hsl(${hue}, 58%, 25%)`
+}
+
+/**
+ * Decides whether a participant's choice set is correct for a given prompt type.
+ *
+ * - "multiple-choice": correct if any chosen key matches any correct key
+ * - "multi-select":    correct only if the chosen set equals the correct set
+ * - "ranking-poll":    correct if the participant submitted any answer
+ */
+export function isResponseCorrect(
+  prompt_type: PromptType,
+  correct_keys: string[],
+  chosen_keys: string[],
+): boolean {
+  switch (prompt_type) {
+    case "multi-select": {
+      if (correct_keys.length !== chosen_keys.length) return false
+      const chosen = new Set(chosen_keys)
+      return correct_keys.every((k) => chosen.has(k))
+    }
+    case "multiple-choice": {
+      const chosen = new Set(chosen_keys)
+      return correct_keys.some((k) => chosen.has(k))
+    }
+    case "ranking-poll": {
+      return chosen_keys.length > 0
+    }
+    default: {
+      throw new Error(`Invalid PromptType: ${String(prompt_type)}`)
+    }
+  }
 }
