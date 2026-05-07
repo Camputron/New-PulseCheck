@@ -48,9 +48,6 @@ Scheduled for upcoming sprints. Ready to be picked up.
 
 | ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
 |----|------|--------|---------|----------|-------------|
-| F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
-
-| — | **Bug fixes, testing, polish** | S5 | — | — | — |
 
 ---
 
@@ -60,6 +57,7 @@ Actively being worked on this sprint.
 
 | ID | Item | Sprint | SRS Ref | Owner | Notes |
 |----|------|--------|---------|-------|-------|
+| — | **Bug fixes, testing, polish** | S5 | — | — | — |
 
 ---
 
@@ -136,6 +134,7 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 
 | ID | Item | Priority | SRS Ref | Estimate | Dependencies |
 |----|------|----------|---------|----------|-------------|
+| F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
 | F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
 | F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
 | F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | P1 | RG-6 | 3–5 days | None |
