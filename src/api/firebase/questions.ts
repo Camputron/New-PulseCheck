@@ -81,10 +81,16 @@ export default class QuestionStore extends BaseStore {
       ...payload,
       updated_at: serverTimestamp(),
     })
-    /* bump parent poll's updated_at so edits surface in dashboards */
+    /* bump parent poll's updated_at so edits surface in dashboards.
+       Best-effort: poll may have been deleted while a debounced edit was
+       still in flight. */
     const pref = qref.parent.parent as DocumentReference<Poll> | null
     if (pref) {
-      await updateDoc(pref, { updated_at: serverTimestamp() })
+      try {
+        await updateDoc(pref, { updated_at: serverTimestamp() })
+      } catch (err) {
+        console.debug("Skipped bumping poll updated_at:", err)
+      }
     }
     return qref
   }

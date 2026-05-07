@@ -11,50 +11,62 @@ interface Props {
   promptType: PromptType
 }
 
-const SAVE_DELAY = 1000
-
 /**
  * @todo add docs
  * @author Camputron, VerySirias
  * @returns {JSX.Element}
  */
 export default function CorrectToggleButton(props: Props) {
-  const { ref, promptType } = props
-  const [correct, setCorrect] = useState(props.correct)
+  const { ref, promptType, correct } = props
   const snackbar = useSnackbar()
+  const [pending, setPending] = useState<boolean | null>(null)
+
+  /* re-sync to Firestore whenever the source-of-truth flag changes,
+     unless we have an unflushed user toggle in flight */
+  const displayed = pending ?? correct
 
   useEffect(() => {
-    async function saveChecked(bool: boolean) {
+    if (pending === null) {
+      return undefined
+    }
+    if (pending === correct) {
+      setPending(null)
+      return undefined
+    }
+    let cancelled = false
+    void (async () => {
       try {
         await api.polls.questions.options.updateByRef(ref, {
-          correct: bool,
+          correct: pending,
         })
-      } catch {
-        snackbar.show({
-          message: "Failed to update option",
-          type: "error",
-        })
+      } catch (err: unknown) {
+        console.warn(err)
+        /* if (!cancelled) {
+          snackbar.show({
+            message: "Failed to update option",
+            type: "error",
+          })
+        } */
+      } finally {
+        if (!cancelled) setPending(null)
       }
-    }
-    const timer = setTimeout(() => {
-      void saveChecked(correct)
-    }, SAVE_DELAY)
+    })()
     return () => {
-      clearTimeout(timer)
+      cancelled = true
     }
-  }, [props.correct, correct, ref, snackbar])
+  }, [pending, correct, ref, snackbar])
 
   const handleCheckToggle = () => {
-    setCorrect(!correct)
+    setPending(!displayed)
   }
 
   return (
     <React.Fragment>
       {promptType === "multi-select" && (
-        <Checkbox checked={correct} onClick={handleCheckToggle} />
+        <Checkbox checked={displayed} onClick={handleCheckToggle} />
       )}
       {promptType === "multiple-choice" && (
-        <Radio checked={correct} onClick={handleCheckToggle} />
+        <Radio checked={displayed} onClick={handleCheckToggle} />
       )}
     </React.Fragment>
   )

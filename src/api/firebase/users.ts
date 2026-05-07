@@ -48,7 +48,7 @@ export default class UserStore extends BaseStore {
     const uref = this.doc(uid)
     const userDoc = await getDoc(uref)
     if (!userDoc.exists()) {
-      throw new Error(`User${uid} does not exist!`)
+      throw new Error(`User ${uid} does not exist!`)
     }
     return userDoc.data()
   }

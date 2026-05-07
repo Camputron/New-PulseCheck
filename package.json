@@ -12,7 +12,9 @@
     "lint": "eslint src",
     "format": "prettier src --write --list-different",
     "format:check": "prettier src --check",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:prod": "firebase deploy"
+
   },
   "engines": {
     "node": "24"

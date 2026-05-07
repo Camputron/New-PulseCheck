@@ -97,8 +97,23 @@ export default class PollStore extends BaseStore {
   }
 
   public async delete(pref: DocumentReference<Poll>) {
+    /* Firestore doesn't cascade — manually delete questions + their options
+       so we don't leave orphans, and so debounced writes from any still-mounted
+       editor target docs that no longer exist. */
+    const qclx = this.questions.collect(pref.id)
+    const qsnap = await getDocs(qclx)
+    await Promise.all(
+      qsnap.docs.map(async (qdoc) => {
+        const oclx = this.questions.options.collect({
+          pid: pref.id,
+          qid: qdoc.id,
+        })
+        const osnap = await getDocs(oclx)
+        await Promise.all(osnap.docs.map((odoc) => deleteDoc(odoc.ref)))
+        await deleteDoc(qdoc.ref)
+      }),
+    )
     await deleteDoc(pref)
-    // await api.sessions.deleteAllByPREF(pref)
   }
 
   public async clone(
@@ -148,8 +163,7 @@ export default class PollStore extends BaseStore {
         const srcOsnap = await getDoc(srcOref)
         const srcO = srcOsnap.data()
         if (!srcO) continue
-        const newOref = await this.questions.options.create(newOptsClx)
-        await this.questions.options.updateByRef(newOref, {
+        await this.questions.options.create(newOptsClx, {
           text: srcO.text,
           correct: srcO.correct,
         })
@@ -213,8 +227,7 @@ export default class PollStore extends BaseStore {
         qid: qref.id,
       })
       for (const opt of snap.options) {
-        const oref = await this.questions.options.create(opts_clx)
-        await this.questions.options.updateByRef(oref, {
+        await this.questions.options.create(opts_clx, {
           text: opt.text,
           correct: opt.correct,
         })
@@ -237,22 +250,20 @@ export default class PollStore extends BaseStore {
           pid: pid,
           qid: qid,
         })
-        /* iterate and create option docs from AI response */
-        const opt_proms = ai.options.map(async (opt) => {
+        /* create option docs sequentially with correct flag set atomically.
+           Sequential ordering preserves option order in question.options;
+           single-write avoids a race where the editor subscribes to a fresh
+           option doc with correct=false before the follow-up update lands. */
+        for (const opt of ai.options) {
           try {
-            /* create option doc */
-            const oref = await this.questions.options.create(opts_clx)
-            /* update option doc */
-            await this.questions.options.updateByRef(oref, {
+            await this.questions.options.create(opts_clx, {
               text: opt,
               correct: opt === ai.correct_answer,
             })
           } catch (err) {
             console.debug(err)
           }
-        })
-        /* wait for all options to be process */
-        await Promise.all(opt_proms)
+        }
       } catch (err) {
         console.debug(err)
       }
