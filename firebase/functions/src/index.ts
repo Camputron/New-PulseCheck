@@ -337,6 +337,36 @@ export const finishSession = onCall<FinishSessionRequest>(
     const maxScore: number = session.summary?.max_score ?? 0
     const scores: number[] = []
 
+    // Per-question accumulator (F41 — Question Difficulty Ranking)
+    interface QuestionAcc {
+      qid: string
+      prompt: string
+      prompt_type: string
+      points: number
+      correct_count: number
+      total_responses: number
+      rt_sum_ms: number
+      rt_count: number
+    }
+    const questionAcc = new Map<string, QuestionAcc>()
+    const displayedAtMs = new Map<string, number>()
+    for (const qSnap of questionSnaps) {
+      if (!qSnap.exists) continue
+      const q = qSnap.data()!
+      questionAcc.set(qSnap.id, {
+        qid: qSnap.id,
+        prompt: q.prompt ?? "",
+        prompt_type: q.prompt_type ?? "multiple-choice",
+        points: q.points ?? 0,
+        correct_count: 0,
+        total_responses: 0,
+        rt_sum_ms: 0,
+        rt_count: 0,
+      })
+      const dMs = q.displayed_at?.toMillis?.()
+      if (dMs) displayedAtMs.set(qSnap.id, dMs)
+    }
+
     for (const userDoc of users) {
       let score = 0
       const participantUid = userDoc.id
@@ -364,6 +394,21 @@ export const finishSession = onCall<FinishSessionRequest>(
           const response = responseSnap.data()!
           if (response.correct) {
             score += question.points
+          }
+
+          // Accumulate per-question difficulty stats
+          const acc = questionAcc.get(qid)!
+          const choices = (response.choices ?? []) as unknown[]
+          if (choices.length > 0) acc.total_responses += 1
+          if (response.correct) acc.correct_count += 1
+
+          const dMs = displayedAtMs.get(qid)
+          const rMs =
+            response.updated_at?.toMillis?.() ??
+            response.created_at?.toMillis?.()
+          if (dMs && rMs && rMs > dMs && choices.length > 0) {
+            acc.rt_sum_ms += rMs - dMs
+            acc.rt_count += 1
           }
         }
       }
@@ -394,6 +439,37 @@ export const finishSession = onCall<FinishSessionRequest>(
 
     // Compute metrics and finalize session
     const metrics = calcMetrics(scores, maxScore)
+
+    // Build per-question difficulty stats sorted hardest -> easiest (F41)
+    const totalParticipants = users.length
+    const questionStats = questionSnaps
+      .filter((s) => s.exists)
+      .map((s) => {
+        const a = questionAcc.get(s.id)!
+        const percent_correct =
+          totalParticipants > 0
+            ? (a.correct_count / totalParticipants) * 100
+            : 0
+        return {
+          qid: a.qid,
+          prompt: a.prompt,
+          prompt_type: a.prompt_type,
+          points: a.points,
+          total_responses: a.total_responses,
+          total_participants: totalParticipants,
+          correct_count: a.correct_count,
+          percent_correct,
+          avg_response_time_ms:
+            a.rt_count > 0 ? a.rt_sum_ms / a.rt_count : null,
+          timed_response_count: a.rt_count,
+        }
+      })
+      .sort(
+        (a, b) =>
+          a.percent_correct - b.percent_correct ||
+          a.qid.localeCompare(b.qid)
+      )
+
     await sessionRef.set(
       {
         summary: {
@@ -401,6 +477,7 @@ export const finishSession = onCall<FinishSessionRequest>(
           total_participants: users.length,
           max_score: maxScore,
         },
+        question_stats: questionStats,
         state: "finished",
       },
       { merge: true }

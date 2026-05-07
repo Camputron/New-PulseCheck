@@ -81,9 +81,11 @@ export default function ResponseDialog(props: ResponseDialogProps) {
             {/* <Typography gutterBottom variant='body2' color='textSecondary'>
               Question
             </Typography> */}
-            {currentQuestion?.prompt
-              .split(/\r\n|\r|\n/)
-              .map((x, i) => <Typography key={i}>{x}</Typography>)}
+            {currentQuestion?.prompt.split(/\r\n|\r|\n/).map((x, i) => (
+              <Typography key={i} fontWeight={700}>
+                {x}
+              </Typography>
+            ))}
           </CardContent>
         </Card>
         {currentQuestion?.prompt_img && (
@@ -94,7 +96,7 @@ export default function ResponseDialog(props: ResponseDialogProps) {
         {currentQuestion && (
           <Box mb={1}>
             {/* render question choices */}
-            <Stack spacing={2} mt={2} direction={"column"}>
+            <Stack spacing={1} mt={2} direction={"column"}>
               {currentQuestion.options.map((x) => (
                 <Choice
                   key={x.ref.path}
