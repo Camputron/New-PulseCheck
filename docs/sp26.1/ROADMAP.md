@@ -48,9 +48,6 @@ Scheduled for upcoming sprints. Ready to be picked up.
 
 | ID | Item | Sprint | SRS Ref | Estimate | Dependencies |
 |----|------|--------|---------|----------|-------------|
-| F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
-
-| — | **Bug fixes, testing, polish** | S5 | — | — | — |
 
 ---
 
@@ -60,6 +57,7 @@ Actively being worked on this sprint.
 
 | ID | Item | Sprint | SRS Ref | Owner | Notes |
 |----|------|--------|---------|-------|-------|
+| — | **Bug fixes, testing, polish** | S5 | — | — | — |
 
 ---
 
@@ -69,6 +67,7 @@ Completed and verified.
 
 | ID | Item | Sprint | SRS Ref |
 |----|------|--------|---------|
+| F41 | **Question Difficulty Ranking** — per-question % correct + avg response time computed in `finishSession`, ranked hardest→easiest on session results | S5 | AR-15 |
 | F19 | **Testing & CI/CD** — business logic tests, Cloud Functions tests (emulator), Firestore rules tests, GitHub Actions CI/CD | S5 | IO-4, IO-5 | 5–8 days | F16 |
 | F12 | **Auto-Fill Prompts** — quick-fill option presets (T/F, Agree Scale, Rating 1-5, Confidence, Frequency, Blank), question-level chips in editor | S4 | PM-6, PM-7, AI-6 |
 | F13a | **Poll Templates** — 8 pre-built templates (Quick Quiz, T/F, Vocab, Exit Ticket, Survey, Icebreaker, Muddiest Point, Discussion Prep), template picker empty state, preview dialog, post-apply acceleration (auto-expand, auto-focus, tab-through, completion bar) | S4 | PM-8 |
@@ -135,6 +134,7 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 
 | ID | Item | Priority | SRS Ref | Estimate | Dependencies |
 |----|------|----------|---------|----------|-------------|
+| F42 | **Host Edit Ended Session** — edit finished session questions/options/correct answers + automatic regrading via Cloud Function | S4 | SL-13 | 3–5 days | None |
 | F8 | **Poll Tags** — free-form tags on polls, combo-box for existing tags, `tag:` search syntax in history | S4 | PM-12 | 4–6 days | None |
 | F36 | **Host Response Progress** — real-time linear progress bar showing % of participants who answered current question | S4 | SL-12 | 1–2 days | None |
 | F1 | **Knowledge Pulse** — confidence slider (1–5) per answer + class confusion heatmap | P1 | RG-6 | 3–5 days | None |
@@ -155,7 +155,6 @@ Not scheduled. Will be pulled in if ahead of schedule or deferred to future seme
 | F26 | **Bloom's Taxonomy Tagging** — AI auto-tags questions by cognitive level | P4 | AI-7 | 2–3 days | F18 |
 | F27 | **Misconception Detection** — AI wrong-answer pattern analysis | P4 | AI-8 | 3–5 days | F3 |
 | F9 | **Study Resources** — attach source PDF + AI study suggestions | P3 | AI-10 | 3–5 days | F8, F16 |
-| F41 | **Question Difficulty Ranking** — per-question % correct stats ranked most→least difficult on session results | P3 | AR-15 | 2–3 days | None |
 | F25 | **Personalized Study Guides** — wrong-answer compilation, self-quiz mode with timed input, attempt history for improvement tracking, tag-filtered study guides | P3 | AI-9 | 5–8 days | F3, F8, F9 |
 | F15 | **Sharing Polls** — share with view/edit permissions via email | P3 | PM-9 | 3–5 days | None |
 | F14 | **Async Results** — show results to participants post-session (gated behind submission) | P3 | SL-9 | 3–5 days | None |
@@ -269,7 +268,7 @@ Identified via static analysis of the codebase. Organized by severity. Each bug 
 | **S2** | Mar 18–24 | F32, F33, F12, F4 | F32 (8 items), F33 (6 items) | F12, F4 |
 | **S3** | Apr 1–14 | F12, F4, F1, F2, F14, F16.8 | F2, F34, BUG (listener leak), BUG-3 | F12, F4, F1, F14, F16.8 |
 | **S4** | Apr 15–28 | F3, F13a, F12, F42, F36, F37, F41, F8 | F12, F13a | — |
-| **S5** | Apr 29 – May 6 | F34, bugs, polish | — | — |
+| **S5** | Apr 29 – May 6 | F34, bugs, polish | F41 | — |
 
 ---
 

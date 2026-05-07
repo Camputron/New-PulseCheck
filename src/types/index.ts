@@ -102,6 +102,20 @@ export interface SessionSummary {
   max_score: number
 }
 
+/** per-question difficulty stat computed at session finish (F41) */
+export interface QuestionStat {
+  qid: string
+  prompt: string
+  prompt_type: PromptType
+  points: number
+  total_responses: number
+  total_participants: number
+  correct_count: number
+  percent_correct: number
+  avg_response_time_ms: number | null
+  timed_response_count: number
+}
+
 /** data model of a poll session document */
 export interface Session {
   summary: SessionSummary
@@ -126,6 +140,8 @@ export interface Session {
   leaderboard_scores: LeaderboardData | null
   leaderboard_cumulative: Record<string, number> | null
   created_at: Timestamp
+  /* per-question difficulty stats — populated by finishSession (F41) */
+  question_stats?: QuestionStat[]
 }
 
 /** data model of the current question to display to all users in a session */

@@ -2,6 +2,7 @@ import { Container, Typography, Stack, Grid2, Divider } from "@mui/material"
 import SessionGaugeCard from "@/components/graphs/SessionGaugeCard"
 import Header from "@/components/poll/results/session/Header"
 import PollMetricsCard from "@/components/poll/results/PollMetricsCard"
+import QuestionDifficultyCard from "@/components/poll/results/QuestionDifficultyCard"
 import { useParams } from "react-router-dom"
 import api from "@/api"
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
@@ -65,6 +66,7 @@ export default function PollSessionResults() {
             timestamp={session?.created_at}
           />
           <PollMetricsCard sum={session?.summary}></PollMetricsCard>
+          <QuestionDifficultyCard stats={session?.question_stats} />
           <ScoreHistogram
             submissions={submissions.map((i) => i.data())}
             summary={session?.summary}

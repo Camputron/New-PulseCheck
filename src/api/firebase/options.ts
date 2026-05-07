@@ -68,7 +68,10 @@ export default class PromptOptionStore
     ) as CollectionReference<PromptOption>
   }
 
-  public async create(ref: CollectionReference<PromptOption>) {
+  public async create(
+    ref: CollectionReference<PromptOption>,
+    initial?: Partial<PromptOption>,
+  ) {
     const qref = ref.parent as DocumentReference<Question> | null
     if (!qref) {
       throw new Error(
@@ -76,8 +79,8 @@ export default class PromptOptionStore
       )
     }
     const oref = await addDoc(ref, {
-      text: "",
-      correct: false,
+      text: initial?.text ?? "",
+      correct: initial?.correct ?? false,
     })
     /* update question doc to include reference to {oref} and bump updated_at */
     await setDoc(
@@ -104,14 +107,23 @@ export default class PromptOptionStore
     payload: Partial<PromptOption>,
   ): Promise<void> {
     await updateDoc(ref, payload)
-    /* bump parent question + poll updated_at — option has no own timestamp */
+    /* bump parent question + poll updated_at — option has no own timestamp.
+       Best-effort: a debounced editor write may race with a poll/question
+       delete, in which case the parent doc is gone and the bump fails. */
     const qref = ref.parent.parent as DocumentReference<Question> | null
-    if (qref) {
+    if (!qref) return
+    try {
       await updateDoc(qref, { updated_at: serverTimestamp() })
-      const pref = pollRefFromQuestionRef(qref)
-      if (pref) {
-        await updateDoc(pref, { updated_at: serverTimestamp() })
-      }
+    } catch (err) {
+      console.debug("Skipped bumping question updated_at:", err)
+      return
+    }
+    const pref = pollRefFromQuestionRef(qref)
+    if (!pref) return
+    try {
+      await updateDoc(pref, { updated_at: serverTimestamp() })
+    } catch (err) {
+      console.debug("Skipped bumping poll updated_at:", err)
     }
   }
 

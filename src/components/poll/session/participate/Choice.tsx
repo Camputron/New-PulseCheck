@@ -51,16 +51,25 @@ export default function Choice(props: ChoiceProps) {
     }
   }
   return (
-    <Card>
-      <CardActionArea onClick={handleCheck}>
+    <Card sx={{ p: 0 }}>
+      <CardActionArea>
         <FormControlLabel
           onChange={handleCheck}
           value={props.text}
-          sx={{ m: 1 }}
+          sx={{
+            m: 1,
+            px: 1,
+            "& .MuiFormControlLabel-label": { p: 1 },
+          }}
           checked={Boolean(theChosenOnes.find((x) => refEqual(x, ref)))}
-          control={promptType === "multi-select" ? <Checkbox /> : <Radio />}
+          control={
+            promptType === "multi-select" ? (
+              <Checkbox sx={{ p: 0 }} />
+            ) : (
+              <Radio sx={{ p: 0 }} />
+            )
+          }
           label={text}
-          // onClick={check}
         />
       </CardActionArea>
     </Card>
