@@ -447,9 +447,8 @@ export const finishSession = onCall<FinishSessionRequest>(
       .map((s) => {
         const a = questionAcc.get(s.id)!
         const percent_correct =
-          totalParticipants > 0
-            ? (a.correct_count / totalParticipants) * 100
-            : 0
+          totalParticipants > 0 ?
+            (a.correct_count / totalParticipants) * 100 : 0
         return {
           qid: a.qid,
           prompt: a.prompt,
