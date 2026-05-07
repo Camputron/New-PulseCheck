@@ -111,7 +111,7 @@ export const generateQuestions = onCall<GenerateQuestionsRequest>(
 
     const { n, uri } = request.data
     const MIN_QUESTIONS = 1
-    const MAX_QUESTIONS = 20
+    const MAX_QUESTIONS = 10
 
     /* ensure input is valid */
     if (!n || typeof n !== "number" || n < MIN_QUESTIONS || n > MAX_QUESTIONS) {
